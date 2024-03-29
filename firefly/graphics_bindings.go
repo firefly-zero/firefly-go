@@ -1,0 +1,11 @@
+package firefly
+
+//go:wasmimport graphics draw_point
+func drawPoint(
+	x, y, c int32,
+)
+
+//go:wasmimport graphics draw_triange
+func drawTriangle(
+	p1_x, p1_y, p2_x, p2_y, p3_x, p3_y, fill_color, stroke_color, stroke_width int32,
+)
