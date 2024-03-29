@@ -2,7 +2,7 @@ package main
 
 import "github.com/life4/firefly-go/firefly"
 
-func main() {
+func init() {
 	firefly.Render = render
 }
 

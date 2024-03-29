@@ -1,11 +1,15 @@
 # https://taskfile.dev
 version: '3'
 vars:
-  OUT_DIR: ../../../roms/triangle
+  OUT_DIR: ../../../roms/go-triangle
 tasks:
   build:
     - mkdir -p {{.OUT_DIR}}
-    - tinygo build -target wasm-unknown -o {{.OUT_DIR}}/cart.wasm .
+    - >
+      tinygo build
+      -target ../target.json
+      -o {{.OUT_DIR}}/cart.wasm
+      .
     - wasm-strip {{.OUT_DIR}}/cart.wasm
     - ls -lah {{.OUT_DIR}}
   default:

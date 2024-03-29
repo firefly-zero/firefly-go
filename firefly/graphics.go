@@ -6,8 +6,8 @@ type Point struct {
 }
 
 type Size struct {
-	W uint16
-	H uint16
+	W uint32
+	H uint32
 }
 
 type Color uint8
@@ -21,7 +21,7 @@ type RGB struct {
 type Style struct {
 	FillColor   Color
 	StrokeColor Color
-	StrokeWidth uint16
+	StrokeWidth uint32
 }
 
 func DrawPoint(p Point, c Color) {
