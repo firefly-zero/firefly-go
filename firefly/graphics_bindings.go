@@ -1,9 +1,10 @@
 package firefly
 
+//go:wasmimport graphics get_screen_size
+func getScreenSize() int32
+
 //go:wasmimport graphics draw_point
-func drawPoint(
-	x, y, c int32,
-)
+func drawPoint(x, y, c int32)
 
 //go:wasmimport graphics draw_triangle
 func drawTriangle(

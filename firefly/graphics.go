@@ -24,6 +24,14 @@ type Style struct {
 	StrokeWidth uint32
 }
 
+func GetScreenSize() Size {
+	raw := getScreenSize()
+	return Size{
+		W: uint32((raw >> 16) & 0xffff),
+		H: uint32(raw & 0xffff),
+	}
+}
+
 func DrawPoint(p Point, c Color) {
 	drawPoint(p.X, p.Y, int32(c))
 }
