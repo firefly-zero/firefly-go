@@ -24,6 +24,10 @@ type Style struct {
 	StrokeWidth uint32
 }
 
+func Clear(c Color) {
+	clearScreen(int32(c))
+}
+
 func GetScreenSize() Size {
 	raw := getScreenSize()
 	return Size{
@@ -39,6 +43,13 @@ func DrawPoint(p Point, c Color) {
 func DrawTriangle(a, b, c Point, s Style) {
 	drawTriangle(
 		a.X, a.Y, b.X, b.Y, c.X, c.Y,
+		int32(s.FillColor), int32(s.StrokeColor), int32(s.StrokeWidth),
+	)
+}
+
+func DrawCircle(p Point, d uint32, s Style) {
+	drawCircle(
+		p.X, p.Y, int32(d),
 		int32(s.FillColor), int32(s.StrokeColor), int32(s.StrokeWidth),
 	)
 }
