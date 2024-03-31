@@ -1,7 +1,7 @@
 # https://taskfile.dev
 version: '3'
 vars:
-  OUT_DIR: ../../../roms/demo.go-animation
+  OUT_DIR: ../../../roms/demo/go-animation
 tasks:
   build:
     - mkdir -p {{.OUT_DIR}}
