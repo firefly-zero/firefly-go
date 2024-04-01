@@ -12,6 +12,14 @@ type Size struct {
 
 type Color uint8
 
+const (
+	ColorNone      Color = 0
+	ColorDark      Color = 1
+	ColorAccent    Color = 2
+	ColorSecondary Color = 3
+	ColorLight     Color = 4
+)
+
 type RGB struct {
 	R uint8
 	G uint8

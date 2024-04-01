@@ -21,7 +21,11 @@ func update() {
 }
 
 func render() {
-	firefly.Clear(3)
-	style := firefly.Style{FillColor: 1, StrokeColor: 2, StrokeWidth: 1}
+	firefly.Clear(firefly.ColorLight)
+	style := firefly.Style{
+		FillColor:   firefly.ColorAccent,
+		StrokeColor: firefly.ColorSecondary,
+		StrokeWidth: 1,
+	}
 	firefly.DrawCircle(pos, diameter, style)
 }

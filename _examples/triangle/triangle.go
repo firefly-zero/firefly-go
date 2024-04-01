@@ -11,6 +11,6 @@ func render() {
 		firefly.Point{X: 60, Y: 10},
 		firefly.Point{X: 40, Y: 40},
 		firefly.Point{X: 80, Y: 40},
-		firefly.Style{FillColor: 1, StrokeColor: 2, StrokeWidth: 1},
+		firefly.Style{FillColor: 2, StrokeColor: 3, StrokeWidth: 1},
 	)
 }
