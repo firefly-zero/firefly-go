@@ -1,6 +1,8 @@
 package firefly
 
-import "unsafe"
+import (
+	"unsafe"
+)
 
 type Point struct {
 	X int32
@@ -67,9 +69,10 @@ func DrawCircle(p Point, d uint32, s Style) {
 func DrawText(t string, f Font, p Point, c Color) {
 	textBytes := []byte(t)
 	textPtr := unsafe.Pointer(unsafe.SliceData(textBytes))
+	rawPtr := unsafe.Pointer(unsafe.SliceData(f.raw))
 	drawText(
 		textPtr, uint32(len(t)),
-		unsafe.Pointer(&f.raw), uint32(len(f.raw)),
+		rawPtr, uint32(len(f.raw)),
 		p.X, p.Y, int32(c),
 	)
 }

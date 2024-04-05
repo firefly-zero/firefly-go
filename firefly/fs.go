@@ -7,12 +7,13 @@ type Font struct {
 }
 
 func LoadFont(path string, byteSize int) Font {
-	raw := make([]byte, 0, byteSize)
+	raw := make([]byte, byteSize)
 	pathBytes := []byte(path)
 	pathPtr := unsafe.Pointer(unsafe.SliceData(pathBytes))
+	rawPtr := unsafe.Pointer(unsafe.SliceData(raw))
 	loadRomFile(
 		pathPtr, uint32(len(path)),
-		unsafe.Pointer(&raw), uint32(byteSize),
+		rawPtr, uint32(byteSize),
 	)
 	return Font{raw: raw}
 }

@@ -15,7 +15,7 @@ func boot() {
 
 func render() {
 	firefly.DrawText(
-		"The quick brown fox jumps over the lazy dog",
-		font, firefly.Point{X: 60, Y: 10}, firefly.ColorAccent,
+		"The quick brown fox\njumps over the lazy dog",
+		font, firefly.Point{X: 10, Y: 60}, firefly.ColorAccent,
 	)
 }
