@@ -77,8 +77,7 @@ func DrawCircle(p Point, d uint32, s Style) {
 }
 
 func DrawText(t string, f Font, p Point, c Color) {
-	textBytes := []byte(t)
-	textPtr := unsafe.Pointer(unsafe.SliceData(textBytes))
+	textPtr := unsafe.Pointer(unsafe.StringData(t))
 	rawPtr := unsafe.Pointer(unsafe.SliceData(f.raw))
 	drawText(
 		textPtr, uint32(len(t)),

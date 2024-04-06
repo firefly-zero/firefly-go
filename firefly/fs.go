@@ -8,8 +8,7 @@ type Font struct {
 
 func LoadFont(path string, byteSize int) Font {
 	raw := make([]byte, byteSize)
-	pathBytes := []byte(path)
-	pathPtr := unsafe.Pointer(unsafe.SliceData(pathBytes))
+	pathPtr := unsafe.Pointer(unsafe.StringData(path))
 	rawPtr := unsafe.Pointer(unsafe.SliceData(raw))
 	loadRomFile(
 		pathPtr, uint32(len(path)),
