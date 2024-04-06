@@ -18,5 +18,6 @@
     "--stack-first",
     "--no-entry",
     "-zstack-size=14752"
-  ]
+  ],
+  "extra-files": ["src/runtime/asm_tinygowasm.S"]
 }
