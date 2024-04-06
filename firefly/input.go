@@ -1,14 +1,14 @@
 package firefly
 
 type TouchPad struct {
-	X int16
-	Y int16
+	X i32
+	Y i32
 }
 
 func ReadLeft() TouchPad {
 	raw := readLeft()
 	return TouchPad{
-		X: int16(raw >> 16),
-		Y: int16(raw),
+		X: i32(int16(raw >> 16)),
+		Y: i32(int16(raw)),
 	}
 }

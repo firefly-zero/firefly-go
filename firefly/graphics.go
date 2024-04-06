@@ -4,14 +4,24 @@ import (
 	"unsafe"
 )
 
+// Use just int for both signed and unsigned 32-bit integers.
+//
+// It simplifies API: X is compatible with Width and len is assignable to X
+// without an explicit type conversion.
+//
+// Since wasm is 32-bit system without uints, converting int to uint32 or int32
+// is no-op in runtime.
+type i32 = int
+type u32 = int
+
 type Point struct {
-	X int32
-	Y int32
+	X i32
+	Y i32
 }
 
 type Size struct {
-	W uint32
-	H uint32
+	W u32
+	H u32
 }
 
 type Color uint8
@@ -33,7 +43,7 @@ type RGB struct {
 type Style struct {
 	FillColor   Color
 	StrokeColor Color
-	StrokeWidth uint32
+	StrokeWidth u32
 }
 
 func Clear(c Color) {
@@ -43,25 +53,25 @@ func Clear(c Color) {
 func GetScreenSize() Size {
 	raw := getScreenSize()
 	return Size{
-		W: uint32((raw >> 16) & 0xffff),
-		H: uint32(raw & 0xffff),
+		W: u32((raw >> 16) & 0xffff),
+		H: u32(raw & 0xffff),
 	}
 }
 
 func DrawPoint(p Point, c Color) {
-	drawPoint(p.X, p.Y, int32(c))
+	drawPoint(int32(p.X), int32(p.Y), int32(c))
 }
 
 func DrawTriangle(a, b, c Point, s Style) {
 	drawTriangle(
-		a.X, a.Y, b.X, b.Y, c.X, c.Y,
+		int32(a.X), int32(a.Y), int32(b.X), int32(b.Y), int32(c.X), int32(c.Y),
 		int32(s.FillColor), int32(s.StrokeColor), int32(s.StrokeWidth),
 	)
 }
 
 func DrawCircle(p Point, d uint32, s Style) {
 	drawCircle(
-		p.X, p.Y, int32(d),
+		int32(p.X), int32(p.Y), int32(d),
 		int32(s.FillColor), int32(s.StrokeColor), int32(s.StrokeWidth),
 	)
 }
@@ -73,6 +83,6 @@ func DrawText(t string, f Font, p Point, c Color) {
 	drawText(
 		textPtr, uint32(len(t)),
 		rawPtr, uint32(len(f.raw)),
-		p.X, p.Y, int32(c),
+		int32(p.X), int32(p.Y), int32(c),
 	)
 }
