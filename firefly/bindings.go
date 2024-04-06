@@ -2,6 +2,8 @@ package firefly
 
 import "unsafe"
 
+// -- GRAPHICS -- //
+
 //go:wasmimport graphics clear
 func clearScreen(c int32)
 
@@ -25,3 +27,24 @@ func drawText(
 	fontPtr unsafe.Pointer, fontLen uint32,
 	x, y, color int32,
 )
+
+// -- INPUT -- //
+
+//go:wasmimport input read_left
+func readLeft() int32
+
+//go:wasmimport input read_right
+func readRight() int32
+
+// -- FS -- //
+
+//go:wasmimport fs load_rom_file
+func loadRomFile(
+	pathPtr unsafe.Pointer, pathLen uint32,
+	bufPtr unsafe.Pointer, bufLen uint32,
+) uint32
+
+// -- MISC -- //
+
+//go:wasmimport misc log_debug
+func logDebug(ptr unsafe.Pointer, len uint32)
