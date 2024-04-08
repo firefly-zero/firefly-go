@@ -8,12 +8,15 @@ func init() {
 	firefly.Render = render
 }
 
-var font firefly.Font
+var image firefly.Image
 
 func boot() {
-	panic("")
+	image = firefly.LoadImage("img", 37)
 }
 
 func render() {
-	panic("")
+	firefly.DrawImage(
+		image, firefly.Point{X: 60, Y: 60},
+		firefly.ColorDark, firefly.ColorAccent, firefly.ColorSecondary, firefly.ColorLight,
+	)
 }

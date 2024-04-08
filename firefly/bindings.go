@@ -28,6 +28,12 @@ func drawText(
 	x, y, color int32,
 )
 
+//go:wasmimport graphics draw_image
+func drawImage(
+	ptr unsafe.Pointer, len uint32,
+	x, y, c1, c2, c3, c4 int32,
+)
+
 // -- INPUT -- //
 
 //go:wasmimport input read_left
