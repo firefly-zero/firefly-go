@@ -11,12 +11,12 @@ func init() {
 var image firefly.Image
 
 func boot() {
-	image = firefly.LoadImage("img", 37)
+	image = firefly.LoadImage("img", 94)
 }
 
 func render() {
 	firefly.DrawImage(
 		image, firefly.Point{X: 60, Y: 60},
-		firefly.ColorDark, firefly.ColorAccent, firefly.ColorSecondary, firefly.ColorLight,
+		firefly.ColorDark, firefly.ColorAccent, firefly.ColorSecondary, firefly.ColorNone,
 	)
 }
