@@ -25,11 +25,12 @@ func update() {
 
 func render() {
 	firefly.Clear(firefly.ColorLight)
-	firefly.DrawSubImage(
-		sprite,
-		firefly.Point{X: 60, Y: 60},
+	sub := sprite.Sub(
 		firefly.Point{X: 32 * frame, Y: 0},
 		firefly.Size{W: 32, H: 32},
+	)
+	firefly.DrawSubImage(
+		sub, firefly.Point{X: 60, Y: 60},
 		firefly.ColorDark, firefly.ColorSecondary, firefly.ColorNone, firefly.ColorNone,
 	)
 }

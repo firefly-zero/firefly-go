@@ -95,13 +95,13 @@ func DrawImage(i Image, p Point, c1, c2, c3, c4 Color) {
 	)
 }
 
-func DrawSubImage(i Image, p Point, subP Point, subS Size, c1, c2, c3, c4 Color) {
+func DrawSubImage(i SubImage, p Point, c1, c2, c3, c4 Color) {
 	rawPtr := unsafe.Pointer(unsafe.SliceData(i.raw))
 	drawSubImage(
 		rawPtr, uint32(len(i.raw)),
 		int32(p.X), int32(p.Y),
-		int32(subP.X), int32(subP.Y),
-		uint32(subS.W), uint32(subS.H),
+		int32(i.point.X), int32(i.point.Y),
+		uint32(i.size.W), uint32(i.size.H),
 		int32(c1), int32(c2), int32(c3), int32(c4),
 	)
 }
