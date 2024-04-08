@@ -34,6 +34,13 @@ func drawImage(
 	x, y, c1, c2, c3, c4 int32,
 )
 
+//go:wasmimport graphics draw_sub_image
+func drawSubImage(
+	ptr unsafe.Pointer, len uint32,
+	x, y, sub_x, sub_y int32, sub_width, sub_height uint32,
+	c1, c2, c3, c4 int32,
+)
+
 // -- INPUT -- //
 
 //go:wasmimport input read_left

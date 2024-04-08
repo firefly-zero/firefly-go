@@ -1,0 +1,7 @@
+author_id = "demo"
+app_id = "go-sprite"
+author_name = "Demo"
+app_name = "Sprite Demo"
+
+[files]
+sprite = { path = "sprite.png" }
