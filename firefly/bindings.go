@@ -48,6 +48,9 @@ func readLeft() int32
 
 // -- FS -- //
 
+//go:wasmimport fs get_rom_file_size
+func getRomFileSize(pathPtr unsafe.Pointer, pathLen uint32) uint32
+
 //go:wasmimport fs load_rom_file
 func loadRomFile(
 	pathPtr unsafe.Pointer, pathLen uint32,

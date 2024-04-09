@@ -11,16 +11,17 @@ func init() {
 
 var sprite firefly.Image
 
+// How many animation frames the sprite has.
 const frames = 12
 
 var frame = 0
 
 func boot() {
-	sprite = firefly.LoadImage("sprite", 3076)
+	sprite = firefly.LoadImage("sprite")
 }
 
 func update() {
-	frame = (frame + 1) % 12
+	frame = (frame + 1) % frames
 }
 
 func render() {

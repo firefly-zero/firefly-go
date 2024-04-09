@@ -20,24 +20,26 @@ type SubImage struct {
 	size  Size
 }
 
-func LoadFont(path string, byteSize int) Font {
-	raw := make([]byte, byteSize)
+func LoadFont(path string) Font {
 	pathPtr := unsafe.Pointer(unsafe.StringData(path))
+	fileSize := getRomFileSize(pathPtr, uint32(len(path)))
+	raw := make([]byte, fileSize)
 	rawPtr := unsafe.Pointer(unsafe.SliceData(raw))
 	loadRomFile(
 		pathPtr, uint32(len(path)),
-		rawPtr, uint32(byteSize),
+		rawPtr, uint32(fileSize),
 	)
 	return Font{raw: raw}
 }
 
-func LoadImage(path string, byteSize int) Image {
-	raw := make([]byte, byteSize)
+func LoadImage(path string) Image {
 	pathPtr := unsafe.Pointer(unsafe.StringData(path))
+	fileSize := getRomFileSize(pathPtr, uint32(len(path)))
+	raw := make([]byte, fileSize)
 	rawPtr := unsafe.Pointer(unsafe.SliceData(raw))
 	loadRomFile(
 		pathPtr, uint32(len(path)),
-		rawPtr, uint32(byteSize),
+		rawPtr, uint32(fileSize),
 	)
 	return Image{raw: raw}
 }

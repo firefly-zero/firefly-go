@@ -10,7 +10,7 @@ func init() {
 var font firefly.Font
 
 func boot() {
-	font = firefly.LoadFont("font", 727)
+	font = firefly.LoadFont("font")
 }
 
 func render() {

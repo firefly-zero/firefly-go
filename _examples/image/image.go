@@ -11,7 +11,7 @@ func init() {
 var image firefly.Image
 
 func boot() {
-	image = firefly.LoadImage("img", 94)
+	image = firefly.LoadImage("img")
 }
 
 func render() {
