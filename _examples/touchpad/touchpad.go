@@ -18,7 +18,7 @@ func update() {
 		X: screen.W / 2,
 		Y: screen.H / 2,
 	}
-	input := firefly.ReadLeft()
+	input := firefly.ReadPad()
 	point = firefly.Point{
 		X: center.X + input.X/20 - radius,
 		Y: center.Y - input.Y/20 - radius,

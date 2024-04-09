@@ -43,8 +43,8 @@ func drawSubImage(
 
 // -- INPUT -- //
 
-//go:wasmimport input read_left
-func readLeft() int32
+//go:wasmimport input read_pad
+func readPad() int32
 
 // -- FS -- //
 
