@@ -50,6 +50,10 @@ func Clear(c Color) {
 	clearScreen(int32(c))
 }
 
+func SetColor(c Color, v RGB) {
+	setColor(int32(c), int32(v.R), int32(v.G), int32(v.B))
+}
+
 func GetScreenSize() Size {
 	raw := getScreenSize()
 	return Size{
