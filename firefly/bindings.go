@@ -7,22 +7,46 @@ import "unsafe"
 //go:wasmimport graphics clear
 func clearScreen(c int32)
 
+//go:wasmimport graphics get_screen_size
+func getScreenSize() int32
+
 //go:wasmimport graphics set_color
 func setColor(c, r, g, b int32)
 
-//go:wasmimport graphics get_screen_size
-func getScreenSize() int32
+//go:wasmimport graphics set_colors
+func setColors(
+	r1, g1, b1,
+	r2, g2, b2,
+	r3, g3, b3,
+	r4, g4, b4 int32,
+)
 
 //go:wasmimport graphics draw_point
 func drawPoint(x, y, c int32)
 
-//go:wasmimport graphics draw_triangle
-func drawTriangle(
-	p1_x, p1_y, p2_x, p2_y, p3_x, p3_y, fill_color, stroke_color, stroke_width int32,
-)
+//go:wasmimport graphics draw_line
+func drawLine(x1, y1, x2, y2, c, sw int32)
+
+//go:wasmimport graphics draw_rect
+func drawRect(x, y, w, h, fc, sc, sw int32)
+
+//go:wasmimport graphics draw_rounded_rect
+func drawRoundedRect(x, y, w, h, cw, ch, fc, sc, sw int32)
 
 //go:wasmimport graphics draw_circle
-func drawCircle(x, y, d, fill_color, stroke_color, stroke_width int32)
+func drawCircle(x, y, d, fc, sc, sw int32)
+
+//go:wasmimport graphics draw_ellipse
+func drawEllipse(x, y, w, h, fc, sc, sw int32)
+
+//go:wasmimport graphics draw_triangle
+func drawTriangle(x1, y1, x2, y2, x3, y3, fc, sc, sw int32)
+
+//go:wasmimport graphics draw_arc
+func drawArc(x, y, d, ast, asw, fc, sc, sw int32)
+
+//go:wasmimport graphics draw_sector
+func drawSector(x, y, d, ast, asw, fc, sc, sw int32)
 
 //go:wasmimport graphics draw_text
 func drawText(
