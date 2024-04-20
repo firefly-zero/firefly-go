@@ -25,7 +25,7 @@ func update() {
 }
 
 func render() {
-	firefly.Clear(firefly.ColorLight)
+	firefly.ClearScreen(firefly.ColorLight)
 	sub := sprite.Sub(
 		firefly.Point{X: 32 * frame, Y: 0},
 		firefly.Size{W: 32, H: 32},

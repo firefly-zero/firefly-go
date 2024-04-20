@@ -46,7 +46,7 @@ type Style struct {
 	StrokeWidth u32
 }
 
-func Clear(c Color) {
+func ClearScreen(c Color) {
 	clearScreen(int32(c))
 }
 

@@ -8,7 +8,7 @@ func init() {
 }
 
 func render() {
-	firefly.Clear(firefly.ColorLight)
+	firefly.ClearScreen(firefly.ColorLight)
 	firefly.DrawCircle(
 		firefly.Point{X: 50, Y: 10},
 		120,

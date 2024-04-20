@@ -30,7 +30,7 @@ func update() {
 }
 
 func render() {
-	firefly.Clear(firefly.ColorLight)
+	firefly.ClearScreen(firefly.ColorLight)
 	style := firefly.Style{
 		FillColor:   firefly.ColorLight,
 		StrokeColor: firefly.ColorDark,

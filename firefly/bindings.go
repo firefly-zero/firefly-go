@@ -4,7 +4,7 @@ import "unsafe"
 
 // -- GRAPHICS -- //
 
-//go:wasmimport graphics clear
+//go:wasmimport graphics clear_screen
 func clearScreen(c int32)
 
 //go:wasmimport graphics get_screen_size
