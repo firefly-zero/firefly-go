@@ -46,6 +46,13 @@ type Style struct {
 	StrokeWidth u32
 }
 
+type ImageColors struct {
+	A Color
+	B Color
+	C Color
+	D Color
+}
+
 func ClearScreen(c Color) {
 	clearScreen(int32(c))
 }
@@ -90,22 +97,22 @@ func DrawText(t string, f Font, p Point, c Color) {
 	)
 }
 
-func DrawImage(i Image, p Point, c1, c2, c3, c4 Color) {
+func DrawImage(i Image, p Point, c ImageColors) {
 	rawPtr := unsafe.Pointer(unsafe.SliceData(i.raw))
 	drawImage(
 		rawPtr, uint32(len(i.raw)),
 		int32(p.X), int32(p.Y),
-		int32(c1), int32(c2), int32(c3), int32(c4),
+		int32(c.A), int32(c.B), int32(c.C), int32(c.D),
 	)
 }
 
-func DrawSubImage(i SubImage, p Point, c1, c2, c3, c4 Color) {
+func DrawSubImage(i SubImage, p Point, c ImageColors) {
 	rawPtr := unsafe.Pointer(unsafe.SliceData(i.raw))
 	drawSubImage(
 		rawPtr, uint32(len(i.raw)),
 		int32(p.X), int32(p.Y),
 		int32(i.point.X), int32(i.point.Y),
 		uint32(i.size.W), uint32(i.size.H),
-		int32(c1), int32(c2), int32(c3), int32(c4),
+		int32(c.A), int32(c.B), int32(c.C), int32(c.D),
 	)
 }
