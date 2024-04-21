@@ -1,4 +1,3 @@
-// Image source: https://opengameart.org/content/zelda-like-tilesets-and-sprites
 package main
 
 import "github.com/life4/firefly-go/firefly"
