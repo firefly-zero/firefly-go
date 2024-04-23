@@ -71,7 +71,7 @@ func drawSubImage(
 // -- INPUT -- //
 
 //go:wasmimport input read_pad
-func readPad() int32
+func readPad(player uint32) int32
 
 // -- FS -- //
 

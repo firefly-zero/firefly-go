@@ -5,8 +5,8 @@ type TouchPad struct {
 	Y i32
 }
 
-func ReadPad() (TouchPad, bool) {
-	raw := readPad()
+func ReadPad(p Player) (TouchPad, bool) {
+	raw := readPad(uint32(p))
 	pressed := raw != 0xffff
 	pad := TouchPad{
 		X: i32(int16(raw >> 16)),
