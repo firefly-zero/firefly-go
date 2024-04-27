@@ -7,9 +7,6 @@ import "unsafe"
 //go:wasmimport graphics clear_screen
 func clearScreen(c int32)
 
-//go:wasmimport graphics get_screen_size
-func getScreenSize() int32
-
 //go:wasmimport graphics set_color
 func setColor(c, r, g, b int32)
 

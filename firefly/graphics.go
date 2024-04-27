@@ -61,14 +61,6 @@ func SetColor(c Color, v RGB) {
 	setColor(int32(c), int32(v.R), int32(v.G), int32(v.B))
 }
 
-func GetScreenSize() Size {
-	raw := getScreenSize()
-	return Size{
-		W: u32((raw >> 16) & 0xffff),
-		H: u32(raw & 0xffff),
-	}
-}
-
 func DrawPoint(p Point, c Color) {
 	drawPoint(int32(p.X), int32(p.Y), int32(c))
 }
