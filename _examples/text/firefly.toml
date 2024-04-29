@@ -4,4 +4,4 @@ author_name = "Demo"
 app_name = "Text Demo"
 
 [files]
-font = { path = "../../../fonts/ascii/eg_6x10.fff" }
+font = { path = "eg_6x10.fff", url = "https://fonts.fireflyzero.com/fonts/ascii/eg_6x10.fff" }
