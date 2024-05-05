@@ -13,10 +13,9 @@ func init() {
 }
 
 func update() {
-	screen := firefly.GetScreenSize()
 	center = firefly.Point{
-		X: screen.W / 2,
-		Y: screen.H / 2,
+		X: firefly.Width / 2,
+		Y: firefly.Height / 2,
 	}
 	input, pressed := firefly.ReadPad(firefly.Player0)
 	if pressed {

@@ -21,8 +21,8 @@ func (p Point) Size() Size {
 	return Size{W: p.X, H: p.Y}
 }
 
-func (p Point) TouchPad() TouchPad {
-	return TouchPad(p)
+func (p Point) Pad() Pad {
+	return Pad(p)
 }
 
 func (p Point) Abs() Point {
@@ -76,8 +76,8 @@ func (s Size) Point() Point {
 	return Point{X: s.W, Y: s.H}
 }
 
-func (s Size) TouchPad() TouchPad {
-	return TouchPad{X: s.W, Y: s.H}
+func (s Size) Pad() Pad {
+	return Pad{X: s.W, Y: s.H}
 }
 
 func (s Size) Abs() Size {

@@ -13,8 +13,7 @@ func init() {
 }
 
 func update() {
-	size := firefly.GetScreenSize()
-	if pos.X <= 0 || pos.X+diameter >= size.W {
+	if pos.X <= 0 || pos.X+diameter >= firefly.Width {
 		dir = -dir
 	}
 	pos.X += dir
