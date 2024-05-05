@@ -4,24 +4,122 @@ import (
 	"unsafe"
 )
 
-// Use just int for both signed and unsigned 32-bit integers.
-//
-// It simplifies API: X is compatible with Width and len is assignable to X
-// without an explicit type conversion.
-//
-// Since wasm is 32-bit system without uints, converting int to uint32 or int32
-// is no-op in runtime.
-type i32 = int
-type u32 = int
+const (
+	// The screen width in pixels.
+	Width = 240
+
+	// The screen height in pixels.
+	Height = 160
+)
 
 type Point struct {
-	X i32
-	Y i32
+	X int
+	Y int
+}
+
+func (p Point) Size() Size {
+	return Size{W: p.X, H: p.Y}
+}
+
+func (p Point) TouchPad() TouchPad {
+	return TouchPad(p)
+}
+
+func (p Point) Abs() Point {
+	if p.X < 0 {
+		p.X = -p.X
+	}
+	if p.Y < 0 {
+		p.Y = -p.Y
+	}
+	return p
+}
+
+func (p Point) Add(r Point) Point {
+	p.X += r.X
+	p.Y += r.Y
+	return p
+}
+
+func (p Point) Sub(r Point) Point {
+	p.X -= r.X
+	p.Y -= r.Y
+	return p
+}
+
+func (p Point) ComponentMin(r Point) Point {
+	if r.X < p.X {
+		p.X = r.X
+	}
+	if r.Y < p.Y {
+		p.Y = r.Y
+	}
+	return p
+}
+
+func (p Point) ComponentMax(r Point) Point {
+	if r.X > p.X {
+		p.X = r.X
+	}
+	if r.Y > p.Y {
+		p.Y = r.Y
+	}
+	return p
 }
 
 type Size struct {
-	W u32
-	H u32
+	W int
+	H int
+}
+
+func (s Size) Point() Point {
+	return Point{X: s.W, Y: s.H}
+}
+
+func (s Size) TouchPad() TouchPad {
+	return TouchPad{X: s.W, Y: s.H}
+}
+
+func (s Size) Abs() Size {
+	if s.W < 0 {
+		s.W = -s.W
+	}
+	if s.H < 0 {
+		s.H = -s.H
+	}
+	return s
+}
+
+func (s Size) Add(r Size) Size {
+	s.W += r.W
+	s.H += r.H
+	return s
+}
+
+func (s Size) Sub(r Size) Size {
+	s.W -= r.W
+	s.H -= r.H
+	return s
+}
+
+func (s Size) ComponentMin(r Size) Size {
+	if r.W < s.W {
+		s.W = r.W
+	}
+	if r.H < s.H {
+		s.H = r.H
+	}
+	return s
+}
+
+func (s Size) ComponentMax(r Size) Size {
+	if r.W > s.W {
+		s.W = r.W
+	}
+	if r.H > s.H {
+		s.H = r.H
+	}
+	return s
 }
 
 type Color uint8
@@ -43,7 +141,7 @@ type RGB struct {
 type Style struct {
 	FillColor   Color
 	StrokeColor Color
-	StrokeWidth u32
+	StrokeWidth int
 }
 
 type ImageColors struct {
