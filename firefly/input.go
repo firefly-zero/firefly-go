@@ -48,6 +48,30 @@ type DPad struct {
 	Down  bool
 }
 
+func (p DPad) JustPressed(old DPad) DPad {
+	p.Left = p.Left && !old.Left
+	p.Right = p.Right && !old.Right
+	p.Up = p.Up && !old.Up
+	p.Down = p.Down && !old.Down
+	return p
+}
+
+func (p DPad) JustReleased(old DPad) DPad {
+	p.Left = !p.Left && old.Left
+	p.Right = !p.Right && old.Right
+	p.Up = !p.Up && old.Up
+	p.Down = !p.Down && old.Down
+	return p
+}
+
+func (p DPad) Held(old DPad) DPad {
+	p.Left = p.Left && old.Left
+	p.Right = p.Right && old.Right
+	p.Up = p.Up && old.Up
+	p.Down = p.Down && old.Down
+	return p
+}
+
 type Buttons struct {
 	// If "a" button is pressed.
 	A bool
@@ -65,6 +89,37 @@ type Buttons struct {
 	//
 	// For singleplayer games, the button press is always intercepted by the runtime.
 	Menu bool
+}
+
+func (p Buttons) JustPressed(old Buttons) Buttons {
+	p.A = p.A && !old.A
+	p.B = p.B && !old.B
+	p.X = p.X && !old.X
+	p.Y = p.Y && !old.Y
+	p.Menu = p.Menu && !old.Y
+	return p
+}
+
+func (p Buttons) JustReleased(old Buttons) Buttons {
+	p.A = !p.A && old.A
+	p.B = !p.B && old.B
+	p.X = !p.X && old.X
+	p.Y = !p.Y && old.Y
+	p.Y = !p.Y && old.Y
+	p.Y = !p.Y && old.Y
+	p.Menu = !p.Menu && old.Menu
+	return p
+}
+
+func (p Buttons) Held(old Buttons) Buttons {
+	p.A = p.A && old.A
+	p.B = p.B && old.B
+	p.X = p.X && old.X
+	p.Y = p.Y && old.Y
+	p.Y = p.Y && old.Y
+	p.Y = p.Y && old.Y
+	p.Menu = p.Menu && old.Menu
+	return p
 }
 
 func ReadPad(p Player) (Pad, bool) {
