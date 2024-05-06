@@ -19,6 +19,11 @@ func (p Pad) Radius() float32 {
 	return sqrt(float32(r))
 }
 
+func (p Pad) Azimuth() Angle {
+	r := atan(float32(p.Y) / float32(p.X))
+	return Radians(r)
+}
+
 func (p Pad) Point() Point {
 	return Point(p)
 }
