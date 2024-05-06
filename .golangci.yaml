@@ -1,0 +1,14 @@
+linters:
+  disable:
+    - gocheckcompilerdirectives
+  presets:
+    - bugs
+    - comment
+    - complexity
+    - error
+    - format
+    - import
+    - metalinter
+    - module
+    - performance
+    - unused

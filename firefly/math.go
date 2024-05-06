@@ -24,16 +24,16 @@ func atan(x float32) float32 {
 func atanNorm(x float32) float32 {
 	// https://github.com/tarcieri/micromath/blob/main/src/float/atan.rs
 	// Extract the sign bit
-	ux_s := 0x8000_0000 & math.Float32bits(x)
+	uxS := 0x8000_0000 & math.Float32bits(x)
 
 	// Calculate the arctangent in the first quadrant
-	bx_a := 0.596227 * x
-	if bx_a < 0 {
-		bx_a = -bx_a
+	bxA := 0.596227 * x
+	if bxA < 0 {
+		bxA = -bxA
 	}
-	n := bx_a + x*x
-	atan_1q := n / (1.0 + bx_a + n)
+	n := bxA + x*x
+	atan1q := n / (1.0 + bxA + n)
 
 	// Restore the sign bit and convert to float
-	return math.Float32frombits(ux_s | math.Float32bits(atan_1q))
+	return math.Float32frombits(uxS | math.Float32bits(atan1q))
 }
