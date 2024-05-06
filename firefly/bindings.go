@@ -84,6 +84,24 @@ func loadRomFile(
 	bufPtr unsafe.Pointer, bufLen uint32,
 ) uint32
 
+//go:wasmimport fs get_file_size
+func getFileSize(pathPtr unsafe.Pointer, pathLen uint32) uint32
+
+//go:wasmimport fs load_file
+func loadFile(
+	pathPtr unsafe.Pointer, pathLen uint32,
+	bufPtr unsafe.Pointer, bufLen uint32,
+) uint32
+
+//go:wasmimport fs dump_file
+func dumpFile(
+	pathPtr unsafe.Pointer, pathLen uint32,
+	bufPtr unsafe.Pointer, bufLen uint32,
+) uint32
+
+//go:wasmimport fs remove_file
+func removeFile(pathPtr unsafe.Pointer, pathLen uint32) uint32
+
 // -- MISC -- //
 
 //go:wasmimport misc log_debug
