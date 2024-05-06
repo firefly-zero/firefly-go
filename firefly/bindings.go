@@ -106,3 +106,15 @@ func removeFile(pathPtr unsafe.Pointer, pathLen uint32) uint32
 
 //go:wasmimport misc log_debug
 func logDebug(ptr unsafe.Pointer, len uint32)
+
+//go:wasmimport misc log_error
+func logError(ptr unsafe.Pointer, len uint32)
+
+//go:wasmimport misc set_seed
+func setSeed(seed uint32)
+
+//go:wasmimport misc get_random
+func getRandom() uint32
+
+//go:wasmimport misc quit
+func quit()
