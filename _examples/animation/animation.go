@@ -2,8 +2,10 @@ package main
 
 import "github.com/life4/firefly-go/firefly"
 
-var pos = firefly.Point{X: 60, Y: 40}
-var dir int = 2
+var (
+	pos = firefly.Point{X: 60, Y: 40}
+	dir = 2
+)
 
 const diameter = 20
 

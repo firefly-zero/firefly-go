@@ -1,19 +1,36 @@
 # https://taskfile.dev
-
 version: '3'
 
-vars:
-  GREETING: Hello, World!
-
 tasks:
+  install-gofumpt:
+    status:
+      - which gofumpt
+    cmds:
+      # https://github.com/mvdan/gofumpt
+      - go install mvdan.cc/gofumpt@latest
+  install-golangci-lint:
+    status:
+      - which golangci-lint
+    cmds:
+      # https://golangci-lint.run/welcome/install/
+      - >
+        curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh
+        | sh -s -- -b $(go env GOPATH)/bin v1.58.0
+
+  format:
+    cmds:
+      - task: install-gofumpt
+      - gofumpt -w .
   lint:
     cmds:
+      - task: install-golangci-lint
       - golangci-lint run
   test:
     cmds:
       - go test -count 1 ./...
   all:
     cmds:
+      - task: format
       - task: lint
       - task: test
   default:

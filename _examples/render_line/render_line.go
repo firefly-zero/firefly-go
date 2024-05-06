@@ -21,6 +21,9 @@ func render() {
 }
 
 func renderLine(l int) int {
-	firefly.SetColor(firefly.ColorAccent, firefly.RGB{R: uint8(255 - l*2), G: 0, B: 0})
+	firefly.SetColor(
+		firefly.ColorAccent,
+		firefly.RGB{R: uint8(255 - l*2), G: 0, B: 0},
+	)
 	return l + 5
 }

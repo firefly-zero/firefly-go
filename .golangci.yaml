@@ -1,6 +1,8 @@
 linters:
   disable:
     - gocheckcompilerdirectives
+    - gomoddirectives
+    - depguard
   presets:
     - bugs
     - comment

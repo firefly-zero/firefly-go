@@ -2,8 +2,10 @@ package main
 
 import "github.com/life4/firefly-go/firefly"
 
-var point *firefly.Point
-var center firefly.Point
+var (
+	point  *firefly.Point
+	center firefly.Point
+)
 
 const radius = 10
 
