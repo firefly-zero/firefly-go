@@ -1,5 +1,6 @@
 package firefly
 
+// The player ID.
 type Player uint32
 
 const (
