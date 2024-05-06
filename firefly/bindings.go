@@ -70,6 +70,9 @@ func drawSubImage(
 //go:wasmimport input read_pad
 func readPad(player uint32) int32
 
+//go:wasmimport input read_buttons
+func readButtons(player uint32) uint32
+
 // -- FS -- //
 
 //go:wasmimport fs get_rom_file_size
