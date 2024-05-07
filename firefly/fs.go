@@ -4,17 +4,17 @@ import "unsafe"
 
 // A file loaded from the filesystem.
 type File struct {
-	raw []byte
+	Raw []byte
 }
 
 // Convert the File to a Font.
 func (f File) Font() Font {
-	return Font(f)
+	return Font{f.Raw}
 }
 
 // Convert the File to an Image.
 func (f File) Image() Image {
-	return Image(f)
+	return Image{f.Raw}
 }
 
 // A loaded font file.
