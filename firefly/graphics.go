@@ -289,7 +289,7 @@ func DrawRoundedRect(p Point, b, c Size, s Style) {
 }
 
 // Draw a circle with the given diameter.
-func DrawCircle(p Point, d uint32, s Style) {
+func DrawCircle(p Point, d int, s Style) {
 	drawCircle(
 		int32(p.X), int32(p.Y), int32(d),
 		int32(s.FillColor), int32(s.StrokeColor), int32(s.StrokeWidth),
@@ -316,7 +316,7 @@ func DrawTriangle(a, b, c Point, s Style) {
 }
 
 // Draw an arc.
-func DrawArc(p Point, d uint32, start, sweep Angle, s Style) {
+func DrawArc(p Point, d int, start, sweep Angle, s Style) {
 	drawArc(
 		int32(p.X), int32(p.Y), int32(d),
 		int32(start.a), int32(sweep.a),
@@ -325,7 +325,7 @@ func DrawArc(p Point, d uint32, start, sweep Angle, s Style) {
 }
 
 // Draw a sector.
-func DrawSector(p Point, d uint32, start, sweep Angle, s Style) {
+func DrawSector(p Point, d int, start, sweep Angle, s Style) {
 	drawSector(
 		int32(p.X), int32(p.Y), int32(d),
 		int32(start.a), int32(sweep.a),
