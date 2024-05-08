@@ -17,6 +17,14 @@ tasks:
         curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh
         | sh -s -- -b $(go env GOPATH)/bin v1.58.0
 
+  release:
+    cmds:
+      - test {{.CLI_ARGS}}
+      - git tag v{{.CLI_ARGS}}
+      - git push
+      - git push --tags
+      - gh release create --generate-notes v{{.CLI_ARGS}}
+
   format:
     cmds:
       - task: install-gofumpt
@@ -29,6 +37,7 @@ tasks:
     cmds:
       - go test -count 1 ./...
   all:
+    desc: run all code formatters, linters, and tests
     cmds:
       - task: format
       - task: lint
