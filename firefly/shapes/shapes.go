@@ -5,7 +5,7 @@
 // or manipulate a shape before it can be drawn.
 package shapes
 
-import "github.com/life4/firefly-go/firefly"
+import "github.com/firefly-zero/firefly-go/firefly"
 
 type Shape interface {
 	Draw()

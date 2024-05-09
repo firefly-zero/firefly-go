@@ -3,7 +3,7 @@ package sudo
 import (
 	"unsafe"
 
-	"github.com/life4/firefly-go/firefly"
+	"github.com/firefly-zero/firefly-go/firefly"
 )
 
 // Get the name of all dirs in the given dir.

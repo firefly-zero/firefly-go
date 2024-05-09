@@ -1,7 +1,7 @@
 // Image source: https://opengameart.org/content/zelda-like-tilesets-and-sprites
 package main
 
-import "github.com/life4/firefly-go/firefly"
+import "github.com/firefly-zero/firefly-go/firefly"
 
 func init() {
 	firefly.Boot = boot
