@@ -1,7 +1,7 @@
 author_id = "demo"
 app_id = "go-image"
 author_name = "Demo"
-app_name = "Image Demo"
+app_name = "Image Demo (Go)"
 
 [files]
 img = { path = "image.png" }

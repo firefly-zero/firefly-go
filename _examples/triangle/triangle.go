@@ -7,10 +7,15 @@ func init() {
 }
 
 func render() {
+	firefly.ClearScreen(firefly.ColorWhite)
 	firefly.DrawTriangle(
 		firefly.Point{X: 60, Y: 10},
 		firefly.Point{X: 40, Y: 40},
 		firefly.Point{X: 80, Y: 40},
-		firefly.Style{FillColor: 2, StrokeColor: 3, StrokeWidth: 1},
+		firefly.Style{
+			FillColor:   firefly.ColorDarkBlue,
+			StrokeColor: firefly.ColorBlue,
+			StrokeWidth: 1,
+		},
 	)
 }

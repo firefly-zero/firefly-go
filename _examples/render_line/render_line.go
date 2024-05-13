@@ -8,13 +8,13 @@ func init() {
 }
 
 func render() {
-	firefly.ClearScreen(firefly.ColorLight)
+	firefly.ClearScreen(firefly.ColorWhite)
 	firefly.DrawCircle(
 		firefly.Point{X: 50, Y: 10},
 		120,
 		firefly.Style{
-			FillColor:   firefly.ColorAccent,
-			StrokeColor: firefly.ColorDark,
+			FillColor:   firefly.ColorRed,
+			StrokeColor: firefly.ColorBlack,
 			StrokeWidth: 1,
 		},
 	)
@@ -22,7 +22,7 @@ func render() {
 
 func renderLine(l int) int {
 	firefly.SetColor(
-		firefly.ColorAccent,
+		firefly.ColorRed,
 		firefly.RGB{R: uint8(255 - l*2), G: 0, B: 0},
 	)
 	return l + 5

@@ -31,10 +31,10 @@ func update() {
 }
 
 func render() {
-	firefly.ClearScreen(firefly.ColorLight)
+	firefly.ClearScreen(firefly.ColorWhite)
 	style := firefly.Style{
-		FillColor:   firefly.ColorLight,
-		StrokeColor: firefly.ColorDark,
+		FillColor:   firefly.ColorWhite,
+		StrokeColor: firefly.ColorDarkBlue,
 		StrokeWidth: 1,
 	}
 	firefly.DrawCircle(firefly.Point{
@@ -43,8 +43,8 @@ func render() {
 	}, 100+radius*2, style)
 
 	style = firefly.Style{
-		FillColor:   firefly.ColorAccent,
-		StrokeColor: firefly.ColorSecondary,
+		FillColor:   firefly.ColorBlue,
+		StrokeColor: firefly.ColorDarkBlue,
 		StrokeWidth: 1,
 	}
 	if point != nil {

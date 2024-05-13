@@ -36,12 +36,21 @@ tasks:
   test:
     cmds:
       - go test -count 1 ./...
+  test-examples:
+    cmds:
+      - firefly_cli build ./_examples/image
+      - firefly_cli build ./_examples/render_line
+      - firefly_cli build ./_examples/sprite
+      - firefly_cli build ./_examples/text
+      - firefly_cli build ./_examples/touchpad
+      - firefly_cli build ./_examples/triangle
   all:
     desc: run all code formatters, linters, and tests
     cmds:
       - task: format
       - task: lint
       - task: test
+      - task: test-examples
   default:
     cmds:
       - task: all

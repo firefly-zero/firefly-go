@@ -1,7 +1,7 @@
 author_id = "demo"
 app_id = "go-text"
 author_name = "Demo"
-app_name = "Text Demo"
+app_name = "Text Demo (Go)"
 
 [files]
 font = { path = "eg_6x10.fff", url = "https://fonts.fireflyzero.com/fonts/ascii/eg_6x10.fff" }

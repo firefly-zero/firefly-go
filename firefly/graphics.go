@@ -179,24 +179,47 @@ type Color uint8
 const (
 	// No color (100% transparency).
 	ColorNone Color = 0
-
-	// The first color in the palette. Typically, the darkest color.
-	ColorDark Color = 1
-
-	// The second color in the palette.
-	ColorAccent Color = 2
-
-	// The third color in the palette.
-	ColorSecondary Color = 3
-
-	// The last color in the palette. Typically, the brightest, almost white, color.
-	ColorLight Color = 4
+	// Black color: #1A1C2C.
+	ColorBlack Color = 1
+	// Purple color: #5D275D.
+	ColorPurple Color = 2
+	// Red color: #B13E53.
+	ColorRed Color = 3
+	// Orange color: #EF7D57.
+	ColorOrange Color = 4
+	// Yellow color: #FFCD75.
+	ColorYellow Color = 5
+	// Light green color: #A7F070.
+	ColorLightGreen Color = 6
+	// Green color: #38B764.
+	ColorGreen Color = 7
+	// Dark green color: #257179.
+	ColorDarkGreen Color = 8
+	// Dark blue color: #29366F.
+	ColorDarkBlue Color = 9
+	// Blue color: #3B5DC9.
+	ColorBlue Color = 10
+	// Light blue color: #41A6F6.
+	ColorLightBlue Color = 11
+	// Cyan color: #73EFF7.
+	ColorCyan Color = 12
+	// White color: #F4F4F4.
+	ColorWhite Color = 13
+	// Light gray color: #94B0C2.
+	ColorLightGray Color = 14
+	// Gray color: #566C86.
+	ColorGray Color = 15
+	// Dark gray color: #333C57.
+	ColorDarkGray Color = 16
 )
 
 // The RGB value of a color in the palette.
 type RGB struct {
+	// Red component
 	R uint8
+	// Green component
 	G uint8
+	// Blue component
 	B uint8
 }
 
@@ -227,14 +250,6 @@ type LineStyle struct {
 	Width int
 }
 
-// A mapping of colors in the image to the color palette.
-type ImageColors struct {
-	A Color
-	B Color
-	C Color
-	D Color
-}
-
 // Fill the whole frame with the given color.
 func ClearScreen(c Color) {
 	clearScreen(int32(c))
@@ -243,16 +258,6 @@ func ClearScreen(c Color) {
 // Set a color value in the palette.
 func SetColor(c Color, v RGB) {
 	setColor(int32(c), int32(v.R), int32(v.G), int32(v.B))
-}
-
-// Set the color palette.
-func SetColors(a, b, c, d RGB) {
-	setColors(
-		int32(a.R), int32(a.G), int32(a.B),
-		int32(b.R), int32(b.G), int32(b.B),
-		int32(c.R), int32(c.G), int32(c.B),
-		int32(d.R), int32(d.G), int32(d.B),
-	)
 }
 
 // Set a single point (1 pixel is scaling is 1) on the frame.
@@ -348,25 +353,23 @@ func DrawText(t string, f Font, p Point, c Color) {
 }
 
 // Render an image using the given colors.
-func DrawImage(i Image, p Point, c ImageColors) {
+func DrawImage(i Image, p Point) {
 	rawPtr := unsafe.Pointer(unsafe.SliceData(i.raw))
 	drawImage(
 		rawPtr, uint32(len(i.raw)),
 		int32(p.X), int32(p.Y),
-		int32(c.A), int32(c.B), int32(c.C), int32(c.D),
 	)
 }
 
 // Draw a subregion of an image.
 //
 // Most often used to draw a sprite from a sprite atlas.
-func DrawSubImage(i SubImage, p Point, c ImageColors) {
+func DrawSubImage(i SubImage, p Point) {
 	rawPtr := unsafe.Pointer(unsafe.SliceData(i.raw))
 	drawSubImage(
 		rawPtr, uint32(len(i.raw)),
 		int32(p.X), int32(p.Y),
 		int32(i.point.X), int32(i.point.Y),
 		uint32(i.size.W), uint32(i.size.H),
-		int32(c.A), int32(c.B), int32(c.C), int32(c.D),
 	)
 }
