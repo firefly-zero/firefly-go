@@ -10,14 +10,6 @@ func clearScreen(c int32)
 //go:wasmimport graphics set_color
 func setColor(c, r, g, b int32)
 
-//go:wasmimport graphics set_colors
-func setColors(
-	r1, g1, b1,
-	r2, g2, b2,
-	r3, g3, b3,
-	r4, g4, b4 int32,
-)
-
 //go:wasmimport graphics draw_point
 func drawPoint(x, y, c int32)
 
@@ -53,16 +45,12 @@ func drawText(
 )
 
 //go:wasmimport graphics draw_image
-func drawImage(
-	ptr unsafe.Pointer, len uint32,
-	x, y, c1, c2, c3, c4 int32,
-)
+func drawImage(ptr unsafe.Pointer, len uint32, x, y int32)
 
 //go:wasmimport graphics draw_sub_image
 func drawSubImage(
 	ptr unsafe.Pointer, len uint32,
 	x, y, subX, subY int32, subWidth, subHeight uint32,
-	c1, c2, c3, c4 int32,
 )
 
 // -- INPUT -- //
