@@ -14,11 +14,6 @@ func boot() {
 }
 
 func render() {
-	colors := firefly.ImageColors{
-		A: firefly.ColorDark,
-		B: firefly.ColorAccent,
-		C: firefly.ColorSecondary,
-		D: firefly.ColorNone,
-	}
-	firefly.DrawImage(image, firefly.Point{X: 60, Y: 60}, colors)
+	firefly.ClearScreen(firefly.ColorWhite)
+	firefly.DrawImage(image, firefly.Point{X: 60, Y: 60})
 }
