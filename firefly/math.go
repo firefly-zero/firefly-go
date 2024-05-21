@@ -2,38 +2,35 @@ package firefly
 
 import "math"
 
-const uvnan = 0x7FE00000
+const signMask uint32 = 0x8000_0000
 
 func sqrt(x float32) float32 {
-	// https://github.com/tarcieri/micromath/blob/main/src/float/sqrt.rs
-	if x >= 0. {
-		r := (math.Float32bits(x) + 0x3f80_0000) >> 1
-		return math.Float32frombits(r)
-	}
-	return math.Float32frombits(uvnan)
+	r := (math.Float32bits(x) + 0x3f80_0000) >> 1
+	return math.Float32frombits(r)
 }
 
-// Approximates `atan(x)` approximation in radians with a maximum error of `0.002`.
-func atan(x float32) float32 {
-	// https://github.com/tarcieri/micromath/blob/main/src/float/atan.rs
-	return math.Pi / 2. * atanNorm(x)
-}
-
-// Approximates `atan(x)` normalized to the `[−1,1]` range with a maximum
+// Approximates `atan2(y,x)` normalized to the `[0, 4)` range with a maximum
 // error of `0.1620` degrees.
-func atanNorm(x float32) float32 {
-	// https://github.com/tarcieri/micromath/blob/main/src/float/atan.rs
-	// Extract the sign bit
-	uxS := 0x8000_0000 & math.Float32bits(x)
+func atan2Norm(y float32, x float32) float32 {
+	const B = 0.596_227
 
-	// Calculate the arctangent in the first quadrant
-	bxA := 0.596227 * x
-	if bxA < 0 {
-		bxA = -bxA
-	}
-	n := bxA + x*x
-	atan1q := n / (1.0 + bxA + n)
+	// Extract sign bits from floating point values
+	uxS := signMask & math.Float32bits(x)
+	uyS := signMask & math.Float32bits(y)
 
-	// Restore the sign bit and convert to float
-	return math.Float32frombits(uxS | math.Float32bits(atan1q))
+	// Determine quadrant offset
+	q := float32((^uxS&uyS)>>29 | uxS>>30)
+
+	// Calculate arctangent in the first quadrant
+	bxyA := abs(B * x * y)
+	n := bxyA + y*y
+	atan1q := n / (x*x + bxyA + n)
+
+	// Translate it to the proper quadrant
+	uatan2q := (uxS ^ uyS) | math.Float32bits(atan1q)
+	return q + math.Float32frombits(uatan2q)
+}
+
+func abs(self float32) float32 {
+	return math.Float32frombits(math.Float32bits(self) & ^signMask)
 }

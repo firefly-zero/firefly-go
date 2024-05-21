@@ -1,5 +1,7 @@
 package firefly
 
+import "math"
+
 const (
 	// The lowest possible value for [Pad.X].
 	PadMinX = -1000
@@ -38,7 +40,7 @@ func (p Pad) Radius() float32 {
 //
 // [polar coordinate]: https://en.wikipedia.org/wiki/Polar_coordinate_system
 func (p Pad) Azimuth() Angle {
-	r := atan(float32(p.Y) / float32(p.X))
+	r := math.Pi / 2. * atan2Norm(float32(p.Y), float32(p.X))
 	return Radians(r)
 }
 
