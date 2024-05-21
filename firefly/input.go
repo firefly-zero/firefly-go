@@ -1,5 +1,11 @@
 package firefly
 
+import (
+	"math"
+
+	"github.com/orsinium-labs/tinymath"
+)
+
 const (
 	// The lowest possible value for [Pad.X].
 	PadMinX = -1000
@@ -31,14 +37,14 @@ type Pad struct {
 // The distance from the pad center to the touch point.
 func (p Pad) Radius() float32 {
 	r := p.X*p.X + p.Y*p.Y
-	return sqrt(float32(r))
+	return tinymath.Sqrt(float32(r))
 }
 
 // The angle of the [polar coordinate] of the touch point.
 //
 // [polar coordinate]: https://en.wikipedia.org/wiki/Polar_coordinate_system
 func (p Pad) Azimuth() Angle {
-	r := atan(float32(p.Y) / float32(p.X))
+	r := math.Pi / 2. * tinymath.Atan2Norm(float32(p.Y), float32(p.X))
 	return Radians(r)
 }
 
