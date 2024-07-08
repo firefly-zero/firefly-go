@@ -28,3 +28,8 @@ func GetRandom() uint32 {
 func Quit() {
 	quit()
 }
+
+// Restart the app.
+func Restart() {
+	restart()
+}
