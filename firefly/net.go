@@ -5,6 +5,13 @@ import "math/bits"
 // The peer ID.
 type Peer uint8
 
+// Peer value that can be passed to [ReadPad] and [ReadButtons]
+// to get the combined input of all peers.
+//
+// Useful for single-player games that want in multi-player to handle
+// inputs from all devices as one input.
+const Combined Peer = 0xFF
+
 // The map of peers online.
 type Peers uint32
 
