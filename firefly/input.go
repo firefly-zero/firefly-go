@@ -167,7 +167,7 @@ func (p Buttons) Held(old Buttons) Buttons {
 
 // Get the current touch pad state.
 //
-// In single-player game, the peer ID doesn't matter.
+// The peer can be [Combined] or one of the [GetPeers].
 func ReadPad(p Peer) (Pad, bool) {
 	raw := readPad(uint32(p))
 	pressed := raw != 0xffff
@@ -183,7 +183,7 @@ func ReadPad(p Peer) (Pad, bool) {
 
 // Get the currently pressed buttons.
 //
-// In single-player game, the peer ID doesn't matter.
+// The peer can be [Combined] or one of the [GetPeers].
 func ReadButtons(p Peer) Buttons {
 	raw := readButtons(uint32(p))
 	return Buttons{
