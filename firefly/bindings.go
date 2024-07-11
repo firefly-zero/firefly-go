@@ -90,6 +90,14 @@ func dumpFile(
 //go:wasmimport fs remove_file
 func removeFile(pathPtr unsafe.Pointer, pathLen uint32) uint32
 
+// -- NET -- //
+
+//go:wasmimport net get_me
+func getMe() uint32
+
+//go:wasmimport net get_peers
+func getPeers() uint32
+
 // -- MISC -- //
 
 //go:wasmimport misc log_debug
@@ -103,6 +111,9 @@ func setSeed(seed uint32)
 
 //go:wasmimport misc get_random
 func getRandom() uint32
+
+//go:wasmimport misc restart
+func restart()
 
 //go:wasmimport misc quit
 func quit()

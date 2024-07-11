@@ -19,7 +19,7 @@ func update() {
 		X: firefly.Width / 2,
 		Y: firefly.Height / 2,
 	}
-	input, pressed := firefly.ReadPad(firefly.Player0)
+	input, pressed := firefly.ReadPad(firefly.Combined)
 	if pressed {
 		point = &firefly.Point{
 			X: center.X + input.X/20 - radius,
