@@ -73,7 +73,7 @@ func addClip(parentID uint32, low float32, high float32) uint32
 // modulators
 
 //go:wasmimport audio mod_linear
-func modLinear(nodeID uint32, param uint32, start float32, end float32, start_at uint32, end_at uint32)
+func modLinear(nodeID uint32, param uint32, start float32, end float32, startAt uint32, endAt uint32)
 
 //go:wasmimport audio mod_hold
 func modHold(nodeID uint32, param uint32, v1 float32, v2 float32, time uint32)
