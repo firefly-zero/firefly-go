@@ -14,7 +14,7 @@ func ListDirs(path string) []string {
 	bufPtr := unsafe.Pointer(unsafe.SliceData(buf))
 	listDirs(
 		pathPtr, uint32(len(path)),
-		bufPtr, uint32(bufSize),
+		bufPtr, bufSize,
 	)
 	res := make([]string, 0)
 	for len(buf) != 0 {
@@ -47,7 +47,7 @@ func LoadFile(path string) firefly.File {
 	rawPtr := unsafe.Pointer(unsafe.SliceData(raw))
 	loadFile(
 		pathPtr, uint32(len(path)),
-		rawPtr, uint32(fileSize),
+		rawPtr, fileSize,
 	)
 	return firefly.File{Raw: raw}
 }
