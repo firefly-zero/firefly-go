@@ -74,25 +74,25 @@ type Zero struct{ Node }
 
 // Add sine wave oscillator source (`∿`).
 func (n Node) AddSine(f Freq, phase float32) Sine {
-	id := addSine(n.id, f.f, phase)
+	id := addSine(n.id, float32(f), phase)
 	return Sine{Node{id}}
 }
 
 // Add square wave oscillator source (`⎍`).
 func (n Node) AddSquare(f Freq, phase float32) Square {
-	id := addSquare(n.id, f.f, phase)
+	id := addSquare(n.id, float32(f), phase)
 	return Square{Node{id}}
 }
 
 // Add sawtooth wave oscillator source (`╱│`).
 func (n Node) AddSawtooth(f Freq, phase float32) Sawtooth {
-	id := addSawtooth(n.id, f.f, phase)
+	id := addSawtooth(n.id, float32(f), phase)
 	return Sawtooth{Node{id}}
 }
 
 // Add triangle wave oscillator source (`╱╲`).
 func (n Node) AddTriangle(f Freq, phase float32) Triangle {
-	id := addTriangle(n.id, f.f, phase)
+	id := addTriangle(n.id, float32(f), phase)
 	return Triangle{Node{id}}
 }
 
