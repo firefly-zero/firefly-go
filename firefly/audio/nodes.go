@@ -6,70 +6,70 @@ type Node struct {
 
 var Out = Node{0}
 
-// A marker for a specific node type. See [Node.AddSine].
+// An audio node created by [Node.AddSine].
 type Sine struct{ Node }
 
-// A marker for a specific node type. See [Node.AddMix].
+// An audio node created by [Node.AddMix].
 type Mix struct{ Node }
 
-// A marker for a specific node type. See [Node.AddAllForOne].
+// An audio node created by [Node.AddAllForOne].
 type AllForOne struct{ Node }
 
-// A marker for a specific node type. See [Node.AddGain].
+// An audio node created by [Node.AddGain].
 type Gain struct{ Node }
 
-// A marker for a specific node type. See [Node.AddLoop].
+// An audio node created by [Node.AddLoop].
 type Loop struct{ Node }
 
-// A marker for a specific node type. See [Node.AddConcat].
+// An audio node created by [Node.AddConcat].
 type Concat struct{ Node }
 
-// A marker for a specific node type. See [Node.AddPan].
+// An audio node created by [Node.AddPan].
 type Pan struct{ Node }
 
-// A marker for a specific node type. See [Node.AddMute].
+// An audio node created by [Node.AddMute].
 type Mute struct{ Node }
 
-// A marker for a specific node type. See [Node.AddPause].
+// An audio node created by [Node.AddPause].
 type Pause struct{ Node }
 
-// A marker for a specific node type. See [Node.AddTrackPosition].
+// An audio node created by [Node.AddTrackPosition].
 type TrackPosition struct{ Node }
 
-// A marker for a specific node type. See [Node.AddLowPass].
+// An audio node created by [Node.AddLowPass].
 type LowPass struct{ Node }
 
-// A marker for a specific node type. See [Node.AddHighPass].
+// An audio node created by [Node.AddHighPass].
 type HighPass struct{ Node }
 
-// A marker for a specific node type. See [Node.AddTakeLeft].
+// An audio node created by [Node.AddTakeLeft].
 type TakeLeft struct{ Node }
 
-// A marker for a specific node type. See [Node.AddTakeRight].
+// An audio node created by [Node.AddTakeRight].
 type TakeRight struct{ Node }
 
-// A marker for a specific node type. See [Node.AddSwap].
+// An audio node created by [Node.AddSwap].
 type Swap struct{ Node }
 
-// A marker for a specific node type. See [Node.AddClip].
+// An audio node created by [Node.AddClip].
 type Clip struct{ Node }
 
-// A marker for a specific node type. See [Node.AddSquare].
+// An audio node created by [Node.AddSquare].
 type Square struct{ Node }
 
-// A marker for a specific node type. See [Node.AddSawtooth].
+// An audio node created by [Node.AddSawtooth].
 type Sawtooth struct{ Node }
 
-// A marker for a specific node type. See [Node.AddTriangle].
+// An audio node created by [Node.AddTriangle].
 type Triangle struct{ Node }
 
-// A marker for a specific node type. See [Node.AddNoise].
+// An audio node created by [Node.AddNoise].
 type Noise struct{ Node }
 
-// A marker for a specific node type. See [Node.AddEmpty].
+// An audio node created by [Node.AddEmpty].
 type Empty struct{ Node }
 
-// A marker for a specific node type. See [Node.AddZero].
+// An audio node created by [Node.AddZero].
 type Zero struct{ Node }
 
 // Add sine wave oscillator source (`∿`).
