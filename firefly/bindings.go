@@ -32,10 +32,10 @@ func drawEllipse(x, y, w, h, fc, sc, sw int32)
 func drawTriangle(x1, y1, x2, y2, x3, y3, fc, sc, sw int32)
 
 //go:wasmimport graphics draw_arc
-func drawArc(x, y, d, ast, asw, fc, sc, sw int32)
+func drawArc(x, y, d int32, ast, asw float32, fc, sc, sw int32)
 
 //go:wasmimport graphics draw_sector
-func drawSector(x, y, d, ast, asw, fc, sc, sw int32)
+func drawSector(x, y, d int32, ast, asw float32, fc, sc, sw int32)
 
 //go:wasmimport graphics draw_text
 func drawText(
