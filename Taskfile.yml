@@ -1,5 +1,5 @@
 # https://taskfile.dev
-version: '3'
+version: "3"
 
 tasks:
   install-gofumpt:
@@ -44,6 +44,7 @@ tasks:
       - firefly_cli build ./_examples/text
       - firefly_cli build ./_examples/touchpad
       - firefly_cli build ./_examples/triangle
+      - firefly_cli build ./_examples/audio_sine
   all:
     desc: run all code formatters, linters, and tests
     cmds:

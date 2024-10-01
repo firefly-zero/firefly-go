@@ -4,6 +4,8 @@ linters:
     - exhaustruct
     - gocheckcompilerdirectives
     - gochecknoglobals
+    - gochecknoinits
+    - gomoddirectives
     - mnd
     - nlreturn
     - predeclared
