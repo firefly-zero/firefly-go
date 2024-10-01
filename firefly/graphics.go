@@ -324,7 +324,7 @@ func DrawTriangle(a, b, c Point, s Style) {
 func DrawArc(p Point, d int, start, sweep Angle, s Style) {
 	drawArc(
 		int32(p.X), int32(p.Y), int32(d),
-		int32(start.a), int32(sweep.a),
+		start.a, sweep.a,
 		int32(s.FillColor), int32(s.StrokeColor), int32(s.StrokeWidth),
 	)
 }
@@ -333,7 +333,7 @@ func DrawArc(p Point, d int, start, sweep Angle, s Style) {
 func DrawSector(p Point, d int, start, sweep Angle, s Style) {
 	drawSector(
 		int32(p.X), int32(p.Y), int32(d),
-		int32(start.a), int32(sweep.a),
+		start.a, sweep.a,
 		int32(s.FillColor), int32(s.StrokeColor), int32(s.StrokeWidth),
 	)
 }
