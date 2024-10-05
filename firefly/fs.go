@@ -51,7 +51,7 @@ func LoadROMFile(path string) File {
 	rawPtr := unsafe.Pointer(unsafe.SliceData(raw))
 	loadRomFile(
 		pathPtr, uint32(len(path)),
-		rawPtr, uint32(fileSize),
+		rawPtr, fileSize,
 	)
 	return File{raw}
 }
@@ -64,7 +64,7 @@ func LoadDataFile(path string) File {
 	rawPtr := unsafe.Pointer(unsafe.SliceData(raw))
 	loadFile(
 		pathPtr, uint32(len(path)),
-		rawPtr, uint32(fileSize),
+		rawPtr, fileSize,
 	)
 	return File{raw}
 }

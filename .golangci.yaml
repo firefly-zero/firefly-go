@@ -1,8 +1,16 @@
 linters:
   disable:
-    - gocheckcompilerdirectives
-    - gomoddirectives
     - depguard
+    - exhaustruct
+    - gocheckcompilerdirectives
+    - gochecknoglobals
+    - gochecknoinits
+    - gomoddirectives
+    - mnd
+    - nlreturn
+    - predeclared
+    - varnamelen
+    - wsl
   presets:
     - bugs
     - comment
@@ -13,4 +21,9 @@ linters:
     - metalinter
     - module
     - performance
+    - style
     - unused
+linters-settings:
+  gosec:
+    excludes:
+      - G115
