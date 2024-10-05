@@ -221,3 +221,74 @@ func (n Node) ResetAll() {
 func (n Node) Clear() {
 	clear(n.id)
 }
+
+// Modulate oscillation frequency.
+func (n Sine) Modulate(m Modulator) {
+	m.Modulate(n.id, 0)
+}
+
+// Modulate oscillation frequency.
+func (n Square) Modulate(m Modulator) {
+	m.Modulate(n.id, 0)
+}
+
+// Modulate oscillation frequency.
+func (n Sawtooth) Modulate(m Modulator) {
+	m.Modulate(n.id, 0)
+}
+
+// Modulate oscillation frequency.
+func (n Triangle) Modulate(m Modulator) {
+	m.Modulate(n.id, 0)
+}
+
+// Modulate the gain level.
+func (n Gain) Modulate(m Modulator) {
+	m.Modulate(n.id, 0)
+}
+
+// Modulate the pan value (from 0. to 1.: 0. is only left, 1. is only right).
+func (n Pan) Modulate(m Modulator) {
+	m.Modulate(n.id, 0)
+}
+
+// Modulate the muted state.
+//
+// Below 0.5 is muted, above is unmuted.
+func (n Mute) Modulate(m Modulator) {
+	m.Modulate(n.id, 0)
+}
+
+// Modulate the paused state.
+//
+// Below 0.5 is paused, above is playing.
+func (n Pause) Modulate(m Modulator) {
+	m.Modulate(n.id, 0)
+}
+
+// Modulate the cut-off frequency.
+func (n LowPass) ModulateFreq(m Modulator) {
+	m.Modulate(n.id, 0)
+}
+
+// Modulate the cut-off frequency.
+func (n HighPass) ModulateFreq(m Modulator) {
+	m.Modulate(n.id, 0)
+}
+
+// Modulate the low cut amplitude and adjust the high amplitude to keep the gap.
+//
+// In other words, the difference between low and high cut points will stay the same.
+func (n Clip) ModulateBoth(m Modulator) {
+	m.Modulate(n.id, 0)
+}
+
+// Modulate the low cut amplitude.
+func (n Clip) ModulateLow(m Modulator) {
+	m.Modulate(n.id, 0)
+}
+
+// Modulate the high cut amplitude.
+func (n Clip) ModulateHigh(m Modulator) {
+	m.Modulate(n.id, 0)
+}
