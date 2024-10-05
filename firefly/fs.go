@@ -43,21 +43,11 @@ type SubImage struct {
 	size  Size
 }
 
-// Read a file from the app ROM.
-func LoadROMFile(path string) File {
-	pathPtr := unsafe.Pointer(unsafe.StringData(path))
-	fileSize := getRomFileSize(pathPtr, uint32(len(path)))
-	raw := make([]byte, fileSize)
-	rawPtr := unsafe.Pointer(unsafe.SliceData(raw))
-	loadRomFile(
-		pathPtr, uint32(len(path)),
-		rawPtr, fileSize,
-	)
-	return File{raw}
-}
-
-// Read a file from the app data dir.
-func LoadDataFile(path string) File {
+// Read a file.
+//
+// It will first lookup file in the app's ROM directory and then check
+// the app writable data directory.
+func LoadFile(path string) File {
 	pathPtr := unsafe.Pointer(unsafe.StringData(path))
 	fileSize := getFileSize(pathPtr, uint32(len(path)))
 	raw := make([]byte, fileSize)
@@ -70,7 +60,7 @@ func LoadDataFile(path string) File {
 }
 
 // Write a file into the app data dir.
-func DumpDataFile(path string, raw []byte) {
+func DumpFile(path string, raw []byte) {
 	pathPtr := unsafe.Pointer(unsafe.StringData(path))
 	rawPtr := unsafe.Pointer(unsafe.SliceData(raw))
 	dumpFile(
@@ -80,7 +70,7 @@ func DumpDataFile(path string, raw []byte) {
 }
 
 // Remove a file from the app data dir.
-func RemoveDataFile(path string) {
+func RemoveFile(path string) {
 	pathPtr := unsafe.Pointer(unsafe.StringData(path))
 	removeFile(pathPtr, uint32(len(path)))
 }

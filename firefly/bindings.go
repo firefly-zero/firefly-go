@@ -63,15 +63,6 @@ func readButtons(player uint32) uint32
 
 // -- FS -- //
 
-//go:wasmimport fs get_rom_file_size
-func getRomFileSize(pathPtr unsafe.Pointer, pathLen uint32) uint32
-
-//go:wasmimport fs load_rom_file
-func loadRomFile(
-	pathPtr unsafe.Pointer, pathLen uint32,
-	bufPtr unsafe.Pointer, bufLen uint32,
-) uint32
-
 //go:wasmimport fs get_file_size
 func getFileSize(pathPtr unsafe.Pointer, pathLen uint32) uint32
 
