@@ -47,9 +47,14 @@ type SubImage struct {
 //
 // It will first lookup file in the app's ROM directory and then check
 // the app writable data directory.
+//
+// If the file does not exist, the Raw value of the returned File will be nil.
 func LoadFile(path string) File {
 	pathPtr := unsafe.Pointer(unsafe.StringData(path))
 	fileSize := getFileSize(pathPtr, uint32(len(path)))
+	if fileSize == 0 {
+		return File{nil}
+	}
 	raw := make([]byte, fileSize)
 	rawPtr := unsafe.Pointer(unsafe.SliceData(raw))
 	loadFile(
