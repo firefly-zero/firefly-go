@@ -250,6 +250,21 @@ type LineStyle struct {
 	Width int
 }
 
+type Canvas struct {
+	raw []byte
+}
+
+func NewCanvas(s Size) Canvas {
+	headerSize := 5 + 8
+	bodySize := s.W * s.H / 2
+	raw := make([]byte, headerSize+bodySize)
+	raw[0] = 0x21           // magic number
+	raw[1] = 4              // BPP
+	raw[2] = byte(s.W)      // width
+	raw[3] = byte(s.W >> 8) // width
+	return Canvas{raw}
+}
+
 // Fill the whole frame with the given color.
 func ClearScreen(c Color) {
 	clearScreen(int32(c))
@@ -372,4 +387,17 @@ func DrawSubImage(i SubImage, p Point) {
 		int32(i.point.X), int32(i.point.Y),
 		uint32(i.size.W), uint32(i.size.H),
 	)
+}
+
+func SetCanvas(c Canvas) {
+	rawPtr := unsafe.Pointer(unsafe.SliceData(c.raw))
+	setCanvas(rawPtr, uint32(len(c.raw)))
+}
+
+func UnsetCanvas() {
+	unsetCanvas()
+}
+
+func DrawCanvas(p Point) {
+	drawCanvas(int32(p.X), int32(p.Y))
 }
