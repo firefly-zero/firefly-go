@@ -30,8 +30,8 @@ func update() {
 			continue
 		}
 		point := firefly.Point{
-			X: pad.X/20 + 50,
-			Y: pad.Y/20 + 50,
+			X: 50 + pad.X/20,
+			Y: 50 - pad.Y/20,
 		}
 		positions[i] = &point
 		buttons := firefly.ReadButtons(peer)
