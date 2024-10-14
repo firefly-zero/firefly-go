@@ -45,10 +45,8 @@ func update() {
 
 func render() {
 	firefly.ClearScreen(firefly.ColorWhite)
-	firefly.SetCanvas(canvas)
 	shift := firefly.Point{X: 10, Y: 10}
-	firefly.DrawCanvas(shift)
-	firefly.UnsetCanvas()
+	firefly.DrawImage(canvas.Image(), shift)
 	for _, point := range positions {
 		if point != nil {
 			firefly.DrawPoint(point.Add(shift), firefly.ColorDarkBlue)

@@ -262,7 +262,18 @@ func NewCanvas(s Size) Canvas {
 	raw[1] = 4              // BPP
 	raw[2] = byte(s.W)      // width
 	raw[3] = byte(s.W >> 8) // width
+	raw[4] = 255            // transparency
+
+	// color swaps
+	var i byte
+	for i = 0; i < 8; i++ { //nolint:intrange
+		raw[5+i] = ((i * 2) << 4) | (i*2 + 1)
+	}
 	return Canvas{raw}
+}
+
+func (c Canvas) Image() Image {
+	return Image(c)
 }
 
 // Fill the whole frame with the given color.
@@ -396,8 +407,4 @@ func SetCanvas(c Canvas) {
 
 func UnsetCanvas() {
 	unsetCanvas()
-}
-
-func DrawCanvas(p Point) {
-	drawCanvas(int32(p.X), int32(p.Y))
 }

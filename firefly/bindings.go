@@ -59,9 +59,6 @@ func setCanvas(ptr unsafe.Pointer, len uint32)
 //go:wasmimport graphics unset_canvas
 func unsetCanvas()
 
-//go:wasmimport graphics draw_canvas
-func drawCanvas(x, y int32)
-
 // -- INPUT -- //
 
 //go:wasmimport input read_pad
