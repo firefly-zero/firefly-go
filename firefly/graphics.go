@@ -283,6 +283,16 @@ func (i Image) Transparency() Color {
 	return Color(c + 1)
 }
 
+// Set the color that should represent transparency.
+//
+// Pass ColorNone to disable transparency.
+func (i Image) SetTransparency(c Color) {
+	if c == ColorNone {
+		i.raw[4] = 16
+	}
+	i.raw[4] = byte(c) - 1
+}
+
 // The number of pixels the image has.
 func (i Image) Pixels() int {
 	return len(i.raw) * 8 / int(i.BPP())
@@ -311,6 +321,49 @@ func (i Image) Size() Size {
 	return Size{
 		W: w,
 		H: i.Pixels() / w,
+	}
+}
+
+// Get the color used to represent the given pixel value.
+func (i Image) GetColor(p uint8) Color {
+	if p > 15 {
+		return ColorNone
+	}
+	byteVal := i.raw[5+p/2]
+	if p%2 == 0 {
+		byteVal >>= 4
+	}
+	byteVal &= 0b1111
+	transp := i.raw[4]
+	if byteVal == transp {
+		return ColorNone
+	}
+	return Color(byteVal + 1)
+}
+
+// Set color to be used to represent the given pixel value.
+func (i Image) SetColor(p uint8, c Color) {
+	if p > 15 || c == ColorNone {
+		return
+	}
+	byteIdx := 5 + p/2
+	byteVal := i.raw[byteIdx]
+	colorVal := byte(c) - 1
+	if p%2 == 0 {
+		byteVal = (colorVal << 4) | (byteVal & 0b_0000_1111)
+	} else {
+		byteVal = (byteVal & 0b_1111_0000) | colorVal
+	}
+	i.raw[byteIdx] = byteVal
+}
+
+// Replace the old color with the new value.
+func (i Image) ReplaceColor(old, new Color) {
+	var p uint8
+	for p = range 16 {
+		if i.GetColor(p) == old {
+			i.SetColor(p, new)
+		}
 	}
 }
 
