@@ -250,12 +250,86 @@ type LineStyle struct {
 	Width int
 }
 
+// A loaded font file.
+//
+// Can be loaded using [LoadROMFile].
+type Font struct {
+	raw []byte
+}
+
+// A loaded image file.
+//
+// Can be loaded using [LoadROMFile].
+type Image struct {
+	raw []byte
+}
+
+// Get a rectangle subregion of the image.
+func (i Image) Sub(p Point, s Size) SubImage {
+	return SubImage{raw: i.raw, point: p, size: s}
+}
+
+// Bits per pixel. One of: 1, 2, or 4.
+func (i Image) BPP() uint8 {
+	return i.raw[1]
+}
+
+// The color used for transparency. If no transparency, returns [ColorNone].
+func (i Image) Transparency() Color {
+	c := i.raw[4]
+	if c > 15 {
+		return ColorNone
+	}
+	return Color(c + 1)
+}
+
+// The number of pixels the image has.
+func (i Image) Pixels() int {
+	return len(i.raw) * 8 / int(i.BPP())
+}
+
+// The image width in pixels.
+func (i Image) Width() int {
+	return int(i.raw[2]) | int(i.raw[3])<<8
+}
+
+// The image height in pixels.
+func (i Image) Height() int {
+	w := i.Width()
+	if w == 0 {
+		return 0
+	}
+	return i.Pixels() / w
+}
+
+// The image size in pixels.
+func (i Image) Size() Size {
+	w := i.Width()
+	if w == 0 {
+		return Size{}
+	}
+	return Size{
+		W: w,
+		H: i.Pixels() / w,
+	}
+}
+
+// A subregion of an image. Constructed using [Image.Sub].
+type SubImage struct {
+	raw   []byte
+	point Point
+	size  Size
+}
+
+// Canvas is an [Image] that can be drawn upon.
+//
+// Constructed by [NewCanvas].
 type Canvas struct {
 	raw []byte
 }
 
 func NewCanvas(s Size) Canvas {
-	headerSize := 5 + 8
+	const headerSize = 5 + 8
 	bodySize := s.W * s.H / 2
 	raw := make([]byte, headerSize+bodySize)
 	raw[0] = 0x21           // magic number
@@ -266,12 +340,13 @@ func NewCanvas(s Size) Canvas {
 
 	// color swaps
 	var i byte
-	for i = 0; i < 8; i++ { //nolint:intrange
+	for i = range 8 {
 		raw[5+i] = ((i * 2) << 4) | (i*2 + 1)
 	}
 	return Canvas{raw}
 }
 
+// Represent the canvas as an [Image].
 func (c Canvas) Image() Image {
 	return Image(c)
 }
