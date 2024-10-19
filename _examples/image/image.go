@@ -10,7 +10,7 @@ func init() {
 var image firefly.Image
 
 func boot() {
-	image = firefly.LoadROMFile("img").Image()
+	image = firefly.LoadFile("img").Image()
 }
 
 func render() {

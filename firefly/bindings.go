@@ -53,6 +53,12 @@ func drawSubImage(
 	x, y, subX, subY int32, subWidth, subHeight uint32,
 )
 
+//go:wasmimport graphics set_canvas
+func setCanvas(ptr unsafe.Pointer, len uint32)
+
+//go:wasmimport graphics unset_canvas
+func unsetCanvas()
+
 // -- INPUT -- //
 
 //go:wasmimport input read_pad

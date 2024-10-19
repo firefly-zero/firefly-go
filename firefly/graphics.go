@@ -250,6 +250,160 @@ type LineStyle struct {
 	Width int
 }
 
+// A loaded font file.
+//
+// Can be loaded using [LoadFile].
+type Font struct {
+	raw []byte
+}
+
+// A loaded image file.
+//
+// Can be loaded using [LoadFile].
+type Image struct {
+	raw []byte
+}
+
+// Get a rectangle subregion of the image.
+func (i Image) Sub(p Point, s Size) SubImage {
+	return SubImage{raw: i.raw, point: p, size: s}
+}
+
+// Bits per pixel. One of: 1, 2, or 4.
+func (i Image) BPP() uint8 {
+	return i.raw[1]
+}
+
+// The color used for transparency. If no transparency, returns [ColorNone].
+func (i Image) Transparency() Color {
+	c := i.raw[4]
+	if c > 15 {
+		return ColorNone
+	}
+	return Color(c + 1)
+}
+
+// Set the color that should represent transparency.
+//
+// Pass ColorNone to disable transparency.
+func (i Image) SetTransparency(c Color) {
+	if c == ColorNone {
+		i.raw[4] = 16
+	}
+	i.raw[4] = byte(c) - 1
+}
+
+// The number of pixels the image has.
+func (i Image) Pixels() int {
+	return len(i.raw) * 8 / int(i.BPP())
+}
+
+// The image width in pixels.
+func (i Image) Width() int {
+	return int(i.raw[2]) | int(i.raw[3])<<8
+}
+
+// The image height in pixels.
+func (i Image) Height() int {
+	w := i.Width()
+	if w == 0 {
+		return 0
+	}
+	return i.Pixels() / w
+}
+
+// The image size in pixels.
+func (i Image) Size() Size {
+	w := i.Width()
+	if w == 0 {
+		return Size{}
+	}
+	return Size{
+		W: w,
+		H: i.Pixels() / w,
+	}
+}
+
+// Get the color used to represent the given pixel value.
+func (i Image) GetColor(p uint8) Color {
+	if p > 15 {
+		return ColorNone
+	}
+	byteVal := i.raw[5+p/2]
+	if p%2 == 0 {
+		byteVal >>= 4
+	}
+	byteVal &= 0b1111
+	transp := i.raw[4]
+	if byteVal == transp {
+		return ColorNone
+	}
+	return Color(byteVal + 1)
+}
+
+// Set color to be used to represent the given pixel value.
+func (i Image) SetColor(p uint8, c Color) {
+	if p > 15 || c == ColorNone {
+		return
+	}
+	byteIdx := 5 + p/2
+	byteVal := i.raw[byteIdx]
+	colorVal := byte(c) - 1
+	if p%2 == 0 {
+		byteVal = (colorVal << 4) | (byteVal & 0b_0000_1111)
+	} else {
+		byteVal = (byteVal & 0b_1111_0000) | colorVal
+	}
+	i.raw[byteIdx] = byteVal
+}
+
+// Replace the old color with the new value.
+func (i Image) ReplaceColor(old, new Color) {
+	var p uint8
+	for p = range 16 {
+		if i.GetColor(p) == old {
+			i.SetColor(p, new)
+		}
+	}
+}
+
+// A subregion of an image. Constructed using [Image.Sub].
+type SubImage struct {
+	raw   []byte
+	point Point
+	size  Size
+}
+
+// Canvas is an [Image] that can be drawn upon.
+//
+// Constructed by [NewCanvas].
+type Canvas struct {
+	raw []byte
+}
+
+func NewCanvas(s Size) Canvas {
+	const headerSize = 5 + 8
+	bodySize := s.W * s.H / 2
+	raw := make([]byte, headerSize+bodySize)
+	raw[0] = 0x21           // magic number
+	raw[1] = 4              // BPP
+	raw[2] = byte(s.W)      // width
+	raw[3] = byte(s.W >> 8) // width
+	raw[4] = 255            // transparency
+
+	// color swaps
+	var i byte
+	for i = range 8 {
+		raw[5+i] = ((i * 2) << 4) | (i*2 + 1)
+	}
+	return Canvas{raw}
+}
+
+// Represent the canvas as an [Image].
+func (c Canvas) Image() Image {
+	return Image(c)
+}
+
 // Fill the whole frame with the given color.
 func ClearScreen(c Color) {
 	clearScreen(int32(c))
@@ -372,4 +526,13 @@ func DrawSubImage(i SubImage, p Point) {
 		int32(i.point.X), int32(i.point.Y),
 		uint32(i.size.W), uint32(i.size.H),
 	)
+}
+
+func SetCanvas(c Canvas) {
+	rawPtr := unsafe.Pointer(unsafe.SliceData(c.raw))
+	setCanvas(rawPtr, uint32(len(c.raw)))
+}
+
+func UnsetCanvas() {
+	unsetCanvas()
 }

@@ -17,32 +17,6 @@ func (f File) Image() Image {
 	return Image{f.Raw}
 }
 
-// A loaded font file.
-//
-// Can be loaded using [LoadROMFile].
-type Font struct {
-	raw []byte
-}
-
-// A loaded image file.
-//
-// Can be loaded using [LoadROMFile].
-type Image struct {
-	raw []byte
-}
-
-// Get a rectangle subregion of the image.
-func (i Image) Sub(p Point, s Size) SubImage {
-	return SubImage{raw: i.raw, point: p, size: s}
-}
-
-// A subregion of an image. Constructed using [Image.Sub].
-type SubImage struct {
-	raw   []byte
-	point Point
-	size  Size
-}
-
 // Read a file.
 //
 // It will first lookup file in the app's ROM directory and then check
