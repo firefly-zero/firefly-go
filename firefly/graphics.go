@@ -252,14 +252,14 @@ type LineStyle struct {
 
 // A loaded font file.
 //
-// Can be loaded using [LoadROMFile].
+// Can be loaded using [LoadFile].
 type Font struct {
 	raw []byte
 }
 
 // A loaded image file.
 //
-// Can be loaded using [LoadROMFile].
+// Can be loaded using [LoadFile].
 type Image struct {
 	raw []byte
 }

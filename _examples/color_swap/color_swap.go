@@ -15,7 +15,7 @@ var (
 )
 
 func boot() {
-	image = firefly.LoadROMFile("img").Image()
+	image = firefly.LoadFile("img").Image()
 }
 
 func update() {

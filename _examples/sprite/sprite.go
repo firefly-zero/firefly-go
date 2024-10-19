@@ -16,7 +16,7 @@ const frames = 12
 var frame = 0
 
 func boot() {
-	sprite = firefly.LoadROMFile("sprite").Image()
+	sprite = firefly.LoadFile("sprite").Image()
 }
 
 func update() {
