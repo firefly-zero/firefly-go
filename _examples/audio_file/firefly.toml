@@ -1,0 +1,7 @@
+author_id = "demo"
+app_id = "go-afile"
+author_name = "Demo"
+app_name = "Audio File Demo (Go)"
+
+[files]
+aud = { path = "audio.wav" }

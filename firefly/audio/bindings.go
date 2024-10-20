@@ -1,6 +1,8 @@
 package audio
 
-// generators
+import "unsafe"
+
+// sources (aka generators)
 
 //go:wasmimport audio add_sine
 func addSine(parentID uint32, freq float32, phase float32) uint32
@@ -22,6 +24,9 @@ func addEmpty(parentID uint32) uint32
 
 //go:wasmimport audio add_zero
 func addZero(parentID uint32) uint32
+
+//go:wasmimport audio add_file
+func addFile(parentID uint32, ptr unsafe.Pointer, len uint32) uint32
 
 // nodes
 
