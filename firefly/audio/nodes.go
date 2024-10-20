@@ -1,5 +1,7 @@
 package audio
 
+import "unsafe"
+
 type Node struct {
 	id uint32
 }
@@ -72,6 +74,9 @@ type Empty struct{ Node }
 // An audio node created by [Node.AddZero].
 type Zero struct{ Node }
 
+// An audio node created by [Node.AddFile].
+type File struct{ Node }
+
 // Add sine wave oscillator source (`∿`).
 func (n Node) AddSine(freq Hz, phase float32) Sine {
 	id := addSine(n.id, float32(freq), phase)
@@ -112,6 +117,13 @@ func (n Node) AddEmpty() Empty {
 func (n Node) AddZero() Zero {
 	id := addZero(n.id)
 	return Zero{Node{id}}
+}
+
+// Add source playing audio from a file.
+func (n Node) AddFile(path string) File {
+	ptr := unsafe.Pointer(unsafe.StringData(path))
+	id := addFile(n.id, ptr, uint32(len(path)))
+	return File{Node{id}}
 }
 
 // Add node simply mixing all inputs.
