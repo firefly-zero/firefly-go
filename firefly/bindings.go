@@ -95,6 +95,20 @@ func getMe() uint32
 //go:wasmimport net get_peers
 func getPeers() uint32
 
+// -- STATS -- //
+
+//go:wasmimport stats get_progress
+func getProgress(id uint32) uint32
+
+//go:wasmimport stats add_progress
+func addProgress(id uint32, val int32) uint32
+
+//go:wasmimport stats set_score
+func setScore() uint32
+
+//go:wasmimport stats get_top_score
+func getTopScore() uint32
+
 // -- MISC -- //
 
 //go:wasmimport misc log_debug
