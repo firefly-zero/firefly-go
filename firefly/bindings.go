@@ -97,17 +97,11 @@ func getPeers() uint32
 
 // -- STATS -- //
 
-//go:wasmimport stats get_progress
-func getProgress(id uint32) uint32
-
 //go:wasmimport stats add_progress
-func addProgress(id uint32, val int32) uint32
+func addProgress(peerID, badgeID uint32, val int32) uint32
 
-//go:wasmimport stats set_score
-func setScore() uint32
-
-//go:wasmimport stats get_top_score
-func getTopScore() uint32
+//go:wasmimport stats add_score
+func addScore(peerID, boardID uint32, val int32) uint32
 
 // -- MISC -- //
 
