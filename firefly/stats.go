@@ -24,6 +24,9 @@ func GetProgress(p Peer, b Badge) Progress {
 }
 
 // Add the given value to the progress for the badge.
+//
+// May be negative if you want to decrease the progress.
+// If zero, does not change the progress.
 func AddProgress(p Peer, b Badge, v int16) Progress {
 	r := addProgress(uint32(p), uint32(b), int32(v))
 	return Progress{
@@ -38,6 +41,9 @@ func GetScore(p Peer, b Board) int16 {
 }
 
 // Add the given score to the board.
+//
+// May be negative if you want the lower scores
+// to rank higher. Zero value is not added to the board.
 func AddScore(p Peer, b Board, v int16) int16 {
 	s := addScore(uint32(p), uint32(b), int32(v))
 	return int16(s)
