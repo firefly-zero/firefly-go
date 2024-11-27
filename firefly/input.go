@@ -113,54 +113,60 @@ func (p DPad) Held(old DPad) DPad {
 
 // State of the buttons.
 type Buttons struct {
-	// If "a" button is pressed.
-	A bool
-
-	// If "b" button is pressed.
-	B bool
-
-	// If "x" button is pressed.
-	X bool
-
-	// If "y" button is pressed.
-	Y bool
-
-	// If "menu" button is pressed.
+	// South. The bottom button, like A on the X-Box controller.
 	//
-	// For singleplayer games, the button press is always intercepted by the runtime.
+	// Typically used for confirmation, main action, jump, etc.
+	S bool
+
+	// East. The right button, like B on the X-Box controller.
+	//
+	// Typically used for cancellation, going to previous screen, etc.
+	E bool
+
+	// West. The left button, like X on the X-Box controller.
+	//
+	// Typically used for attack.
+	W bool
+
+	// North. The top button, like Y on the X-Box controller.
+	//
+	// Typically used for a secondary action, like charged attack.
+	N bool
+
+	// The menu button, almost always handled by the runtime.
 	Menu bool
 }
 
 // Given the old state, get buttons that were not pressed but are pressed now.
 func (p Buttons) JustPressed(old Buttons) Buttons {
-	p.A = p.A && !old.A
-	p.B = p.B && !old.B
-	p.X = p.X && !old.X
-	p.Y = p.Y && !old.Y
-	p.Menu = p.Menu && !old.Y
+	p.S = p.S && !old.S
+	p.E = p.E && !old.E
+	p.W = p.W && !old.W
+	p.N = p.N && !old.N
+	p.Menu = p.Menu && !old.N
 	return p
 }
 
 // Given the old state, get buttons that were pressed but aren't pressed now.
 func (p Buttons) JustReleased(old Buttons) Buttons {
-	p.A = !p.A && old.A
-	p.B = !p.B && old.B
-	p.X = !p.X && old.X
-	p.Y = !p.Y && old.Y
-	p.Y = !p.Y && old.Y
-	p.Y = !p.Y && old.Y
+	p.S = !p.S && old.S
+	p.E = !p.E && old.E
+	p.W = !p.W && old.W
+	p.N = !p.N && old.N
+	p.N = !p.N && old.N
+	p.N = !p.N && old.N
 	p.Menu = !p.Menu && old.Menu
 	return p
 }
 
 // Given the old state, get buttons that were pressed and are still pressed now.
 func (p Buttons) Held(old Buttons) Buttons {
-	p.A = p.A && old.A
-	p.B = p.B && old.B
-	p.X = p.X && old.X
-	p.Y = p.Y && old.Y
-	p.Y = p.Y && old.Y
-	p.Y = p.Y && old.Y
+	p.S = p.S && old.S
+	p.E = p.E && old.E
+	p.W = p.W && old.W
+	p.N = p.N && old.N
+	p.N = p.N && old.N
+	p.N = p.N && old.N
 	p.Menu = p.Menu && old.Menu
 	return p
 }
@@ -187,10 +193,10 @@ func ReadPad(p Peer) (Pad, bool) {
 func ReadButtons(p Peer) Buttons {
 	raw := readButtons(uint32(p))
 	return Buttons{
-		A:    hasBitSet(raw, 0),
-		B:    hasBitSet(raw, 1),
-		X:    hasBitSet(raw, 2),
-		Y:    hasBitSet(raw, 3),
+		S:    hasBitSet(raw, 0),
+		E:    hasBitSet(raw, 1),
+		W:    hasBitSet(raw, 2),
+		N:    hasBitSet(raw, 3),
 		Menu: hasBitSet(raw, 4),
 	}
 }
