@@ -528,11 +528,15 @@ func DrawSubImage(i SubImage, p Point) {
 	)
 }
 
+// Set the target image for all subsequent drawing operations.
 func SetCanvas(c Canvas) {
 	rawPtr := unsafe.Pointer(unsafe.SliceData(c.raw))
 	setCanvas(rawPtr, uint32(len(c.raw)))
 }
 
+// Make all subsequent drawing operations target the screen instead of a canvas.
+//
+// Cancels the effect of [SetCanvas].
 func UnsetCanvas() {
 	unsetCanvas()
 }
