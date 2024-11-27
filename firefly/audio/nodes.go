@@ -297,10 +297,10 @@ func (n Clip) ModulateBoth(m Modulator) {
 
 // Modulate the low cut amplitude.
 func (n Clip) ModulateLow(m Modulator) {
-	m.Modulate(n.id, 0)
+	m.Modulate(n.id, 1)
 }
 
 // Modulate the high cut amplitude.
 func (n Clip) ModulateHigh(m Modulator) {
-	m.Modulate(n.id, 0)
+	m.Modulate(n.id, 2)
 }
