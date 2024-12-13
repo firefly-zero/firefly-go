@@ -15,7 +15,7 @@ var (
 )
 
 func boot() {
-	image = firefly.LoadFile("img").Image()
+	image = firefly.LoadFile("img", nil).Image()
 }
 
 func update() {

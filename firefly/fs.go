@@ -23,19 +23,24 @@ func (f File) Image() Image {
 // the app writable data directory.
 //
 // If the file does not exist, the Raw value of the returned File will be nil.
-func LoadFile(path string) File {
+func LoadFile(path string, buf []byte) File {
 	pathPtr := unsafe.Pointer(unsafe.StringData(path))
-	fileSize := getFileSize(pathPtr, uint32(len(path)))
+	if buf == nil {
+		fileSize := getFileSize(pathPtr, uint32(len(path)))
+		if fileSize == 0 {
+			return File{nil}
+		}
+		buf = make([]byte, fileSize)
+	}
+	bufPtr := unsafe.Pointer(unsafe.SliceData(buf))
+	fileSize := loadFile(
+		pathPtr, uint32(len(path)),
+		bufPtr, uint32(len(buf)),
+	)
 	if fileSize == 0 {
 		return File{nil}
 	}
-	raw := make([]byte, fileSize)
-	rawPtr := unsafe.Pointer(unsafe.SliceData(raw))
-	loadFile(
-		pathPtr, uint32(len(path)),
-		rawPtr, fileSize,
-	)
-	return File{raw}
+	return File{buf[:fileSize]}
 }
 
 // Write a file into the app data dir.
