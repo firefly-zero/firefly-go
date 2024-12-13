@@ -95,6 +95,12 @@ func getMe() uint32
 //go:wasmimport net get_peers
 func getPeers() uint32
 
+//go:wasmimport net save_stash
+func saveStash(peerID uint32, bufPtr unsafe.Pointer, bufLen uint32)
+
+//go:wasmimport net save_stash
+func loadStash(peerID uint32, bufPtr unsafe.Pointer, bufLen uint32) uint32
+
 // -- STATS -- //
 
 //go:wasmimport stats add_progress

@@ -1,6 +1,9 @@
 package firefly
 
-import "math/bits"
+import (
+	"math/bits"
+	"unsafe"
+)
 
 // The peer ID.
 type Peer uint8
@@ -50,4 +53,18 @@ func GetMe() Peer {
 // if there is more than 1 peer, you're playing with friends.
 func GetPeers() Peers {
 	return Peers(getPeers())
+}
+
+func SaveStash(p Peer, b []byte) {
+	ptr := unsafe.Pointer(unsafe.SliceData(b))
+	saveStash(uint32(p), ptr, uint32(len(b)))
+}
+
+func LoadStash(p Peer, b []byte) []byte {
+	if b == nil {
+		b = make([]byte, 80)
+	}
+	ptr := unsafe.Pointer(unsafe.SliceData(b))
+	size := loadStash(uint32(p), ptr, uint32(len(b)))
+	return b[:size]
 }
