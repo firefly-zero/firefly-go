@@ -17,6 +17,9 @@ var (
 	// Don't use it to update the state, use [Update] instead.
 	Render func()
 
+	// Callback to be called before exiting the app.
+	BeforeExit func()
+
 	// Callback to be called before rendering a horizontal line on the screen.
 	//
 	// Accepts the index of the line about to be rendered
@@ -48,6 +51,13 @@ func update() { //nolint
 func render() { //nolint
 	if Render != nil {
 		Render()
+	}
+}
+
+//go:export before_exit
+func beforeExit() { //nolint
+	if BeforeExit != nil {
+		BeforeExit()
 	}
 }
 

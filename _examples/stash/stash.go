@@ -11,6 +11,7 @@ func init() {
 	firefly.Boot = boot
 	firefly.Update = update
 	firefly.Render = render
+	firefly.BeforeExit = beforeExit
 }
 
 type State struct {
@@ -66,4 +67,11 @@ func render() {
 		}
 		firefly.DrawText(text, font, point, color)
 	}
+}
+
+func beforeExit() {
+	peer := firefly.GetMe()
+	state := states[peer]
+	buf := binary.LittleEndian.AppendUint32(nil, state.clicks)
+	firefly.SaveStash(peer, buf)
 }
