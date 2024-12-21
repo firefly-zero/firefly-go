@@ -171,6 +171,11 @@ func (p Buttons) Held(old Buttons) Buttons {
 	return p
 }
 
+// Check if any button is currently pressed.
+func (p Buttons) AnyPressed() bool {
+	return p.S || p.E || p.W || p.N || p.Menu
+}
+
 // Get the current touch pad state.
 //
 // The peer can be [Combined] or one of the [GetPeers].
