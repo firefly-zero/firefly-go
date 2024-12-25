@@ -1,2 +1,2 @@
-/_examples/text/*.fff
+/_examples/*/*.fff
 __pycache__/
