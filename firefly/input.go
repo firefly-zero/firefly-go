@@ -74,9 +74,8 @@ func (p Pad) DPad() DPad {
 // The middle of the pad is a "dead zone" pressing which will not activate any direction.
 //
 // Invariant: it's not possible for opposite directions (left and right, or down and up)
-// to be active at the same time. However, it's possible for heighboring directions
+// to be active at the same time. However, it's possible for neighboring directions
 // (like up and right) to be active at the same time if the player presses a diagonal.
-
 type DPad struct {
 	Left  bool
 	Right bool
