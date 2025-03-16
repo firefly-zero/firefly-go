@@ -164,8 +164,6 @@ func (p Buttons) Held(old Buttons) Buttons {
 	p.E = p.E && old.E
 	p.W = p.W && old.W
 	p.N = p.N && old.N
-	p.N = p.N && old.N
-	p.N = p.N && old.N
 	p.Menu = p.Menu && old.Menu
 	return p
 }

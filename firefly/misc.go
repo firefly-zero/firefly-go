@@ -24,6 +24,14 @@ func GetRandom() uint32 {
 	return getRandom()
 }
 
+// Get human-readable name of the given peer.
+func GetName(p Peer) string {
+	buf := [16]byte{}
+	ptr := unsafe.Pointer(&buf)
+	length := getName(uint32(p), ptr)
+	return unsafe.String(&buf[0], length)
+}
+
 // Exit the app after the current update is finished.
 func Quit() {
 	quit()

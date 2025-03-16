@@ -123,6 +123,9 @@ func setSeed(seed uint32)
 //go:wasmimport misc get_random
 func getRandom() uint32
 
+//go:wasmimport misc get_name
+func getName(index uint32, ptr unsafe.Pointer) uint32
+
 //go:wasmimport misc restart
 func restart()
 
