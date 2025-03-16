@@ -231,7 +231,7 @@ func (n Node) ResetAll() {
 // After it is called, you should make sure to discard all references to the old
 // child nodes.
 func (n Node) Clear() {
-	clear(n.id)
+	clearNode(n.id)
 }
 
 // Modulate oscillation frequency.

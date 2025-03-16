@@ -45,16 +45,16 @@ func drawText(
 )
 
 //go:wasmimport graphics draw_image
-func drawImage(ptr unsafe.Pointer, len uint32, x, y int32)
+func drawImage(ptr unsafe.Pointer, size uint32, x, y int32)
 
 //go:wasmimport graphics draw_sub_image
 func drawSubImage(
-	ptr unsafe.Pointer, len uint32,
+	ptr unsafe.Pointer, size uint32,
 	x, y, subX, subY int32, subWidth, subHeight uint32,
 )
 
 //go:wasmimport graphics set_canvas
-func setCanvas(ptr unsafe.Pointer, len uint32)
+func setCanvas(ptr unsafe.Pointer, size uint32)
 
 //go:wasmimport graphics unset_canvas
 func unsetCanvas()
@@ -112,16 +112,19 @@ func addScore(peerID, boardID uint32, val int32) int32
 // -- MISC -- //
 
 //go:wasmimport misc log_debug
-func logDebug(ptr unsafe.Pointer, len uint32)
+func logDebug(ptr unsafe.Pointer, size uint32)
 
 //go:wasmimport misc log_error
-func logError(ptr unsafe.Pointer, len uint32)
+func logError(ptr unsafe.Pointer, size uint32)
 
 //go:wasmimport misc set_seed
 func setSeed(seed uint32)
 
 //go:wasmimport misc get_random
 func getRandom() uint32
+
+//go:wasmimport misc get_name
+func getName(index uint32, ptr unsafe.Pointer) uint32
 
 //go:wasmimport misc restart
 func restart()

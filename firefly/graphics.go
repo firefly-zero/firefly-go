@@ -358,11 +358,11 @@ func (i Image) SetColor(p uint8, c Color) {
 }
 
 // Replace the old color with the new value.
-func (i Image) ReplaceColor(old, new Color) {
+func (i Image) ReplaceColor(oldC, newC Color) {
 	var p uint8
 	for p = range 16 {
-		if i.GetColor(p) == old {
-			i.SetColor(p, new)
+		if i.GetColor(p) == oldC {
+			i.SetColor(p, newC)
 		}
 	}
 }

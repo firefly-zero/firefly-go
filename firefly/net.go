@@ -1,6 +1,7 @@
 package firefly
 
 import (
+	"iter"
 	"math/bits"
 	"unsafe"
 )
@@ -43,6 +44,23 @@ func (peers Peers) Slice() []Peer {
 		}
 	}
 	return res
+}
+
+// Iterate over all peers that are online.
+//
+// Uses the iterators API introduced in Go 1.23.
+func (peers Peers) Iter() iter.Seq[Peer] {
+	return func(yield func(Peer) bool) {
+		for peer := Peer(0); peer < 32; peer++ {
+			if !peers.IsOnline(peer) {
+				continue
+			}
+			exit := yield(peer)
+			if !exit {
+				return
+			}
+		}
+	}
 }
 
 // Check if the given [Peer] is online.

@@ -26,7 +26,7 @@ func addEmpty(parentID uint32) uint32
 func addZero(parentID uint32) uint32
 
 //go:wasmimport audio add_file
-func addFile(parentID uint32, ptr unsafe.Pointer, len uint32) uint32
+func addFile(parentID uint32, ptr unsafe.Pointer, size uint32) uint32
 
 // nodes
 
@@ -93,4 +93,4 @@ func reset(nodeID uint32)
 func resetAll(nodeID uint32)
 
 //go:wasmimport audio clear
-func clear(nodeID uint32)
+func clearNode(nodeID uint32)
