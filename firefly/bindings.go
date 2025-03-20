@@ -44,6 +44,12 @@ func drawText(
 	x, y, color int32,
 )
 
+//go:wasmimport graphics draw_qr
+func drawQR(
+	textPtr unsafe.Pointer, textLen uint32,
+	x, y, black, white int32,
+)
+
 //go:wasmimport graphics draw_image
 func drawImage(ptr unsafe.Pointer, size uint32, x, y int32)
 

@@ -506,6 +506,16 @@ func DrawText(t string, f Font, p Point, c Color) {
 	)
 }
 
+// Render a QR code for the given text.
+func DrawQR(t string, p Point, black, white Color) {
+	ptr := unsafe.Pointer(unsafe.StringData(t))
+	drawQR(
+		ptr, uint32(len(t)),
+		int32(p.X), int32(p.Y),
+		int32(black), int32(white),
+	)
+}
+
 // Render an image using the given colors.
 func DrawImage(i Image, p Point) {
 	rawPtr := unsafe.Pointer(unsafe.SliceData(i.raw))
