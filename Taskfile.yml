@@ -45,7 +45,6 @@ tasks:
       - firefly_cli build ./_examples/debug
       - firefly_cli build ./_examples/image
       - firefly_cli build ./_examples/qr
-      - firefly_cli build ./_examples/render_line
       - firefly_cli build ./_examples/sprite
       - firefly_cli build ./_examples/stash
       - firefly_cli build ./_examples/text
