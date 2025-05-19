@@ -1,4 +1,4 @@
-module debugdemo
+module demoqr
 
 go 1.24.0
 

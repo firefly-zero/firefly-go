@@ -38,13 +38,18 @@ tasks:
       - go test -count 1 ./...
   test-examples:
     cmds:
+      - firefly_cli build ./_examples/audio_file
+      - firefly_cli build ./_examples/audio_sine
+      - firefly_cli build ./_examples/canvas
+      - firefly_cli build ./_examples/color_swap
+      - firefly_cli build ./_examples/debug
       - firefly_cli build ./_examples/image
-      - firefly_cli build ./_examples/render_line
+      - firefly_cli build ./_examples/qr
       - firefly_cli build ./_examples/sprite
+      - firefly_cli build ./_examples/stash
       - firefly_cli build ./_examples/text
       - firefly_cli build ./_examples/touchpad
       - firefly_cli build ./_examples/triangle
-      - firefly_cli build ./_examples/audio_sine
   all:
     desc: run all code formatters, linters, and tests
     cmds:

@@ -35,7 +35,7 @@ func update() {
 		}
 		positions[i] = &point
 		buttons := firefly.ReadButtons(peer)
-		if buttons.A {
+		if buttons.S {
 			firefly.SetCanvas(canvas)
 			firefly.DrawPoint(point, firefly.ColorBlue)
 			firefly.UnsetCanvas()
