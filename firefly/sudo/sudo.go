@@ -19,7 +19,7 @@ func ListDirs(path string) []string {
 	res := make([]string, 0)
 	for len(buf) != 0 {
 		size := buf[0]
-		name := string(buf[1:size])
+		name := string(buf[1 : size+1])
 		res = append(res, name)
 		buf = buf[size+1:]
 	}
