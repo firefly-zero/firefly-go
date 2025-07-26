@@ -17,12 +17,27 @@ func (f File) Image() Image {
 	return Image{f.Raw}
 }
 
+// Check if the file was loaded.
+func (f File) Exists() bool {
+	return len(f.Raw) != 0
+}
+
 // Ensure that the loaded file exists.
 func (f File) Must() File {
-	if f.Raw == nil {
+	if len(f.Raw) == 0 {
 		panic("file not found")
 	}
 	return f
+}
+
+// Load the given file as a font.
+func LoadFont(path string, buf []byte) Font {
+	return LoadFile(path, buf).Font()
+}
+
+// Load the given file as an image.
+func LoadImage(path string, buf []byte) Image {
+	return LoadFile(path, buf).Image()
 }
 
 // Read a file.
@@ -40,6 +55,18 @@ func LoadFile(path string, buf []byte) File {
 		return loadAllocFile(path)
 	}
 	return loadFileInto(path, buf)
+}
+
+// Check if the given file exists.
+func FileExists(path string) bool {
+	return FileSize(path) != 0
+}
+
+// Get size (in bytes) of the given file.
+func FileSize(path string) int {
+	pathPtr := unsafe.Pointer(unsafe.StringData(path))
+	size := getFileSize(pathPtr, uint32(len(path)))
+	return int(size)
 }
 
 // Allocate a new buffer and load the file into it.

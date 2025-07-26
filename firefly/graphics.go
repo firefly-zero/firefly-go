@@ -21,6 +21,16 @@ type Point struct {
 	Y int
 }
 
+// Shortcut for creating a [Point].
+func P(x, y int) Point {
+	return Point{X: x, Y: y}
+}
+
+// Render a single pixel.
+func (p Point) Draw(c Color) {
+	DrawPoint(p, c)
+}
+
 // Convert the Point to a Size.
 func (p Point) Size() Size {
 	return Size{W: p.X, H: p.Y}
@@ -78,6 +88,11 @@ func (p Point) ComponentMax(r Point) Point {
 	return p
 }
 
+// Check if the point is within the screen boundaries.
+func (p Point) InBounds() bool {
+	return p.X >= 0 && p.Y >= 0 && p.X < Width && p.Y < Height
+}
+
 // Size of a bounding box for a shape.
 //
 // The width and height must be positive.
@@ -86,6 +101,11 @@ type Size struct {
 	W int
 	// H is the height of the bounding box.
 	H int
+}
+
+// Shortcut for creating a [Size].
+func S(w, h int) Size {
+	return Size{W: w, H: h}
 }
 
 // Convert the Size to a Point.
@@ -237,6 +257,16 @@ type Style struct {
 	StrokeWidth int
 }
 
+// Make [Style] for a solid shape (without stroke).
+func Solid(c Color) Style {
+	return Style{FillColor: c}
+}
+
+// Make [Style] for an outlined shape (without fill).
+func Outlined(c Color, width int) Style {
+	return Style{StrokeColor: c, StrokeWidth: width}
+}
+
 // Convert the [Style] to a [LineStyle].
 //
 // [LineStyle] is the same as [Style] except it doesn't have a fill color.
@@ -250,6 +280,11 @@ type LineStyle struct {
 	Width int
 }
 
+// Draw a line from a to b.
+func (s LineStyle) Draw(a, b Point) {
+	DrawLine(a, b, s)
+}
+
 // A loaded font file.
 //
 // Can be loaded using [LoadFile].
@@ -257,11 +292,21 @@ type Font struct {
 	raw []byte
 }
 
+// Render the given text.
+func (f Font) Draw(t string, p Point, c Color) {
+	DrawText(t, f, p, c)
+}
+
 // A loaded image file.
 //
 // Can be loaded using [LoadFile].
 type Image struct {
 	raw []byte
+}
+
+// Render the image.
+func (i Image) Draw(p Point) {
+	DrawImage(i, p)
 }
 
 // Get a rectangle subregion of the image.
@@ -374,6 +419,11 @@ type SubImage struct {
 	size  Size
 }
 
+// Render the sub image at the given point.
+func (i SubImage) Draw(p Point) {
+	DrawSubImage(i, p)
+}
+
 // Canvas is an [Image] that can be drawn upon.
 //
 // Constructed by [NewCanvas].
@@ -397,6 +447,11 @@ func NewCanvas(s Size) Canvas {
 		raw[5+i] = ((i * 2) << 4) | (i*2 + 1)
 	}
 	return Canvas{raw}
+}
+
+// Set this canvas as the target for all subsequent draw operations.
+func (c Canvas) Set() {
+	SetCanvas(c)
 }
 
 // Represent the canvas as an [Image].
@@ -516,7 +571,7 @@ func DrawQR(t string, p Point, black, white Color) {
 	)
 }
 
-// Render an image using the given colors.
+// Render an image at the given point.
 func DrawImage(i Image, p Point) {
 	rawPtr := unsafe.Pointer(unsafe.SliceData(i.raw))
 	drawImage(
