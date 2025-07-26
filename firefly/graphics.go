@@ -190,7 +190,7 @@ func (a Angle) Radians() float32 {
 
 // Get the angle value in degrees.
 func (a Angle) Degrees() float32 {
-	return a.a / (math.Pi * 2)
+	return 180 * a.a / math.Pi
 }
 
 // A pointer to a color in the color palette.
