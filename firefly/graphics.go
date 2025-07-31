@@ -297,6 +297,28 @@ func (f Font) Draw(t string, p Point, c Color) {
 	DrawText(t, f, p, c)
 }
 
+// If the font is for ASCII encoding (English alphabet).
+func (f Font) IsASCII() bool {
+	return f.raw[1] == 0
+}
+
+// Calculate width (in pixels) of the given text.
+//
+// This function does not account for newlines.
+func (f Font) LineWidth(t string) int {
+	return len(t) * f.CharWidth()
+}
+
+// Character width.
+func (f Font) CharWidth() int {
+	return int(f.raw[2])
+}
+
+// Character height.
+func (f Font) CharHeight() int {
+	return int(f.raw[3])
+}
+
 // A loaded image file.
 //
 // Can be loaded using [LoadFile].
