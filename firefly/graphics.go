@@ -193,11 +193,32 @@ func (a Angle) Degrees() float32 {
 	return 180 * a.a / math.Pi
 }
 
+func (a Angle) Add(r Angle) Angle {
+	a.a += r.a
+	return a
+}
+
+func (a Angle) Sub(r Angle) Angle {
+	a.a -= r.a
+	return a
+}
+
+// Ensure the angle is on the 0°-360° range.
+func (a Angle) Normalize() Angle {
+	for a.a >= math.Pi*2 {
+		a.a -= math.Pi * 2
+	}
+	for a.a < 0 {
+		a.a += math.Pi * 2
+	}
+	return a
+}
+
 // A pointer to a color in the color palette.
 type Color uint8
 
 const (
-	// No color (100% transparency).
+	// No color (100% transparency). Default.
 	ColorNone Color = 0
 	// Black color: #1A1C2C.
 	ColorBlack Color = 1
@@ -278,6 +299,11 @@ func (s Style) LineStyle() LineStyle {
 type LineStyle struct {
 	Color Color
 	Width int
+}
+
+// A shortcut for creating a new [LineStyle].
+func L(c Color, w int) LineStyle {
+	return LineStyle{Color: c, Width: w}
 }
 
 // Draw a line from a to b.
@@ -489,6 +515,13 @@ func ClearScreen(c Color) {
 // Set a color value in the palette.
 func SetColor(c Color, v RGB) {
 	setColor(int32(c), int32(v.R), int32(v.G), int32(v.B))
+}
+
+// Set all colors in the color palette.
+func SetPalette(colors [16]RGB) {
+	for c, v := range colors {
+		setColor(int32(c), int32(v.R), int32(v.G), int32(v.B))
+	}
 }
 
 // Set a single point (1 pixel is scaling is 1) on the frame.
