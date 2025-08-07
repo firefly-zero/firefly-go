@@ -193,6 +193,11 @@ func (a Angle) Degrees() float32 {
 	return 180 * a.a / math.Pi
 }
 
+func (a Angle) Neg() Angle {
+	a.a = -a.a
+	return a
+}
+
 func (a Angle) Add(r Angle) Angle {
 	a.a += r.a
 	return a
