@@ -5,3 +5,4 @@ app_name = "Text Demo (Go)"
 
 [files]
 font = { path = "eg_6x10.fff", url = "https://fonts.fireflyzero.com/fonts/ascii/eg_6x10.fff" }
+sixel = { path = "sixel.fff", url = "https://fonts.fireflyzero.com/fonts/ascii/sixel_1x6.fff" }
