@@ -269,6 +269,10 @@ type RGB struct {
 	B uint8
 }
 
+func NewRGB(r uint8, g uint8, b uint8) RGB {
+	return RGB{R: r, G: g, B: b}
+}
+
 // Style of a shape.
 type Style struct {
 	// The color to use to fill the shape.
