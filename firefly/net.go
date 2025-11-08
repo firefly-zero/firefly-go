@@ -38,8 +38,8 @@ type Stash = []byte
 // Get the slice of all peers that are online.
 func (peers Peers) Slice() []Peer {
 	res := make([]Peer, 0, 32)
-	for peer := Peer(0); peer < 32; peer++ {
-		if peers.IsOnline(peer) {
+	for peer := range Peer(32) {
+		if peers.Contains(peer) {
 			res = append(res, peer)
 		}
 	}
@@ -51,8 +51,8 @@ func (peers Peers) Slice() []Peer {
 // Uses the iterators API introduced in Go 1.23.
 func (peers Peers) Iter() iter.Seq[Peer] {
 	return func(yield func(Peer) bool) {
-		for peer := Peer(0); peer < 32; peer++ {
-			if !peers.IsOnline(peer) {
+		for peer := range Peer(32) {
+			if !peers.Contains(peer) {
 				continue
 			}
 			exit := yield(peer)
@@ -64,7 +64,7 @@ func (peers Peers) Iter() iter.Seq[Peer] {
 }
 
 // Check if the given [Peer] is online.
-func (peers Peers) IsOnline(peer Peer) bool {
+func (peers Peers) Contains(peer Peer) bool {
 	return peers>>peer&1 != 0
 }
 
