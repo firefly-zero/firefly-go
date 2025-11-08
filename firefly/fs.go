@@ -59,11 +59,11 @@ func LoadFile(path string, buf []byte) File {
 
 // Check if the given file exists.
 func FileExists(path string) bool {
-	return FileSize(path) != 0
+	return GetFileSize(path) != 0
 }
 
 // Get size (in bytes) of the given file.
-func FileSize(path string) int {
+func GetFileSize(path string) int {
 	pathPtr := unsafe.Pointer(unsafe.StringData(path))
 	size := getFileSize(pathPtr, uint32(len(path)))
 	return int(size)
