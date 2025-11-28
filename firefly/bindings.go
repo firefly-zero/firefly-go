@@ -91,7 +91,7 @@ func dumpFile(
 ) uint32
 
 //go:wasmimport fs remove_file
-func removeFile(pathPtr unsafe.Pointer, pathLen uint32) uint32
+func removeFile(pathPtr unsafe.Pointer, pathLen uint32)
 
 // -- NET -- //
 
