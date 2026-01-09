@@ -20,10 +20,27 @@ const (
 	PadMaxY = 1000
 )
 
+// 4-directional DPad-like representation of the [Pad].
+//
+// Constructed with [Pad.DPad4]. Useful for simple games and ports.
+// The middle of the pad is a "dead zone" pressing which will not activate any direction.
+type DPad4 uint8
+
+// Possible directions for [DPad4].
+const (
+	DPad4None  DPad4 = 0
+	DPad4Right DPad4 = 1
+	DPad4Up    DPad4 = 2
+	DPad4Left  DPad4 = 3
+	DPad4Down  DPad4 = 4
+)
+
 // The minimum X or Y value when converting Pad into DPad
 // for the direction to be considered pressed.
 // We do that to provide a dead zone in the middle of the pad.
-const dPadThreshold = 100
+const dPad8Threshold = 100
+
+const dPad4Threshold = 100
 
 // A finger position on the touch pad.
 //
@@ -48,35 +65,62 @@ func (p Pad) Azimuth() Angle {
 	return Radians(r)
 }
 
-// Convert the Pad into a Point.
+// Convert the [Pad] into [Point].
 func (p Pad) Point() Point {
 	return Point(p)
 }
 
-// Convert the Pad into a Size.
+// Convert the [Pad] into [Size].
 func (p Pad) Size() Size {
 	return Size{W: p.X, H: p.Y}
 }
 
-// Convert the Pad into DPad.
-func (p Pad) DPad() DPad {
-	return DPad{
-		Left:  p.X <= -dPadThreshold,
-		Right: p.X >= dPadThreshold,
-		Up:    p.Y <= -dPadThreshold,
-		Down:  p.Y >= dPadThreshold,
+// Convert the [Pad] into [DPad4].
+func (p Pad) DPad4() DPad4 {
+	x := p.X
+	y := p.Y
+	absX := abs(x)
+	absY := abs(y)
+	switch {
+	case y > dPad4Threshold && y > absX:
+		return DPad4Up
+	case y < -dPad4Threshold && -y > absX:
+		return DPad4Down
+	case x > dPad4Threshold && x > absY:
+		return DPad4Right
+	case x < -dPad4Threshold && -x > absY:
+		return DPad4Left
+	default:
+		return DPad4None
 	}
 }
 
-// DPad-like representation of the [Pad].
+func abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
+}
+
+// Convert the [Pad] into [DPad8].
+func (p Pad) DPad8() DPad8 {
+	return DPad8{
+		Left:  p.X <= -dPad8Threshold,
+		Right: p.X >= dPad8Threshold,
+		Up:    p.Y <= -dPad8Threshold,
+		Down:  p.Y >= dPad8Threshold,
+	}
+}
+
+// 8-directional DPad-like representation of the [Pad].
 //
-// Constructed with [Pad.DPad]. Useful for simple games and ports.
+// Constructed with [Pad.DPad8]. Useful for simple games and ports.
 // The middle of the pad is a "dead zone" pressing which will not activate any direction.
 //
 // Invariant: it's not possible for opposite directions (left and right, or down and up)
 // to be active at the same time. However, it's possible for neighboring directions
 // (like up and right) to be active at the same time if the player presses a diagonal.
-type DPad struct {
+type DPad8 struct {
 	Left  bool
 	Right bool
 	Up    bool
@@ -84,7 +128,7 @@ type DPad struct {
 }
 
 // Given the old state, get directions that were not pressed but are pressed now.
-func (p DPad) JustPressed(old DPad) DPad {
+func (p DPad8) JustPressed(old DPad8) DPad8 {
 	p.Left = p.Left && !old.Left
 	p.Right = p.Right && !old.Right
 	p.Up = p.Up && !old.Up
@@ -93,7 +137,7 @@ func (p DPad) JustPressed(old DPad) DPad {
 }
 
 // Given the old state, get directions that were pressed but aren't pressed now.
-func (p DPad) JustReleased(old DPad) DPad {
+func (p DPad8) JustReleased(old DPad8) DPad8 {
 	p.Left = !p.Left && old.Left
 	p.Right = !p.Right && old.Right
 	p.Up = !p.Up && old.Up
@@ -102,7 +146,7 @@ func (p DPad) JustReleased(old DPad) DPad {
 }
 
 // Given the old state, get directions that were pressed and are still pressed now.
-func (p DPad) Held(old DPad) DPad {
+func (p DPad8) Held(old DPad8) DPad8 {
 	p.Left = p.Left && old.Left
 	p.Right = p.Right && old.Right
 	p.Up = p.Up && old.Up
