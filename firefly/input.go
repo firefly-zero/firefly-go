@@ -35,12 +35,11 @@ const (
 	DPad4Down  DPad4 = 4
 )
 
-// The minimum X or Y value when converting Pad into DPad
+// The minimum X or Y value when converting Pad into DPad8
 // for the direction to be considered pressed.
-// We do that to provide a dead zone in the middle of the pad.
-const dPad8Threshold = 100
+const dPad8Threshold = 300
 
-const dPad4Threshold = 100
+const dPad4Threshold = 300
 
 // A finger position on the touch pad.
 //
@@ -125,6 +124,10 @@ type DPad8 struct {
 	Right bool
 	Up    bool
 	Down  bool
+}
+
+func (p DPad8) Any() bool {
+	return p.Left || p.Right || p.Up || p.Down
 }
 
 // Given the old state, get directions that were not pressed but are pressed now.
