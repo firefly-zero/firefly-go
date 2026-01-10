@@ -20,21 +20,6 @@ const (
 	PadMaxY = 1000
 )
 
-// 4-directional DPad-like representation of the [Pad].
-//
-// Constructed with [Pad.DPad4]. Useful for simple games and ports.
-// The middle of the pad is a "dead zone" pressing which will not activate any direction.
-type DPad4 uint8
-
-// Possible directions for [DPad4].
-const (
-	DPad4None  DPad4 = 0
-	DPad4Right DPad4 = 1
-	DPad4Up    DPad4 = 2
-	DPad4Left  DPad4 = 3
-	DPad4Down  DPad4 = 4
-)
-
 // The minimum X or Y value when converting Pad into DPad8
 // for the direction to be considered pressed.
 const dPad8Threshold = 300
@@ -111,6 +96,48 @@ func (p Pad) DPad8() DPad8 {
 	}
 }
 
+// 4-directional DPad-like representation of the [Pad].
+//
+// Constructed with [Pad.DPad4]. Useful for simple games and ports.
+// The middle of the pad is a "dead zone" pressing which will not activate any direction.
+//
+// Implements all the same methods as [DPad8].
+type DPad4 uint8
+
+// Possible directions for [DPad4].
+const (
+	DPad4None  DPad4 = 0
+	DPad4Right DPad4 = 1
+	DPad4Up    DPad4 = 2
+	DPad4Left  DPad4 = 3
+	DPad4Down  DPad4 = 4
+)
+
+func (p DPad4) Any() bool {
+	return p != DPad4None
+}
+
+func (p DPad4) JustPressed(old DPad4) DPad4 {
+	if p == old {
+		return DPad4None
+	}
+	return p
+}
+
+func (p DPad4) JustReleased(old DPad4) DPad4 {
+	if p == old {
+		return DPad4None
+	}
+	return old
+}
+
+func (p DPad4) Held(old DPad4) DPad4 {
+	if p == old {
+		return p
+	}
+	return DPad4None
+}
+
 // 8-directional DPad-like representation of the [Pad].
 //
 // Constructed with [Pad.DPad8]. Useful for simple games and ports.
@@ -119,6 +146,8 @@ func (p Pad) DPad8() DPad8 {
 // Invariant: it's not possible for opposite directions (left and right, or down and up)
 // to be active at the same time. However, it's possible for neighboring directions
 // (like up and right) to be active at the same time if the player presses a diagonal.
+//
+// Implements all the same methods as [DPad4].
 type DPad8 struct {
 	Left  bool
 	Right bool
