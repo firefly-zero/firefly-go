@@ -216,7 +216,7 @@ func (p Buttons) Held(old Buttons) Buttons {
 }
 
 // Check if any button is currently pressed.
-func (p Buttons) AnyPressed() bool {
+func (p Buttons) Any() bool {
 	return p.S || p.E || p.W || p.N || p.Menu
 }
 
