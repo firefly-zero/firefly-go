@@ -19,7 +19,9 @@ func SetSeed(seed uint32) {
 	setSeed(seed)
 }
 
-// Get a random value.
+// Get a random value from [0-[math.MaxUint32]]
+// See also the [github.com/firefly-zero/firefly-go/firefly/random]
+// package provides more ways to generate random numbers.
 func GetRandom() uint32 {
 	return getRandom()
 }
