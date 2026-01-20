@@ -1,8 +1,11 @@
 package firefly
 
 import (
+	"cmp"
 	"math"
 	"unsafe"
+
+	"github.com/orsinium-labs/tinymath"
 )
 
 const (
@@ -219,6 +222,50 @@ func (a Angle) Normalize() Angle {
 	return a
 }
 
+// Difference returns the difference between the two angles, in the range of [-[math.Pi], +[math.Pi]].
+// When "a" and "to" are opposite,
+// returns -[math.Pi] if "a" is smaller than "to", or [math.Pi] otherwise.
+//
+// Input angles do not need to be normalized.
+// Based on the Godot [angle_difference] (licensed under MIT)
+//
+// [angle_difference]: https://github.com/godotengine/godot/blob/50277787eacaf4bc4d8683a706fe54dc65762020/core/math/math_funcs.h#L482-L489
+func (a Angle) Difference(to Angle) Angle {
+	// tinymath has "RemEuclid" https://github.com/orsinium-labs/tinymath/blob/de812093edff2384fd94a922c5b255b0e39139a6/tinymath.go#L320-L328
+	// but it has some math bugs, so we have to resort to the big math functions.
+	diff := math.Mod(float64(to.Radians()-a.Radians()), 2*math.Pi)
+	return Radians(float32(math.Mod(2*diff, 2*math.Pi) - diff))
+}
+
+// RotateTowards rotates "a" toward "to" by the "delta" amount.
+// Will not go past "to". Angles are interpolated correctly when the angles
+// wrap around [Radians](2*[math.Pi]) or [Degrees](360).
+//
+// If "delta" is negative, this function will rotate away from "to",
+// towards the opposite angle, and will not go past the opposite angle.
+//
+// Based on the Godot [rotate_towards] (licensed under MIT)
+//
+// [rotate_towards]: https://github.com/godotengine/godot/blob/50277787eacaf4bc4d8683a706fe54dc65762020/core/math/math_funcs.h#L598-L609
+func (a Angle) RotateTowards(to, delta Angle) Angle {
+	diff := a.Difference(to).Radians()
+	abs_diff := tinymath.Abs(diff)
+	return Radians(
+		a.Radians() + clamp(delta.Radians(), abs_diff-math.Pi, abs_diff)*tinymath.Sign(diff),
+	)
+}
+
+func clamp[T cmp.Ordered](val, minimum, maximum T) T {
+	switch {
+	case val < minimum:
+		return minimum
+	case val > maximum:
+		return maximum
+	default:
+		return val
+	}
+}
+
 // A pointer to a color in the color palette.
 type Color uint8
 
@@ -269,7 +316,7 @@ type RGB struct {
 	B uint8
 }
 
-func NewRGB(r uint8, g uint8, b uint8) RGB {
+func NewRGB(r, g, b uint8) RGB {
 	return RGB{R: r, G: g, B: b}
 }
 
