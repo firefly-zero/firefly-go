@@ -47,7 +47,7 @@ var image4BPP = []byte{
 	0xcd, 0xef, // row 4
 }
 
-func TestExtImage_GetPixel(t *testing.T) {
+func TestImage_GetPixel(t *testing.T) {
 	t.Parallel()
 	P := firefly.P
 	tests := []struct {
@@ -94,6 +94,30 @@ func TestExtImage_GetPixel(t *testing.T) {
 			got := image.GetPixel(test.pixel)
 			if got != test.want {
 				t.Errorf("pixel: {%d, %d}, want %s, but got %s", test.pixel.X, test.pixel.Y, test.want, got)
+			}
+		})
+	}
+}
+
+func TestImagePixels(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name string
+		raw  []byte
+		want int
+	}{
+		{name: "1 BPP", raw: image1BPP, want: 16},
+		{name: "2 BPP", raw: image2BPP, want: 16},
+		{name: "4 BPP", raw: image4BPP, want: 16},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			image := firefly.File{test.raw}.Image()
+			got := image.Pixels()
+			if got != test.want {
+				t.Errorf("want %d, but got %d", test.want, got)
 			}
 		})
 	}
