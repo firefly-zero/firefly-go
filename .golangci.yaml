@@ -1,5 +1,6 @@
 linters:
   disable:
+    - cyclop
     - depguard
     - exhaustruct
     - gocheckcompilerdirectives

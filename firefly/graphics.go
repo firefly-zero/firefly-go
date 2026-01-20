@@ -259,7 +259,8 @@ const (
 	ColorDarkGray Color = 16
 )
 
-// String returns the color name.
+// Get the color name in the default palette (SWEETIE-16).
+//
 // Implements [fmt.Stringer].
 func (color Color) String() string {
 	switch color {
@@ -486,9 +487,10 @@ func (i Image) GetColor(p uint8) Color {
 	return Color(byteVal + 1)
 }
 
-// GetColorAt returns the color of a pixel in the image.
+// Get color of a pixel in the image.
+//
 // Returns [ColorNone] if out of bounds.
-func (i Image) GetColorAt(point Point) Color {
+func (i Image) GetPixel(point Point) Color {
 	if point.X < 0 || point.Y < 0 {
 		return ColorNone
 	}
