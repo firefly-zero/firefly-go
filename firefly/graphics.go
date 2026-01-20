@@ -269,7 +269,7 @@ type RGB struct {
 	B uint8
 }
 
-func NewRGB(r uint8, g uint8, b uint8) RGB {
+func NewRGB(r, g, b uint8) RGB {
 	return RGB{R: r, G: g, B: b}
 }
 
@@ -479,6 +479,32 @@ type SubImage struct {
 // Render the sub image at the given point.
 func (i SubImage) Draw(p Point) {
 	DrawSubImage(i, p)
+}
+
+// Image returns back the original parent [Image] from which this sub-image
+// was created from.
+func (i SubImage) Image() Image {
+	return Image{raw: i.raw}
+}
+
+// Point returns the offset of this sub-image in the parent [Image].
+func (i SubImage) Point() Point {
+	return i.point
+}
+
+// Size returns the size of this sub-image.
+func (i SubImage) Size() Size {
+	return i.size
+}
+
+// Width returns the width of this sub-image.
+func (i SubImage) Width() int {
+	return i.size.W
+}
+
+// Height returns the height of this sub-image.
+func (i SubImage) Height() int {
+	return i.size.H
 }
 
 // Canvas is an [Image] that can be drawn upon.
