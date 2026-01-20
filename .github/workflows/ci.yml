@@ -19,17 +19,17 @@ jobs:
       pull-requests: write
     steps:
       - name: checkout
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@v6
         with:
           persist-credentials: false
 
       - name: setup go
-        uses: actions/setup-go@7a3fe6cf4cb3a834922a1244abfce67bcef6a0c5 # 6.2.0
+        uses: actions/setup-go@v6
         with:
           go-version-file: go.mod
 
       - name: Setup Taskfile
-        uses: arduino/setup-task@b91d5d2c96a56797b48ac1e0e89220bf64044611 # v2.0.0
+        uses: arduino/setup-task@v2
         with:
           version: 3.x
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -38,18 +38,11 @@ jobs:
         run: bash -c "$(curl https://fireflyzero.com/install.sh)"
 
       - name: Run tests
-        run: task test format
-
-      # Taskfile contains a step for running golangci-lint, but their
-      # GitHub Action provides nicer integration
-      - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@1e7e51e771db61008b38414a730f564565cf7c20 # v9.2.0
-        with:
-          version: v2.8
+        run: task all
 
       - name: Suggester / gofumpt
-        uses: reviewdog/action-suggester@4747dbc9f9e37adba0943e681cc20db466642158 # v1.21.0
-        if: always() # run even if golangci-lint fails
+        uses: reviewdog/action-suggester@v1
+        if: always() # run even if tests fails
         with:
           tool_name: gofumpt
           fail_level: warning
