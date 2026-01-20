@@ -41,7 +41,18 @@ func (p Pad) Radius() float32 {
 	return tinymath.Sqrt(float32(r))
 }
 
+// Radius returns the squared distance from the pad center to the touch point,
+// which is simpler to calculate, and guarantees that the return value is an integer.
+func (p Pad) RadiusSquared() int {
+	return p.X*p.X + p.Y*p.Y
+}
+
 // The angle of the [polar coordinate] of the touch point.
+//
+//   - (Pad{X: 1, Y: 0}).Azimuth() == [Degrees](0)
+//   - (Pad{X: 0, Y: 1}).Azimuth() == [Degrees](90)
+//   - (Pad{X: -1, Y: 0}).Azimuth() == [Degrees](180)
+//   - (Pad{X: 0, Y: -1}).Azimuth() == [Degrees](270)
 //
 // [polar coordinate]: https://en.wikipedia.org/wiki/Polar_coordinate_system
 func (p Pad) Azimuth() Angle {
