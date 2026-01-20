@@ -235,7 +235,9 @@ func (a Angle) Normalize() Angle {
 	return a
 }
 
-// Difference returns the difference between the two angles, in the range of [-[math.Pi], +[math.Pi]].
+// Angle difference to go from "a" to "to".
+//
+// Result will be in the range of [-[math.Pi], +[math.Pi]].
 // When "a" and "to" are opposite,
 // returns -[math.Pi] if "a" is smaller than "to", or [math.Pi] otherwise.
 //
@@ -250,8 +252,9 @@ func (a Angle) Difference(to Angle) Angle {
 	return Radians(float32(math.Mod(2*diff, 2*math.Pi) - diff))
 }
 
-// RotateTowards rotates "a" toward "to" by the "delta" amount.
-// Will not go past "to". Angles are interpolated correctly when the angles
+// Rotates "a" toward "to" by the "delta" amount.
+//
+// Will not go past "to", but interpolated correctly when the angles
 // wrap around [Radians](2*[math.Pi]) or [Degrees](360).
 //
 // If "delta" is negative, this function will rotate away from "to",
