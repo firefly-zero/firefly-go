@@ -3,6 +3,8 @@ package firefly
 import (
 	"math"
 	"unsafe"
+
+	"github.com/orsinium-labs/tinymath"
 )
 
 const (
@@ -31,14 +33,19 @@ func (p Point) Draw(c Color) {
 	DrawPoint(p, c)
 }
 
-// Convert the Point to a Size.
+// Convert the Point to a [Size].
 func (p Point) Size() Size {
 	return Size{W: p.X, H: p.Y}
 }
 
-// Convert the Point to a Pad.
+// Convert the Point to a [Pad].
 func (p Point) Pad() Pad {
 	return Pad(p)
+}
+
+// Convert the Point to a [Vec2].
+func (p Point) Vec2() Vec2 {
+	return Vec2{X: float32(p.X), Y: float32(p.Y)}
 }
 
 // Set X and Y to their absolute (non-negative) value.
@@ -193,6 +200,14 @@ func (a Angle) Degrees() float32 {
 	return 180 * a.a / math.Pi
 }
 
+// Convert an Angle to a [Vec2].
+func (a Angle) Vec2() Vec2 {
+	return Vec2{
+		X: tinymath.Cos(a.a),
+		Y: -tinymath.Sin(a.a),
+	}
+}
+
 func (a Angle) Neg() Angle {
 	a.a = -a.a
 	return a
@@ -269,7 +284,7 @@ type RGB struct {
 	B uint8
 }
 
-func NewRGB(r uint8, g uint8, b uint8) RGB {
+func NewRGB(r, g, b uint8) RGB {
 	return RGB{R: r, G: g, B: b}
 }
 
