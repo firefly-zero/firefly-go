@@ -3,6 +3,8 @@ package firefly
 import (
 	"math"
 	"unsafe"
+
+	"github.com/orsinium-labs/tinymath"
 )
 
 const (
@@ -31,14 +33,19 @@ func (p Point) Draw(c Color) {
 	DrawPoint(p, c)
 }
 
-// Convert the Point to a Size.
+// Convert the Point to a [Size].
 func (p Point) Size() Size {
 	return Size{W: p.X, H: p.Y}
 }
 
-// Convert the Point to a Pad.
+// Convert the Point to a [Pad].
 func (p Point) Pad() Pad {
 	return Pad(p)
+}
+
+// Convert the Point to a [Vec2].
+func (p Point) Vec2() Vec2 {
+	return Vec2{X: float32(p.X), Y: float32(p.Y)}
 }
 
 // Set X and Y to their absolute (non-negative) value.
@@ -193,6 +200,14 @@ func (a Angle) Degrees() float32 {
 	return 180 * a.a / math.Pi
 }
 
+// Convert an Angle to a [Vec2].
+func (a Angle) Vec2() Vec2 {
+	return Vec2{
+		X: tinymath.Cos(a.a),
+		Y: -tinymath.Sin(a.a),
+	}
+}
+
 func (a Angle) Neg() Angle {
 	a.a = -a.a
 	return a
@@ -259,6 +274,50 @@ const (
 	ColorDarkGray Color = 16
 )
 
+// Get the color name in the default palette (SWEETIE-16).
+//
+// Implements [fmt.Stringer].
+func (color Color) String() string {
+	switch color {
+	case ColorBlack:
+		return "Black"
+	case ColorBlue:
+		return "Blue"
+	case ColorCyan:
+		return "Cyan"
+	case ColorDarkBlue:
+		return "DarkBlue"
+	case ColorDarkGray:
+		return "DarkGray"
+	case ColorDarkGreen:
+		return "DarkGreen"
+	case ColorGray:
+		return "Gray"
+	case ColorGreen:
+		return "Green"
+	case ColorLightBlue:
+		return "LightBlue"
+	case ColorLightGray:
+		return "LightGray"
+	case ColorLightGreen:
+		return "LightGreen"
+	case ColorNone:
+		return "None"
+	case ColorOrange:
+		return "Orange"
+	case ColorPurple:
+		return "Purple"
+	case ColorRed:
+		return "Red"
+	case ColorWhite:
+		return "White"
+	case ColorYellow:
+		return "Yellow"
+	default:
+		return "???"
+	}
+}
+
 // The RGB value of a color in the palette.
 type RGB struct {
 	// Red component
@@ -269,7 +328,7 @@ type RGB struct {
 	B uint8
 }
 
-func NewRGB(r uint8, g uint8, b uint8) RGB {
+func NewRGB(r, g, b uint8) RGB {
 	return RGB{R: r, G: g, B: b}
 }
 
@@ -443,6 +502,42 @@ func (i Image) GetColor(p uint8) Color {
 	return Color(byteVal + 1)
 }
 
+// Get color of a pixel in the image.
+//
+// Returns [ColorNone] if out of bounds.
+func (i Image) GetPixel(point Point) Color {
+	if point.X < 0 || point.Y < 0 {
+		return ColorNone
+	}
+	size := i.Size()
+	if point.X >= size.W || point.Y >= size.H {
+		return ColorNone
+	}
+	bpp := i.raw[1]
+	headerLen := 5 + (1 << (bpp - 1))
+	body := i.raw[headerLen:]
+
+	pixelIndex := point.X + point.Y*size.W
+	bodyIndex := pixelIndex * int(bpp) / 8
+	pixelValue := body[bodyIndex]
+
+	switch bpp {
+	case 1:
+		byteOffset := 1 * (7 - pixelIndex%8)
+		pixelValue = (pixelValue >> byte(byteOffset)) & 0b1
+	case 2:
+		byteOffset := 2 * (3 - pixelIndex%4)
+		pixelValue = (pixelValue >> byte(byteOffset)) & 0b11
+	case 4:
+		byteOffset := 4 * (1 - pixelIndex%2)
+		pixelValue = (pixelValue >> byte(byteOffset)) & 0b1111
+	default:
+		panic("invalid bpp")
+	}
+
+	return i.GetColor(pixelValue)
+}
+
 // Set color to be used to represent the given pixel value.
 func (i Image) SetColor(p uint8, c Color) {
 	if p > 15 || c == ColorNone {
@@ -479,6 +574,32 @@ type SubImage struct {
 // Render the sub image at the given point.
 func (i SubImage) Draw(p Point) {
 	DrawSubImage(i, p)
+}
+
+// Image returns back the original parent [Image] from which this sub-image
+// was created from.
+func (i SubImage) Image() Image {
+	return Image{raw: i.raw}
+}
+
+// Point returns the offset of this sub-image in the parent [Image].
+func (i SubImage) Point() Point {
+	return i.point
+}
+
+// Size returns the size of this sub-image.
+func (i SubImage) Size() Size {
+	return i.size
+}
+
+// Width returns the width of this sub-image.
+func (i SubImage) Width() int {
+	return i.size.W
+}
+
+// Height returns the height of this sub-image.
+func (i SubImage) Height() int {
+	return i.size.H
 }
 
 // Canvas is an [Image] that can be drawn upon.
