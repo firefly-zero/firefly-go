@@ -2,21 +2,22 @@
 version: "3"
 
 tasks:
-  install-gofumpt:
+  install:gofumpt:
     status:
       - which gofumpt
     cmds:
       # https://github.com/mvdan/gofumpt
       - go install mvdan.cc/gofumpt@latest
-  install-golangci-lint:
+  install:golangci-lint:
     status:
-      - which golangci-lint
-      - test "$(golangci-lint version --short)" = "2.8.0"
+      - test -f ./bin/golangci-lint
+      - ./bin/golangci-lint --version | grep -F '2.8.0'
     cmds:
-      # https://golangci-lint.run/welcome/install/
+      # https://golangci-lint.run/welcome/install/#binaries
       - >
-        curl -sSfL https://golangci-lint.run/install.sh
-        | sh -s -- -b $(go env GOPATH)/bin v2.8.0
+        curl -sSfL
+        https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh
+        | sh -s -- -b ./bin v2.8.0
 
   release:
     cmds:
@@ -28,12 +29,12 @@ tasks:
 
   format:
     cmds:
-      - task: install-gofumpt
+      - task: install:gofumpt
       - gofumpt -w .
   lint:
     cmds:
-      - task: install-golangci-lint
-      - golangci-lint run
+      - task: install:golangci-lint
+      - ./bin/golangci-lint run
   test:
     cmds:
       - go test -count 1 ./...

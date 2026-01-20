@@ -1,3 +1,4 @@
 /_examples/*/*.fff
 __pycache__/
 /.venv/
+/bin/
