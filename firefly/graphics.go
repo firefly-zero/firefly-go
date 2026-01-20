@@ -456,7 +456,9 @@ func (i Image) SetTransparency(c Color) {
 
 // The number of pixels the image has.
 func (i Image) Pixels() int {
-	return len(i.raw) * 8 / int(i.BPP())
+	bpp := int(i.BPP())
+	headerSize := 5 + (1 << (bpp - 1))
+	return (len(i.raw) - headerSize) * 8 / bpp
 }
 
 // The image width in pixels.
