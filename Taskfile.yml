@@ -11,11 +11,12 @@ tasks:
   install-golangci-lint:
     status:
       - which golangci-lint
+      - test "$(golangci-lint version --short)" = "2.8.0"
     cmds:
       # https://golangci-lint.run/welcome/install/
       - >
-        curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh
-        | sh -s -- -b $(go env GOPATH)/bin v1.58.0
+        curl -sSfL https://golangci-lint.run/install.sh
+        | sh -s -- -b $(go env GOPATH)/bin v2.8.0
 
   release:
     cmds:
