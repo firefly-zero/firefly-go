@@ -8,6 +8,7 @@ import (
 )
 
 func TestAngleDifference(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		name    string
 		fromDeg float32
@@ -23,7 +24,7 @@ func TestAngleDifference(t *testing.T) {
 		{fromDeg: -179, toDeg: 0, wantDeg: 179},
 		{fromDeg: 720, toDeg: 360, wantDeg: 0},
 		{fromDeg: 700, toDeg: 650, wantDeg: -50},
-		// bug case in "tinymath.RemEuclid":
+		// this test fails when using "tinymath.RemEuclid" instead of "math.Mod"
 		{fromDeg: 19.000001, toDeg: 19, wantDeg: 0},
 	}
 
@@ -31,12 +32,14 @@ func TestAngleDifference(t *testing.T) {
 		result := firefly.Degrees(test.fromDeg).Difference(firefly.Degrees(test.toDeg))
 		resultDeg := tinymath.Round(result.Degrees())
 		if resultDeg != test.wantDeg {
-			t.Errorf("AngleDifference(%f°, %f°)\nwant: %f°\ngot:  %f°", test.fromDeg, test.toDeg, test.wantDeg, resultDeg)
+			t.Errorf("AngleDifference(%f°, %f°)\nwant: %f°\ngot:  %f°",
+				test.fromDeg, test.toDeg, test.wantDeg, resultDeg)
 		}
 	}
 }
 
 func TestRotateTowards(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		name     string
 		fromDeg  float32
@@ -46,15 +49,17 @@ func TestRotateTowards(t *testing.T) {
 	}{
 		{fromDeg: 0, toDeg: 0, deltaDeg: 0, wantDeg: 0},
 		{fromDeg: 19, toDeg: 19, deltaDeg: 3, wantDeg: 19},
-		// bug case in "tinymath.RemEuclid":
+		// this test fails when using "tinymath.RemEuclid" instead of "math.Mod"
 		{fromDeg: 19.000001, toDeg: 19, deltaDeg: 3, wantDeg: 19},
 	}
 
 	for _, test := range tests {
-		result := firefly.Degrees(test.fromDeg).RotateTowards(firefly.Degrees(test.toDeg), firefly.Degrees(test.deltaDeg))
+		result := firefly.Degrees(test.fromDeg).
+			RotateTowards(firefly.Degrees(test.toDeg), firefly.Degrees(test.deltaDeg))
 		resultDeg := result.Degrees()
 		if resultDeg != test.wantDeg {
-			t.Errorf("RotateTowards(%f°, %f°, %f°)\nwant: %f°\ngot:  %f°", test.fromDeg, test.toDeg, test.deltaDeg, test.wantDeg, resultDeg)
+			t.Errorf("RotateTowards(%f°, %f°, %f°)\nwant: %f°\ngot:  %f°",
+				test.fromDeg, test.toDeg, test.deltaDeg, test.wantDeg, resultDeg)
 		}
 	}
 }

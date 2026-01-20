@@ -244,9 +244,9 @@ func (a Angle) Normalize() Angle {
 // Input angles do not need to be normalized.
 // Based on the Godot [angle_difference] (licensed under MIT)
 //
-// [angle_difference]: https://github.com/godotengine/godot/blob/50277787eacaf4bc4d8683a706fe54dc65762020/core/math/math_funcs.h#L482-L489
+// [angle_difference]: https://github.com/godotengine/godot/blob/4.5.1-stable/core/math/math_funcs.h#L482-L489
 func (a Angle) Difference(to Angle) Angle {
-	// tinymath has "RemEuclid" https://github.com/orsinium-labs/tinymath/blob/de812093edff2384fd94a922c5b255b0e39139a6/tinymath.go#L320-L328
+	// tinymath has "RemEuclid" https://github.com/orsinium-labs/tinymath/blob/v1.1.0/tinymath.go#L324-L332
 	// but it has some math bugs, so we have to resort to the big math functions.
 	diff := math.Mod(float64(to.Radians()-a.Radians()), 2*math.Pi)
 	return Radians(float32(math.Mod(2*diff, 2*math.Pi) - diff))
@@ -262,12 +262,12 @@ func (a Angle) Difference(to Angle) Angle {
 //
 // Based on the Godot [rotate_towards] (licensed under MIT)
 //
-// [rotate_towards]: https://github.com/godotengine/godot/blob/50277787eacaf4bc4d8683a706fe54dc65762020/core/math/math_funcs.h#L598-L609
+// [rotate_towards]: https://github.com/godotengine/godot/blob/4.5.1-stable/core/math/math_funcs.h#L598-L609
 func (a Angle) RotateTowards(to, delta Angle) Angle {
 	diff := a.Difference(to).Radians()
-	abs_diff := tinymath.Abs(diff)
+	absDiff := tinymath.Abs(diff)
 	return Radians(
-		a.Radians() + clamp(delta.Radians(), abs_diff-math.Pi, abs_diff)*tinymath.Sign(diff),
+		a.Radians() + clamp(delta.Radians(), absDiff-math.Pi, absDiff)*tinymath.Sign(diff),
 	)
 }
 
