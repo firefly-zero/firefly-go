@@ -6,27 +6,28 @@ import (
 	"github.com/orsinium-labs/tinymath"
 )
 
-const cmp_epsilon = 0.00001
+const epsilon = 0.00001
 
-// Vec2 is a utility class for dealing with float-based positions.
+// Utility type for dealing with float-based positions.
 type Vec2 struct {
 	X float32
 	Y float32
 }
 
-// V is a shortcut for creating a [Vec2]
+// Shortcut for creating a [Vec2].
 func V(x, y float32) Vec2 {
 	return Vec2{X: x, Y: y}
 }
 
 // Convert a Vec2 to a [Point].
+//
 // The X and Y floats are truncated, meaning the floored value of positive numbers
 // and the ceiling value of negative values.
 func (v Vec2) Point() Point {
 	return Point{X: int(v.X), Y: int(v.Y)}
 }
 
-// Round returns a new Vec2 with both X and Y rounded to the nearest integer.
+// Get Vec2 with both X and Y rounded to the nearest integer.
 func (v Vec2) Round() Vec2 {
 	return Vec2{X: tinymath.Round(v.X), Y: tinymath.Round(v.Y)}
 }
@@ -47,35 +48,34 @@ func (v Vec2) Negate() Vec2 {
 	return Vec2{X: -v.X, Y: -v.Y}
 }
 
-// ComponentMin returns a Vec2 with both X and Y to their minimum in the two given Vec2s.
-func (p Vec2) ComponentMin(r Vec2) Vec2 {
-	if r.X < p.X {
-		p.X = r.X
+// Get Vec2 with both X and Y to their minimum in the two given Vec2s.
+func (v Vec2) ComponentMin(r Vec2) Vec2 {
+	if r.X < v.X {
+		v.X = r.X
 	}
-	if r.Y < p.Y {
-		p.Y = r.Y
+	if r.Y < v.Y {
+		v.Y = r.Y
 	}
-	return p
+	return v
 }
 
-// ComponentMax returns a Vec2 with both X and Y to their maximum in the two given Vec2s.
-func (p Vec2) ComponentMax(r Vec2) Vec2 {
-	if r.X > p.X {
-		p.X = r.X
+// Get Vec2 with both X and Y to their maximum in the two given Vec2s.
+func (v Vec2) ComponentMax(r Vec2) Vec2 {
+	if r.X > v.X {
+		v.X = r.X
 	}
-	if r.Y > p.Y {
-		p.Y = r.Y
+	if r.Y > v.Y {
+		v.Y = r.Y
 	}
-	return p
+	return v
 }
 
 // Check if the Vec2 is within the screen boundaries.
-func (p Vec2) InBounds() bool {
-	return p.X >= 0 && p.Y >= 0 && p.X < Width && p.Y < Height
+func (v Vec2) InBounds() bool {
+	return v.X >= 0 && v.Y >= 0 && v.X < Width && v.Y < Height
 }
 
-// Scale returns a new Vec2 where both the X and Y value are individually
-// multiplied by the scalar factor.
+// Get Vec2 where both the X and Y value are individually multiplied by the scalar factor.
 func (v Vec2) Scale(factor float32) Vec2 {
 	return Vec2{X: v.X * factor, Y: v.Y * factor}
 }
@@ -85,13 +85,12 @@ func (v Vec2) Radius() float32 {
 	return tinymath.Sqrt(v.X*v.X + v.Y*v.Y)
 }
 
-// Radius returns the squared vector length (aka squared magnitude),
-// which is simpler to calculate.
+// Get the squared vector length (aka squared magnitude), which is simpler to calculate.
 func (v Vec2) RadiusSquared() float32 {
 	return v.X*v.X + v.Y*v.Y
 }
 
-// Azimuth returns the angle of the [polar coordinate] of the vector.
+// The angle of the polar coordinate of the vector.
 //
 //   - [V](1, 0).Azimuth() == [Degrees](0)
 //   - [V](0, 1).Azimuth() == [Degrees](90)
@@ -102,15 +101,14 @@ func (v Vec2) Azimuth() Angle {
 	return Radians(r)
 }
 
-// MoveTowards returns a vector that has moved towards "to" by the "delta"
-// amount, but will not go past "to".
+// Get Vector that has moved towards "to" by the "delta" amount, but will not go past "to".
+//
 // Use negative "delta" value to move away.
 func (v Vec2) MoveTowards(to Vec2, delta float32) Vec2 {
 	vd := to.Sub(v)
 	dist := vd.Radius()
-	if dist <= delta || dist < cmp_epsilon {
+	if dist <= delta || dist < epsilon {
 		return to
-	} else {
-		return v.Add(vd.Scale(delta / dist))
 	}
+	return v.Add(vd.Scale(delta / dist))
 }
