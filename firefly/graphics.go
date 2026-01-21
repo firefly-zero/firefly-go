@@ -1,6 +1,7 @@
 package firefly
 
 import (
+	"cmp"
 	"math"
 	"unsafe"
 
@@ -232,6 +233,53 @@ func (a Angle) Normalize() Angle {
 		a.a += math.Pi * 2
 	}
 	return a
+}
+
+// Angle difference to go from "a" to "to".
+//
+// Result will be in the range of [-[math.Pi], +[math.Pi]].
+// When "a" and "to" are opposite,
+// returns -[math.Pi] if "a" is smaller than "to", or [math.Pi] otherwise.
+//
+// Input angles do not need to be normalized.
+// Based on the Godot [angle_difference] (licensed under MIT)
+//
+// [angle_difference]: https://github.com/godotengine/godot/blob/4.5.1-stable/core/math/math_funcs.h#L482-L489
+func (a Angle) Difference(to Angle) Angle {
+	// tinymath has "RemEuclid" https://github.com/orsinium-labs/tinymath/blob/v1.1.0/tinymath.go#L324-L332
+	// but it has some math bugs, so we have to resort to the big math functions.
+	diff := math.Mod(float64(to.Radians()-a.Radians()), 2*math.Pi)
+	return Radians(float32(math.Mod(2*diff, 2*math.Pi) - diff))
+}
+
+// Rotates "a" toward "to" by the "delta" amount.
+//
+// Will not go past "to", but interpolated correctly when the angles
+// wrap around [Radians](2*[math.Pi]) or [Degrees](360).
+//
+// If "delta" is negative, this function will rotate away from "to",
+// towards the opposite angle, and will not go past the opposite angle.
+//
+// Based on the Godot [rotate_towards] (licensed under MIT)
+//
+// [rotate_towards]: https://github.com/godotengine/godot/blob/4.5.1-stable/core/math/math_funcs.h#L598-L609
+func (a Angle) RotateTowards(to, delta Angle) Angle {
+	diff := a.Difference(to).Radians()
+	absDiff := tinymath.Abs(diff)
+	return Radians(
+		a.Radians() + clamp(delta.Radians(), absDiff-math.Pi, absDiff)*tinymath.Sign(diff),
+	)
+}
+
+func clamp[T cmp.Ordered](val, minimum, maximum T) T {
+	switch {
+	case val < minimum:
+		return minimum
+	case val > maximum:
+		return maximum
+	default:
+		return val
+	}
 }
 
 // A pointer to a color in the color palette.
