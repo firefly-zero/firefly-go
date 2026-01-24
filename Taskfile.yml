@@ -38,7 +38,7 @@ tasks:
   test:
     cmds:
       - go test -count 1 ./...
-      - firefly_cli test
+      - ff test
   all:
     desc: run all code formatters, linters, and tests
     cmds:
