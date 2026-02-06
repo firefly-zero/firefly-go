@@ -6,13 +6,33 @@ import (
 	"github.com/firefly-zero/firefly-go/firefly"
 )
 
-// Get the name of all dirs in the given dir.
+// Get the names of all dirs in the given dir.
 func ListDirs(path string) []string {
 	pathPtr := unsafe.Pointer(unsafe.StringData(path))
 	bufSize := listDirsBufSize(pathPtr, uint32(len(path)))
 	buf := make([]byte, bufSize)
 	bufPtr := unsafe.Pointer(unsafe.SliceData(buf))
 	listDirs(
+		pathPtr, uint32(len(path)),
+		bufPtr, bufSize,
+	)
+	res := make([]string, 0)
+	for len(buf) != 0 {
+		size := buf[0]
+		name := string(buf[1 : size+1])
+		res = append(res, name)
+		buf = buf[size+1:]
+	}
+	return res
+}
+
+// Get the names of all files in the given dir.
+func ListFiles(path string) []string {
+	pathPtr := unsafe.Pointer(unsafe.StringData(path))
+	bufSize := listFilesBufSize(pathPtr, uint32(len(path)))
+	buf := make([]byte, bufSize)
+	bufPtr := unsafe.Pointer(unsafe.SliceData(buf))
+	listFiles(
 		pathPtr, uint32(len(path)),
 		bufPtr, bufSize,
 	)
