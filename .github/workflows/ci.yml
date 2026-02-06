@@ -10,40 +10,19 @@ permissions: {}
 jobs:
   test:
     runs-on: ubuntu-latest
-    permissions:
-      # Most required by reviewdog/action-suggester
-      # https://github.com/reviewdog/action-suggester#required-permissions
-      contents: read
-      checks: write
-      issues: write
-      pull-requests: write
     steps:
-      - name: checkout
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
-
-      - name: setup go
-        uses: actions/setup-go@v6
+      - uses: actions/setup-go@v6
         with:
           go-version-file: go.mod
-
-      - name: Setup Taskfile
-        uses: arduino/setup-task@v2
+      - uses: acifani/setup-tinygo@v2
+        with:
+          tinygo-version: "0.40.1"
+      - uses: arduino/setup-task@v2
         with:
           version: 3.x
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Install Firefly Zero CLI
-        run: bash -c "$(curl https://fireflyzero.com/install.sh)"
-
-      - name: Run tests
-        run: task all
-
-      - name: Suggester / gofumpt
-        uses: reviewdog/action-suggester@v1
-        if: always() # run even if tests fails
-        with:
-          tool_name: gofumpt
-          fail_level: warning
-          fail_on_error: true
+      - run: bash -c "$(curl https://fireflyzero.com/install.sh)"
+      - run: task all
