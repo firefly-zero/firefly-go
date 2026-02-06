@@ -25,4 +25,5 @@ jobs:
           version: 3.x
           repo-token: ${{ secrets.GITHUB_TOKEN }}
       - run: bash -c "$(curl https://fireflyzero.com/install.sh)"
-      - run: task all
+      - run: task lint
+      - run: go test -count 1 ./...
