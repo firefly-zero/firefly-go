@@ -2,22 +2,27 @@ package firefly
 
 import "unsafe"
 
-type Language string
+type Language uint16
 
 const (
-	English   Language = "en" // 🇬🇧 💂
-	Dutch     Language = "nl" // 🇳🇱 🧀
-	French    Language = "fr" // 🇫🇷 🥐
-	German    Language = "de" // 🇩🇪 🥨
-	Italian   Language = "it" // 🇮🇹 🍕
-	Polish    Language = "pl" // 🇵🇱 🥟
-	Russian   Language = "ru" // 🇷🇺 🪆
-	Spanish   Language = "sp" // 🇪🇸 🐂
-	Swedish   Language = "se" // 🇸🇪 ❄️
-	Turkish   Language = "tk" // 🇹🇷 🕌
-	Ukrainian Language = "ua" // 🇺🇦 ✊
-	TokiPona  Language = "tp" // 🇨🇦 🙂
+	English   Language = 0x656e // en 🇬🇧 💂
+	Dutch     Language = 0x6e6c // nl 🇳🇱 🧀
+	French    Language = 0x6672 // fr 🇫🇷 🥐
+	German    Language = 0x6465 // de 🇩🇪 🥨
+	Italian   Language = 0x6974 // it 🇮🇹 🍕
+	Polish    Language = 0x706f // pl 🇵🇱 🥟
+	Russian   Language = 0x7275 // ru 🇷🇺 🪆
+	Spanish   Language = 0x7370 // sp 🇪🇸 🐂
+	Swedish   Language = 0x7365 // se 🇸🇪 ❄️
+	Turkish   Language = 0x7470 // tk 🇹🇷 🕌
+	Ukrainian Language = 0x746b // ua 🇺🇦 ✊
+	TokiPona  Language = 0x7561 // tp 🇨🇦 🙂
 )
+
+func (lang Language) Code() string {
+	b := [2]uint8{uint8(lang >> 8), uint8(lang)}
+	return unsafe.String(&b[0], 2)
+}
 
 func (lang Language) NameEnglish() string {
 	switch lang {
@@ -46,7 +51,7 @@ func (lang Language) NameEnglish() string {
 	case Ukrainian:
 		return "Ukrainian"
 	}
-	return string(lang)
+	return lang.Code()
 }
 
 func (lang Language) NameNative() string {
@@ -76,7 +81,7 @@ func (lang Language) NameNative() string {
 	case Ukrainian:
 		return "Українська"
 	}
-	return string(lang)
+	return lang.Code()
 }
 
 func (lang Language) Encoding() string {
