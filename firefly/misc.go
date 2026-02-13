@@ -102,6 +102,46 @@ func (lang Language) Encoding() string {
 	return "ascii"
 }
 
+type Theme struct {
+	ID uint8
+	// The main color of text and boxes.
+	Primary Color
+	// The color of disable options, muted text, etc.
+	Secondary Color
+	// The color of important elements, active options, etc.
+	Accent Color
+	// The background color, the most contrast color to primary.
+	BG Color
+}
+
+type Settings struct {
+	// The preferred color scheme of the player.
+	Theme Theme
+
+	// The configured interface language.
+	Language Language
+
+	// If true, the screen is rotated 180 degrees.
+	//
+	// In other words, the player holds the device upside-down.
+	// The touchpad is now on the right and the buttons are on the left.
+	RotateScreen bool
+
+	// The player has photosensitivity. The app should avoid any rapid flashes.
+	ReduceFlashing bool
+
+	// The player wants increased contrast for colors.
+	//
+	// If set, the black and white colors in the default
+	// palette are adjusted automatically. All other colors
+	// in the default palette or all colors in a custom palette
+	// should be adjusted by the app.
+	Contrast bool
+
+	// If true, the player wants to see easter eggs, holiday effects, and weird jokes.
+	EasterEggs bool
+}
+
 // Log a debug message.
 func LogDebug(t string) {
 	ptr := unsafe.Pointer(unsafe.StringData(t))
@@ -130,6 +170,34 @@ func GetName(p Peer) string {
 	ptr := unsafe.Pointer(&buf)
 	length := getName(uint32(p), ptr)
 	return unsafe.String(&buf[0], length)
+}
+
+func GetSettings(p Peer) Settings {
+	raw := getSettings(uint32(p))
+	code := uint16(raw>>8) | uint16(raw)
+	language := Language(code)
+	flags := raw >> 16
+	themeRaw := raw >> 32
+	theme := Theme{
+		ID:        uint8(themeRaw),
+		Primary:   parseColor(themeRaw >> 20),
+		Secondary: parseColor(themeRaw >> 16),
+		Accent:    parseColor(themeRaw >> 12),
+		BG:        parseColor(themeRaw >> 8),
+	}
+	return Settings{
+		Theme:          theme,
+		Language:       language,
+		RotateScreen:   (flags & 0b0001) != 0,
+		ReduceFlashing: (flags & 0b0010) != 0,
+		Contrast:       (flags & 0b0100) != 0,
+		EasterEggs:     (flags & 0b1000) != 0,
+	}
+}
+
+//go:inline
+func parseColor(c uint64) Color {
+	return Color(c&0xf + 1)
 }
 
 // Exit the app after the current update is finished.

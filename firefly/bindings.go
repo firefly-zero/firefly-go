@@ -132,6 +132,9 @@ func getRandom() uint32
 //go:wasmimport misc get_name
 func getName(index uint32, ptr unsafe.Pointer) uint32
 
+//go:wasmimport misc get_settings
+func getSettings(index uint32) uint64
+
 //go:wasmimport misc restart
 func restart()
 
