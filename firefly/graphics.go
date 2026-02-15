@@ -376,6 +376,18 @@ func (f Font) Draw(t string, p Point, c Color) {
 	DrawText(t, f, p, c)
 }
 
+// Render the given text bytes.
+//
+// Input slice must be valid UTF-8 formatted (without BOM).
+//
+// Useful when you are building strings in a byte array or slice, such as via a [bytes.Buffer].
+// This function allows you to use such content without allocating a new string.
+//
+// It is allowed to modify the byte slice after the function call.
+func (f Font) DrawBytes(t []byte, p Point, c Color) {
+	DrawTextBytes(t, f, p, c)
+}
+
 // If the font is for ASCII encoding (English alphabet).
 func (f Font) IsASCII() bool {
 	return f.raw[1] == 0
@@ -733,9 +745,47 @@ func DrawText(t string, f Font, p Point, c Color) {
 	)
 }
 
+// Render text using the given font.
+//
+// Unlike in the other drawing functions, here [Point] points not to the top-left corner
+// but to the baseline start position.
+//
+// Input slice must be valid UTF-8 formatted (without BOM).
+//
+// Useful when you are building strings in a byte array or slice, such as via a [bytes.Buffer].
+// This function allows you to use such content without allocating a new string.
+//
+// It is allowed to modify the byte slice after the function call.
+func DrawTextBytes(t []byte, f Font, p Point, c Color) {
+	textPtr := unsafe.Pointer(unsafe.SliceData(t))
+	rawPtr := unsafe.Pointer(unsafe.SliceData(f.raw))
+	drawText(
+		textPtr, uint32(len(t)),
+		rawPtr, uint32(len(f.raw)),
+		int32(p.X), int32(p.Y), int32(c),
+	)
+}
+
 // Render a QR code for the given text.
 func DrawQR(t string, p Point, black, white Color) {
 	ptr := unsafe.Pointer(unsafe.StringData(t))
+	drawQR(
+		ptr, uint32(len(t)),
+		int32(p.X), int32(p.Y),
+		int32(black), int32(white),
+	)
+}
+
+// Render a QR code for the given text byte slice.
+//
+// Input slice must be valid UTF-8 formatted (without BOM).
+//
+// Useful when you are building strings in a byte array or slice, such as via a [bytes.Buffer].
+// This function allows you to use such content without allocating a new string.
+//
+// It is allowed to modify the byte slice after the function call.
+func DrawQRBytes(t []byte, p Point, black, white Color) {
+	ptr := unsafe.Pointer(unsafe.SliceData(t))
 	drawQR(
 		ptr, uint32(len(t)),
 		int32(p.X), int32(p.Y),
