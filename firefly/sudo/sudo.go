@@ -59,6 +59,17 @@ func RunApp(author string, app string) {
 	)
 }
 
+// Check if the given file exists.
+func FileExists(path string) bool {
+	return GetFileSize(path) != 0
+}
+
+func GetFileSize(path string) int {
+	pathPtr := unsafe.Pointer(unsafe.StringData(path))
+	size := getFileSize(pathPtr, uint32(len(path)))
+	return int(size)
+}
+
 // Read a file from the FS.
 func LoadFile(path string) firefly.File {
 	pathPtr := unsafe.Pointer(unsafe.StringData(path))
