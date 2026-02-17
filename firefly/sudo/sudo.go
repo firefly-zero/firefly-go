@@ -82,3 +82,13 @@ func LoadFile(path string) firefly.File {
 	)
 	return firefly.File{Raw: raw}
 }
+
+func RemoveFile(path string) {
+	pathPtr := unsafe.Pointer(unsafe.StringData(path))
+	removeFile(pathPtr, uint32(len(path)))
+}
+
+func RemoveDir(path string) {
+	pathPtr := unsafe.Pointer(unsafe.StringData(path))
+	removeDir(pathPtr, uint32(len(path)))
+}
