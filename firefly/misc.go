@@ -10,7 +10,8 @@ const (
 	French    Language = 0x6672 // fr 🇫🇷 🥐
 	German    Language = 0x6465 // de 🇩🇪 🥨
 	Italian   Language = 0x6974 // it 🇮🇹 🍕
-	Polish    Language = 0x706f // pl 🇵🇱 🥟
+	Polish    Language = 0x706c // pl 🇵🇱 🥟
+	Romanian  Language = 0x726f // ro 🇷🇴 🧛
 	Russian   Language = 0x7275 // ru 🇷🇺 🪆
 	Spanish   Language = 0x7370 // sp 🇪🇸 🐂
 	Swedish   Language = 0x7365 // se 🇸🇪 ❄️
@@ -38,6 +39,8 @@ func (lang Language) NameEnglish() string {
 		return "Italian"
 	case Polish:
 		return "Polish"
+	case Romanian:
+		return "Romanian"
 	case Russian:
 		return "Russian"
 	case Spanish:
@@ -68,6 +71,8 @@ func (lang Language) NameNative() string {
 		return "Italiano"
 	case Polish:
 		return "Polski"
+	case Romanian:
+		return "Română"
 	case Russian:
 		return "Русский"
 	case Spanish:
@@ -92,12 +97,14 @@ func (lang Language) Encoding() string {
 		return "iso_8859_1"
 	case German, French:
 		return "iso_8859_2"
-	case Polish:
-		return "iso_8859_13"
 	case Russian, Ukrainian:
 		return "iso_8859_5"
 	case Turkish:
 		return "iso_8859_9"
+	case Polish:
+		return "iso_8859_13"
+	case Romanian:
+		return "iso_8859_16"
 	}
 	return "ascii"
 }
