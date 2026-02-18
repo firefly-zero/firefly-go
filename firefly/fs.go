@@ -3,28 +3,30 @@ package firefly
 import "unsafe"
 
 // A file loaded from the filesystem.
-type File struct {
-	Raw []byte
+type File []byte
+
+func (f File) Bytes() []byte {
+	return []byte(f)
 }
 
 // Convert the File to a Font.
 func (f File) Font() Font {
-	return Font{f.Raw}
+	return Font{f}
 }
 
 // Convert the File to an Image.
 func (f File) Image() Image {
-	return Image{f.Raw}
+	return Image{f}
 }
 
 // Check if the file was loaded.
 func (f File) Exists() bool {
-	return len(f.Raw) != 0
+	return len(f) != 0
 }
 
 // Ensure that the loaded file exists.
 func (f File) Must() File {
-	if len(f.Raw) == 0 {
+	if len(f) == 0 {
 		panic("file not found")
 	}
 	return f
@@ -74,15 +76,15 @@ func loadAllocFile(path string) File {
 	pathPtr := unsafe.Pointer(unsafe.StringData(path))
 	fileSize := getFileSize(pathPtr, uint32(len(path)))
 	if fileSize == 0 {
-		return File{nil}
+		return File(nil)
 	}
-	buf := make([]byte, fileSize)
+	buf := make(File, fileSize)
 	bufPtr := unsafe.Pointer(unsafe.SliceData(buf))
 	loadFile(
 		pathPtr, uint32(len(path)),
 		bufPtr, uint32(len(buf)),
 	)
-	return File{buf}
+	return buf
 }
 
 // Load the file into the given buffer.
@@ -94,9 +96,9 @@ func loadFileInto(path string, buf []byte) File {
 		bufPtr, uint32(len(buf)),
 	)
 	if fileSize == 0 {
-		return File{nil}
+		return File(nil)
 	}
-	return File{buf[:fileSize]}
+	return File(buf[:fileSize])
 }
 
 // Write a file into the app data dir.
