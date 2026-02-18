@@ -11,22 +11,22 @@ func (f File) Bytes() []byte {
 
 // Convert the File to a Font.
 func (f File) Font() Font {
-	return Font{f.Bytes()}
+	return Font{f}
 }
 
 // Convert the File to an Image.
 func (f File) Image() Image {
-	return Image{f.Bytes()}
+	return Image{f}
 }
 
 // Check if the file was loaded.
 func (f File) Exists() bool {
-	return len(f.Bytes()) != 0
+	return len(f) != 0
 }
 
 // Ensure that the loaded file exists.
 func (f File) Must() File {
-	if len(f.Bytes()) == 0 {
+	if len(f) == 0 {
 		panic("file not found")
 	}
 	return f
