@@ -1,7 +1,0 @@
-author_id = "demo"
-app_id = "go-cswap"
-author_name = "Demo"
-app_name = "Color Swap Demo (Go)"
-
-[files]
-img = { path = "image.png" }
