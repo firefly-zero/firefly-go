@@ -20,5 +20,11 @@ func runApp(authorPtr unsafe.Pointer, authorLen uint32, appPtr unsafe.Pointer, a
 //go:wasmimport sudo load_file
 func loadFile(pathPtr unsafe.Pointer, pathLen uint32, bufPtr unsafe.Pointer, bufLen uint32) uint32
 
+//go:wasmimport sudo remove_file
+func removeFile(pathPtr unsafe.Pointer, pathLen uint32)
+
+//go:wasmimport sudo remove_dir
+func removeDir(pathPtr unsafe.Pointer, pathLen uint32)
+
 //go:wasmimport sudo get_file_size
 func getFileSize(pathPtr unsafe.Pointer, pathLen uint32) uint32

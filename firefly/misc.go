@@ -2,6 +2,153 @@ package firefly
 
 import "unsafe"
 
+type Language uint16
+
+const (
+	English   Language = 0x656e // en 🇬🇧 💂
+	Dutch     Language = 0x6e6c // nl 🇳🇱 🧀
+	French    Language = 0x6672 // fr 🇫🇷 🥐
+	German    Language = 0x6465 // de 🇩🇪 🥨
+	Italian   Language = 0x6974 // it 🇮🇹 🍕
+	Polish    Language = 0x706c // pl 🇵🇱 🥟
+	Romanian  Language = 0x726f // ro 🇷🇴 🧛
+	Russian   Language = 0x7275 // ru 🇷🇺 🪆
+	Spanish   Language = 0x7370 // sp 🇪🇸 🐂
+	Swedish   Language = 0x7365 // se 🇸🇪 ❄️
+	Turkish   Language = 0x746b // tk 🇹🇷 🕌
+	Ukrainian Language = 0x756b // uk 🇺🇦 ✊
+	TokiPona  Language = 0x7470 // tp 🇨🇦 🙂
+)
+
+func (lang Language) Code() string {
+	b := [2]uint8{uint8(lang >> 8), uint8(lang)}
+	return unsafe.String(&b[0], 2)
+}
+
+func (lang Language) NameEnglish() string {
+	switch lang {
+	case English:
+		return "English"
+	case Dutch:
+		return "Dutch"
+	case French:
+		return "French"
+	case German:
+		return "German"
+	case Italian:
+		return "Italian"
+	case Polish:
+		return "Polish"
+	case Romanian:
+		return "Romanian"
+	case Russian:
+		return "Russian"
+	case Spanish:
+		return "Spanish"
+	case Swedish:
+		return "Swedish"
+	case TokiPona:
+		return "TokiPona"
+	case Turkish:
+		return "Turkish"
+	case Ukrainian:
+		return "Ukrainian"
+	}
+	return lang.Code()
+}
+
+func (lang Language) NameNative() string {
+	switch lang {
+	case English:
+		return "English"
+	case Dutch:
+		return "Nederlands"
+	case French:
+		return "Français"
+	case German:
+		return "Deutsch"
+	case Italian:
+		return "Italiano"
+	case Polish:
+		return "Polski"
+	case Romanian:
+		return "Română"
+	case Russian:
+		return "Русский"
+	case Spanish:
+		return "Español"
+	case Swedish:
+		return "Svenska"
+	case TokiPona:
+		return "toki pona"
+	case Turkish:
+		return "Türkçe"
+	case Ukrainian:
+		return "Українська"
+	}
+	return lang.Code()
+}
+
+func (lang Language) Encoding() string {
+	switch lang {
+	case English, Dutch, TokiPona:
+		return "ascii"
+	case Italian, Spanish, Swedish:
+		return "iso_8859_1"
+	case German, French:
+		return "iso_8859_2"
+	case Russian, Ukrainian:
+		return "iso_8859_5"
+	case Turkish:
+		return "iso_8859_9"
+	case Polish:
+		return "iso_8859_13"
+	case Romanian:
+		return "iso_8859_16"
+	}
+	return "ascii"
+}
+
+type Theme struct {
+	ID uint8
+	// The main color of text and boxes.
+	Primary Color
+	// The color of disable options, muted text, etc.
+	Secondary Color
+	// The color of important elements, active options, etc.
+	Accent Color
+	// The background color, the most contrast color to primary.
+	BG Color
+}
+
+type Settings struct {
+	// The preferred color scheme of the player.
+	Theme Theme
+
+	// The configured interface language.
+	Language Language
+
+	// If true, the screen is rotated 180 degrees.
+	//
+	// In other words, the player holds the device upside-down.
+	// The touchpad is now on the right and the buttons are on the left.
+	RotateScreen bool
+
+	// The player has photosensitivity. The app should avoid any rapid flashes.
+	ReduceFlashing bool
+
+	// The player wants increased contrast for colors.
+	//
+	// If set, the black and white colors in the default
+	// palette are adjusted automatically. All other colors
+	// in the default palette or all colors in a custom palette
+	// should be adjusted by the app.
+	Contrast bool
+
+	// If true, the player wants to see easter eggs, holiday effects, and weird jokes.
+	EasterEggs bool
+}
+
 // Log a debug message.
 func LogDebug(t string) {
 	ptr := unsafe.Pointer(unsafe.StringData(t))
@@ -56,6 +203,34 @@ func GetName(p Peer) string {
 	ptr := unsafe.Pointer(&buf)
 	length := getName(uint32(p), ptr)
 	return unsafe.String(&buf[0], length)
+}
+
+func GetSettings(p Peer) Settings {
+	raw := getSettings(uint32(p))
+	code := uint16(raw>>8) | uint16(raw)
+	language := Language(code)
+	flags := raw >> 16
+	themeRaw := raw >> 32
+	theme := Theme{
+		ID:        uint8(themeRaw),
+		Primary:   parseColor(themeRaw >> 20),
+		Secondary: parseColor(themeRaw >> 16),
+		Accent:    parseColor(themeRaw >> 12),
+		BG:        parseColor(themeRaw >> 8),
+	}
+	return Settings{
+		Theme:          theme,
+		Language:       language,
+		RotateScreen:   (flags & 0b0001) != 0,
+		ReduceFlashing: (flags & 0b0010) != 0,
+		Contrast:       (flags & 0b0100) != 0,
+		EasterEggs:     (flags & 0b1000) != 0,
+	}
+}
+
+//go:inline
+func parseColor(c uint64) Color {
+	return Color(c&0xf + 1)
 }
 
 // Exit the app after the current update is finished.
