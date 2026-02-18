@@ -427,14 +427,9 @@ func (i Image) Sub(p Point, s Size) SubImage {
 	return SubImage{raw: i.raw, point: p, size: s}
 }
 
-// Bits per pixel. One of: 1, 2, or 4.
-func (i Image) BPP() uint8 {
-	return i.raw[1]
-}
-
 // The color used for transparency. If no transparency, returns [ColorNone].
 func (i Image) Transparency() Color {
-	c := i.raw[4]
+	c := i.raw[3]
 	if c > 15 {
 		return ColorNone
 	}
@@ -446,21 +441,21 @@ func (i Image) Transparency() Color {
 // Pass ColorNone to disable transparency.
 func (i Image) SetTransparency(c Color) {
 	if c == ColorNone {
-		i.raw[4] = 16
+		i.raw[3] = 16
 	}
-	i.raw[4] = byte(c) - 1
+	i.raw[3] = byte(c) - 1
 }
 
 // The number of pixels the image has.
 func (i Image) Pixels() int {
-	bpp := int(i.BPP())
-	headerSize := 5 + (1 << (bpp - 1))
-	return (len(i.raw) - headerSize) * 8 / bpp
+	const ppb = 2
+	const headerSize = 4
+	return (len(i.raw) - headerSize) * ppb
 }
 
 // The image width in pixels.
 func (i Image) Width() int {
-	return int(i.raw[2]) | int(i.raw[3])<<8
+	return int(i.raw[1]) | int(i.raw[2])<<8
 }
 
 // The image height in pixels.
@@ -484,23 +479,6 @@ func (i Image) Size() Size {
 	}
 }
 
-// Get the color used to represent the given pixel value.
-func (i Image) GetColor(p uint8) Color {
-	if p > 15 {
-		return ColorNone
-	}
-	byteVal := i.raw[5+p/2]
-	if p%2 == 0 {
-		byteVal >>= 4
-	}
-	byteVal &= 0b1111
-	transp := i.raw[4]
-	if byteVal == transp {
-		return ColorNone
-	}
-	return Color(byteVal + 1)
-}
-
 // Get color of a pixel in the image.
 //
 // Returns [ColorNone] if out of bounds.
@@ -512,55 +490,14 @@ func (i Image) GetPixel(point Point) Color {
 	if point.X >= size.W || point.Y >= size.H {
 		return ColorNone
 	}
-	bpp := i.raw[1]
-	headerLen := 5 + (1 << (bpp - 1))
-	body := i.raw[headerLen:]
-
 	pixelIndex := point.X + point.Y*size.W
-	bodyIndex := pixelIndex * int(bpp) / 8
-	pixelValue := body[bodyIndex]
-
-	switch bpp {
-	case 1:
-		byteOffset := 1 * (7 - pixelIndex%8)
-		pixelValue = (pixelValue >> byte(byteOffset)) & 0b1
-	case 2:
-		byteOffset := 2 * (3 - pixelIndex%4)
-		pixelValue = (pixelValue >> byte(byteOffset)) & 0b11
-	case 4:
-		byteOffset := 4 * (1 - pixelIndex%2)
-		pixelValue = (pixelValue >> byte(byteOffset)) & 0b1111
-	default:
-		panic("invalid bpp")
+	bodyIndex := pixelIndex / 2
+	pixelValue := i.raw[4+bodyIndex]
+	if pixelIndex%2 == 0 {
+		pixelValue = pixelValue >> 4
 	}
-
-	return i.GetColor(pixelValue)
-}
-
-// Set color to be used to represent the given pixel value.
-func (i Image) SetColor(p uint8, c Color) {
-	if p > 15 || c == ColorNone {
-		return
-	}
-	byteIdx := 5 + p/2
-	byteVal := i.raw[byteIdx]
-	colorVal := byte(c) - 1
-	if p%2 == 0 {
-		byteVal = (colorVal << 4) | (byteVal & 0b_0000_1111)
-	} else {
-		byteVal = (byteVal & 0b_1111_0000) | colorVal
-	}
-	i.raw[byteIdx] = byteVal
-}
-
-// Replace the old color with the new value.
-func (i Image) ReplaceColor(oldC, newC Color) {
-	var p uint8
-	for p = range 16 {
-		if i.GetColor(p) == oldC {
-			i.SetColor(p, newC)
-		}
-	}
+	color := pixelValue & 0b1111
+	return Color(color + 1)
 }
 
 // A subregion of an image. Constructed using [Image.Sub].
@@ -609,20 +546,13 @@ type Canvas struct {
 }
 
 func NewCanvas(s Size) Canvas {
-	const headerSize = 5 + 8
+	const headerSize = 4
 	bodySize := s.W * s.H / 2
 	raw := make([]byte, headerSize+bodySize)
-	raw[0] = 0x21           // magic number
-	raw[1] = 4              // BPP
-	raw[2] = byte(s.W)      // width
-	raw[3] = byte(s.W >> 8) // width
-	raw[4] = 255            // transparency
-
-	// color swaps
-	var i byte
-	for i = range 8 {
-		raw[5+i] = ((i * 2) << 4) | (i*2 + 1)
-	}
+	raw[0] = 0x22           // magic number
+	raw[1] = byte(s.W)      // width
+	raw[2] = byte(s.W >> 8) // width
+	raw[3] = 255            // transparency
 	return Canvas{raw}
 }
 
