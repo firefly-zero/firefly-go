@@ -494,7 +494,7 @@ func (i Image) GetPixel(point Point) Color {
 	bodyIndex := pixelIndex / 2
 	pixelValue := i.raw[4+bodyIndex]
 	if pixelIndex%2 == 0 {
-		pixelValue = pixelValue >> 4
+		pixelValue >>= 4
 	}
 	color := pixelValue & 0b1111
 	return Color(color + 1)
