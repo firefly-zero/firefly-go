@@ -15,9 +15,9 @@ const (
 	Russian   Language = 0x7275 // ru 🇷🇺 🪆
 	Spanish   Language = 0x7370 // sp 🇪🇸 🐂
 	Swedish   Language = 0x7365 // se 🇸🇪 ❄️
-	Turkish   Language = 0x7470 // tk 🇹🇷 🕌
-	Ukrainian Language = 0x746b // ua 🇺🇦 ✊
-	TokiPona  Language = 0x7561 // tp 🇨🇦 🙂
+	Turkish   Language = 0x746b // tk 🇹🇷 🕌
+	Ukrainian Language = 0x756b // uk 🇺🇦 ✊
+	TokiPona  Language = 0x7470 // tp 🇨🇦 🙂
 )
 
 func (lang Language) Code() string {
