@@ -4,6 +4,10 @@ import "unsafe"
 
 type Language uint16
 
+// Language codes supported by the runtime.
+// English goes first, Toki Pona goes last,
+// everything else in between is alphabetically sorted.
+
 const (
 	English   Language = 0x656e // en 🇬🇧 💂
 	Dutch     Language = 0x6e6c // nl 🇳🇱 🧀
@@ -13,9 +17,9 @@ const (
 	Polish    Language = 0x706c // pl 🇵🇱 🥟
 	Romanian  Language = 0x726f // ro 🇷🇴 🧛
 	Russian   Language = 0x7275 // ru 🇷🇺 🪆
-	Spanish   Language = 0x7370 // sp 🇪🇸 🐂
-	Swedish   Language = 0x7365 // se 🇸🇪 ❄️
-	Turkish   Language = 0x746b // tk 🇹🇷 🕌
+	Spanish   Language = 0x6573 // es 🇪🇸 🐂
+	Swedish   Language = 0x7376 // sv 🇸🇪 ❄️
+	Turkish   Language = 0x7472 // tr 🇹🇷 🕌
 	Ukrainian Language = 0x756b // uk 🇺🇦 ✊
 	TokiPona  Language = 0x7470 // tp 🇨🇦 🙂
 )
