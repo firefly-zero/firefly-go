@@ -566,6 +566,46 @@ func (c Canvas) Image() Image {
 	return Image(c)
 }
 
+// Helper for working with spritesheets.
+//
+// Constructed by [NewAtlas].
+type Atlas struct {
+	img        Image
+	spriteSize Size
+}
+
+// Create a new [Atlas] with the given sprite dimensions.
+func NewAtlas(spriteW, spriteH int) Atlas {
+	return Atlas{spriteSize: S(spriteW, spriteH)}
+}
+
+// Set the underlying spritesheet image for the atlas.
+//
+// Should be called before any [Sprite.Draw].
+// The best is to call it once from [Boot].
+func (a *Atlas) Load(path string) {
+	a.img = LoadImage(path, nil)
+}
+
+// Create a reference to a sprite within the atlas.
+func (a *Atlas) Sprite(row, col int) Sprite {
+	pos := P(row*a.spriteSize.W, col*a.spriteSize.H)
+	return Sprite{atlas: a, pos: pos}
+}
+
+type Sprite struct {
+	atlas *Atlas
+	pos   Point
+}
+
+// Render the sprite at the given position.
+//
+// Make sure to call [Atlas.Load] first.
+func (s Sprite) Draw(p Point) {
+	sub := s.atlas.img.Sub(s.pos, s.atlas.spriteSize)
+	sub.Draw(p)
+}
+
 // Fill the whole frame with the given color.
 func ClearScreen(c Color) {
 	clearScreen(int32(c))
