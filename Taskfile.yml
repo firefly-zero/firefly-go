@@ -27,6 +27,16 @@ tasks:
       - git push --tags
       - gh release create --generate-notes v{{.CLI_ARGS}}
 
+  update-examples:
+    vars:
+      EXAMPLES:
+        sh: ls -1 _examples
+    cmds:
+      - for:
+          var: EXAMPLES
+          split: "\n"
+        cmd: cd _examples/{{.ITEM}} && go get -u . && go mod tidy
+
   format:
     cmds:
       - task: install:gofumpt
