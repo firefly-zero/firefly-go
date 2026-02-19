@@ -27,37 +27,45 @@ var (
 )
 
 //go:export boot
-func boot() { //nolint
+func boot() {
 	if Boot != nil {
 		Boot()
 	}
 }
 
 //go:export update
-func update() { //nolint
+func update() {
 	if Update != nil {
 		Update()
 	}
 }
 
 //go:export render
-func render() { //nolint
+func render() {
 	if Render != nil {
 		Render()
 	}
 }
 
 //go:export before_exit
-func beforeExit() { //nolint
+func beforeExit() {
 	if BeforeExit != nil {
 		BeforeExit()
 	}
 }
 
 //go:export cheat
-func cheat(c, v int32) int32 { //nolint
+func cheat(c, v int32) int32 {
 	if Cheat != nil {
 		return int32(Cheat(int(c), int(v)))
 	}
 	return 0
 }
+
+var (
+	_ = boot
+	_ = update
+	_ = render
+	_ = beforeExit
+	_ = cheat
+)

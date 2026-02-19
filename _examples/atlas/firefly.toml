@@ -1,0 +1,7 @@
+author_id = "demo"
+app_id = "go-atlas"
+author_name = "Demo"
+app_name = "Atlas Demo (Go)"
+
+[files]
+atlas = { path = "atlas.png" }
