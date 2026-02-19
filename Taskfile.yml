@@ -41,6 +41,8 @@ tasks:
     cmds:
       - task: install:gofumpt
       - gofumpt -w .
+      - go mod edit -fmt
+      - go mod tidy
   lint:
     cmds:
       - task: install:golangci-lint
