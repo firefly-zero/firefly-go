@@ -70,8 +70,9 @@ func render() {
 }
 
 func beforeExit() {
-	peer := firefly.GetMe()
-	state := states[peer]
-	buf := binary.LittleEndian.AppendUint32(nil, state.clicks)
-	firefly.SaveStash(peer, buf)
+	for _, peer := range peers.Slice() {
+		state := states[peer]
+		buf := binary.LittleEndian.AppendUint32(nil, state.clicks)
+		firefly.SaveStash(peer, buf)
+	}
 }

@@ -58,7 +58,7 @@ func (peer Peer) peerID() uint8 {
 //
 // Useful for single-player games that want in multiplayer to handle
 // inputs from all devices as one input.
-var Combined Peer = Peer{0xFF}
+var Combined = Peer{0xFF}
 
 // The list of peers online.
 //
