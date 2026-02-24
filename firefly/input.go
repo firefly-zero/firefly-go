@@ -264,7 +264,7 @@ func (p Buttons) Any() bool {
 //
 // The peer can be [Combined] or one of the [GetPeers].
 func ReadPad(p Peer) (Pad, bool) {
-	raw := readPad(uint32(p))
+	raw := readPad(uint32(p.raw))
 	pressed := raw != 0xffff
 	if !pressed {
 		return Pad{}, false
@@ -280,7 +280,7 @@ func ReadPad(p Peer) (Pad, bool) {
 //
 // The peer can be [Combined] or one of the [GetPeers].
 func ReadButtons(p Peer) Buttons {
-	raw := readButtons(uint32(p))
+	raw := readButtons(uint32(p.raw))
 	return Buttons{
 		S:    hasBitSet(raw, 0),
 		E:    hasBitSet(raw, 1),

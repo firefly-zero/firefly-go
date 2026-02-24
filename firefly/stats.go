@@ -31,7 +31,7 @@ func GetProgress(p Peer, b Badge) Progress {
 // If the Peer is [Combined], the progress is added to every peer
 // and the returned value is the lowest progress.
 func AddProgress(p Peer, b Badge, v int16) Progress {
-	r := addProgress(uint32(p), uint32(b), int32(v))
+	r := addProgress(uint32(p.raw), uint32(b), int32(v))
 	return Progress{
 		Done: uint16(r >> 16),
 		Goal: uint16(r),
@@ -51,6 +51,6 @@ func GetScore(p Peer, b Board) int16 {
 // If the Peer is [Combined], the score is added for every peer
 // and the returned value is the lowest of their best scores.
 func AddScore(p Peer, b Board, v int16) int16 {
-	s := addScore(uint32(p), uint32(b), int32(v))
+	s := addScore(uint32(p.raw), uint32(b), int32(v))
 	return int16(s)
 }
