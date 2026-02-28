@@ -205,12 +205,19 @@ func GetRandom() uint32 {
 func GetName(p Peer) string {
 	buf := [16]byte{}
 	ptr := unsafe.Pointer(&buf)
-	length := getName(uint32(p), ptr)
+	length := getName(uint32(p.raw), ptr)
 	return unsafe.String(&buf[0], length)
 }
 
-func GetSettings(p Peer) Settings {
-	raw := getSettings(uint32(p))
+// Get the peer's system settings.
+//
+// IMPORTANT: This is the only function that accepts as input not only [Peer]
+// but also [Me], which might lead to a state drift if used incorrectly.
+// See [the docs] for more info.
+//
+// [the docs]: https://docs.fireflyzero.com/dev/net/
+func GetSettings(p AnyPeer) Settings {
+	raw := getSettings(uint32(p.peerID()))
 	code := uint16(raw>>8) | uint16(raw)
 	language := Language(code)
 	flags := raw >> 16

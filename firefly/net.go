@@ -6,20 +6,61 @@ import (
 	"unsafe"
 )
 
+// A peer obtained either from [Peers] ([GetPeers]) or from [GetMe].
+type AnyPeer interface {
+	peerID() uint8
+}
+
+// The peer representing the current device.
+//
+// Can be compared to [Peer] (using [Me.Eq]) or used to [GetSettings].
+//
+// **IMPORTANT:** Using this type may cause state drift between device in multiplayer.
+// See [the docs] for more info.
+//
+// [the docs]: https://docs.fireflyzero.com/dev/net/
+type Me struct {
+	raw uint8
+}
+
+// Check if the given [Peer] represents the current device.
+func (me Me) Eq(peer Peer) bool {
+	return me.raw == peer.raw
+}
+
+// peerID implements [AnyPeer].
+func (me Me) peerID() uint8 {
+	return me.raw
+}
+
 // The peer ID.
 //
 // Can be obtained by getting the list of [Peers] using [GetPeers]
 // and then iterating over it.
-type Peer uint8
+type Peer struct {
+	raw uint8
+}
 
-// Peer value that can be passed to [ReadPad] and [ReadButtons]
+// Check if the given peers represent the same device.
+func (peer Peer) Eq(other Peer) bool {
+	return peer.raw == other.raw
+}
+
+// peerID implements [AnyPeer].
+func (peer Peer) peerID() uint8 {
+	return peer.raw
+}
+
+// A combination of all connected peers.
+//
+// Can be passed in functions like [ReadPad] and [ReadButtons]
 // to get the combined input of all peers.
 //
-// Useful for single-player games that want in multi-player to handle
+// Useful for single-player games that want in multiplayer to handle
 // inputs from all devices as one input.
-const Combined Peer = 0xFF
+var Combined = Peer{0xFF}
 
-// The map of peers online.
+// The list of peers online.
 //
 // Can be obtained using [GetPeers].
 type Peers uint32
@@ -38,7 +79,8 @@ type Stash = []byte
 // Get the slice of all peers that are online.
 func (peers Peers) Slice() []Peer {
 	res := make([]Peer, 0, 32)
-	for peer := range Peer(32) {
+	for peerID := range uint8(32) {
+		peer := Peer{peerID}
 		if peers.Contains(peer) {
 			res = append(res, peer)
 		}
@@ -51,7 +93,8 @@ func (peers Peers) Slice() []Peer {
 // Uses the iterators API introduced in Go 1.23.
 func (peers Peers) Iter() iter.Seq[Peer] {
 	return func(yield func(Peer) bool) {
-		for peer := range Peer(32) {
+		for peerID := range uint8(32) {
+			peer := Peer{peerID}
 			if !peers.Contains(peer) {
 				continue
 			}
@@ -65,7 +108,7 @@ func (peers Peers) Iter() iter.Seq[Peer] {
 
 // Check if the given [Peer] is online.
 func (peers Peers) Contains(peer Peer) bool {
-	return peers>>peer&1 != 0
+	return peers>>peer.raw&1 != 0
 }
 
 // Get how many peers are online.
@@ -74,9 +117,9 @@ func (peers Peers) Len() int {
 	return bits.OnesCount32(uint32(peers))
 }
 
-// Get the [Peer] representing the local device.
-func GetMe() Peer {
-	return Peer(getMe())
+// Get the peer corresponding to the local device.
+func GetMe() Me {
+	return Me{uint8(getMe())}
 }
 
 // Get the list of peers that are currently online.
@@ -98,7 +141,7 @@ func GetPeers() Peers {
 // saved earlier.
 func SaveStash(p Peer, b Stash) {
 	ptr := unsafe.Pointer(unsafe.SliceData(b))
-	saveStash(uint32(p), ptr, uint32(len(b)))
+	saveStash(uint32(p.raw), ptr, uint32(len(b)))
 }
 
 // Load [Stash] saved earlier (in this or previous run) by [SaveStash].
@@ -114,7 +157,7 @@ func LoadStash(p Peer, buf []byte) Stash {
 		buf = make([]byte, 80)
 	}
 	ptr := unsafe.Pointer(unsafe.SliceData(buf))
-	size := loadStash(uint32(p), ptr, uint32(len(buf)))
+	size := loadStash(uint32(p.raw), ptr, uint32(len(buf)))
 	if size == 0 {
 		return nil
 	}
