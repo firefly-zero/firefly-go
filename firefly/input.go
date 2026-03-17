@@ -20,11 +20,15 @@ const (
 	PadMaxY = 1000
 )
 
-// The minimum X or Y value when converting Pad into DPad8
-// for the direction to be considered pressed.
-const dPad8Threshold = 300
+const (
+	// The minimum X or Y value when converting [Pad] into [DPad8]
+	// for the direction to be considered pressed.
+	dPad8Threshold = 400
 
-const dPad4Threshold = 300
+	// The minimum X or Y value when converting [Pad] into [DPad4]
+	// for the direction to be considered pressed.
+	dPad4Threshold = 300
+)
 
 // A finger position on the touch pad.
 //
