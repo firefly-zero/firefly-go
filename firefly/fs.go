@@ -3,30 +3,43 @@ package firefly
 import "unsafe"
 
 // A file loaded from the filesystem.
-type File []byte
+type File struct {
+	// Binary file content.
+	//
+	// File is an opaque type: you can deconstruct it into an opaque asset
+	// (image, font, etc) or into raw bytes but you cannot construct it.
+	// The goal is to prevent it from being used to construct fonts, images,
+	// and other assets. The format of assets can be changed at any time,
+	// so manual construction would be unsafe between releases.
+	raw []byte
+}
+
+func UnsafeFileFromBytes(raw []byte) File {
+	return File{raw}
+}
 
 func (f File) Bytes() []byte {
-	return []byte(f)
+	return f.raw
 }
 
 // Convert the File to a Font.
 func (f File) Font() Font {
-	return Font{f}
+	return Font(f)
 }
 
 // Convert the File to an Image.
 func (f File) Image() Image {
-	return Image{f}
+	return Image(f)
 }
 
 // Check if the file was loaded.
 func (f File) Exists() bool {
-	return len(f) != 0
+	return len(f.raw) != 0
 }
 
 // Ensure that the loaded file exists.
 func (f File) Must() File {
-	if len(f) == 0 {
+	if len(f.raw) == 0 {
 		panic("file not found")
 	}
 	return f
@@ -76,15 +89,15 @@ func loadAllocFile(path string) File {
 	pathPtr := unsafe.Pointer(unsafe.StringData(path))
 	fileSize := getFileSize(pathPtr, uint32(len(path)))
 	if fileSize == 0 {
-		return File(nil)
+		return File{nil}
 	}
-	buf := make(File, fileSize)
+	buf := make([]byte, fileSize)
 	bufPtr := unsafe.Pointer(unsafe.SliceData(buf))
 	loadFile(
 		pathPtr, uint32(len(path)),
 		bufPtr, uint32(len(buf)),
 	)
-	return buf
+	return File{buf}
 }
 
 // Load the file into the given buffer.
@@ -96,9 +109,9 @@ func loadFileInto(path string, buf []byte) File {
 		bufPtr, uint32(len(buf)),
 	)
 	if fileSize == 0 {
-		return File(nil)
+		return File{nil}
 	}
-	return File(buf[:fileSize])
+	return File{buf[:fileSize]}
 }
 
 // Write a file into the app data dir.

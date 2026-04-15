@@ -74,13 +74,13 @@ func GetFileSize(path string) int {
 func LoadFile(path string) firefly.File {
 	pathPtr := unsafe.Pointer(unsafe.StringData(path))
 	fileSize := getFileSize(pathPtr, uint32(len(path)))
-	raw := make(firefly.File, fileSize)
+	raw := make([]byte, fileSize)
 	rawPtr := unsafe.Pointer(unsafe.SliceData(raw))
 	loadFile(
 		pathPtr, uint32(len(path)),
 		rawPtr, fileSize,
 	)
-	return raw
+	return firefly.UnsafeFileFromBytes(raw)
 }
 
 func RemoveFile(path string) {

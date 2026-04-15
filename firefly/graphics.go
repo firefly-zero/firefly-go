@@ -168,7 +168,7 @@ func (s Size) ComponentMax(r Size) Size {
 // An angle between two vectors.
 //
 // Used by [DrawArc] and [DrawSector].
-// Constructed by [Dagrees] and [Radians].
+// Constructed by [Degrees] and [Radians].
 type Angle struct {
 	a float32
 }
@@ -623,7 +623,7 @@ func SetPalette(colors [16]RGB) {
 	}
 }
 
-// Set a single point (1 pixel is scaling is 1) on the frame.
+// Draw a single point (1 pixel if scaling is 1).
 func DrawPoint(p Point, c Color) {
 	drawPoint(int32(p.X), int32(p.Y), int32(c))
 }

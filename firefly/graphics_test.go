@@ -6,7 +6,7 @@ import (
 	"github.com/firefly-zero/firefly-go/firefly"
 )
 
-var testImage = firefly.File{
+var testImage = firefly.UnsafeFileFromBytes([]byte{
 	0x22,       // magic number
 	0x04, 0x00, // image width
 	0x01, // transparency
@@ -15,7 +15,7 @@ var testImage = firefly.File{
 	0x45, 0x67, // row 2
 	0x89, 0xab, // row 3
 	0xcd, 0xef, // row 4
-}
+})
 
 func TestImage_GetPixel(t *testing.T) {
 	t.Parallel()
