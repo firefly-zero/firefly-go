@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import pytest
+import tomllib
 from firefly_test import CLI, App
 
 
@@ -14,6 +15,9 @@ def test_example(app_root: Path, tmp_path: Path) -> None:
     """
     cli = CLI(vfs=tmp_path)
     cli.build(app_root)
-    app = App("demo.go-triangle")
+    raw_meta = (app_root / "firefly.toml").read_text()
+    meta = tomllib.loads(raw_meta)
+    app_id = meta["author_id"] + "." + meta["app_id"]
+    app = App(app_id, vfs_path=tmp_path)
     app.start()
     app.update()
