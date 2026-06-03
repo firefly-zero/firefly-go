@@ -106,8 +106,8 @@ func (p Pad) DPad8() DPad8 {
 	return DPad8{
 		Left:  p.X <= -dPad8Threshold,
 		Right: p.X >= dPad8Threshold,
-		Up:    p.Y <= -dPad8Threshold,
-		Down:  p.Y >= dPad8Threshold,
+		Down:  p.Y <= -dPad8Threshold,
+		Up:    p.Y > dPad8Threshold,
 	}
 }
 
