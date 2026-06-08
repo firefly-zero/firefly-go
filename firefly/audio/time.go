@@ -22,3 +22,15 @@ func Duration(t time.Duration) Samples {
 	s := t.Nanoseconds() * SampleRate / 1e9
 	return Samples(uint32(s))
 }
+
+func (t Samples) Seconds() uint32 {
+	return uint32(t) / SampleRate
+}
+
+func (t Samples) MS() uint32 {
+	return uint32(t) * 1000 / SampleRate
+}
+
+func (t Samples) Frequency() Hz {
+	return SampleRate / Hz(t)
+}

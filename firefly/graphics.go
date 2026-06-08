@@ -606,6 +606,12 @@ func (s Sprite) Draw(p Point) {
 	sub.Draw(p)
 }
 
+func (s Sprite) DrawOnGrid(x, y int) {
+	size := s.atlas.spriteSize
+	point := P(x*size.W, y*size.H)
+	s.Draw(point)
+}
+
 // Fill the whole frame with the given color.
 func ClearScreen(c Color) {
 	clearScreen(int32(c))
@@ -619,7 +625,7 @@ func SetColor(c Color, v RGB) {
 // Set all colors in the color palette.
 func SetPalette(colors [16]RGB) {
 	for c, v := range colors {
-		setColor(int32(c), int32(v.R), int32(v.G), int32(v.B))
+		setColor(int32(c+1), int32(v.R), int32(v.G), int32(v.B))
 	}
 }
 

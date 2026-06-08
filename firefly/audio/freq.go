@@ -172,3 +172,7 @@ func MIDI(note uint8) Hz { //nolint:cyclop
 	f *= float32(uint32(1) << oct)
 	return Hz(f)
 }
+
+func (hz Hz) Period() Samples {
+	return SampleRate / Samples(hz)
+}
