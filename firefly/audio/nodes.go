@@ -235,72 +235,72 @@ func (n Node) Clear() {
 }
 
 // Modulate oscillation frequency.
-func (n Sine) Modulate(m Modulator) {
-	m.Modulate(n.id, 0)
+func (n Sine) Modulate(low, high Hz, m Modulator) {
+	m.Modulate(n.id, 0, float32(low), float32(high))
 }
 
 // Modulate oscillation frequency.
-func (n Square) Modulate(m Modulator) {
-	m.Modulate(n.id, 0)
+func (n Square) Modulate(low, high Hz, m Modulator) {
+	m.Modulate(n.id, 0, float32(low), float32(high))
 }
 
 // Modulate oscillation frequency.
-func (n Sawtooth) Modulate(m Modulator) {
-	m.Modulate(n.id, 0)
+func (n Sawtooth) Modulate(low, high Hz, m Modulator) {
+	m.Modulate(n.id, 0, float32(low), float32(high))
 }
 
 // Modulate oscillation frequency.
-func (n Triangle) Modulate(m Modulator) {
-	m.Modulate(n.id, 0)
+func (n Triangle) Modulate(low, high Hz, m Modulator) {
+	m.Modulate(n.id, 0, float32(low), float32(high))
 }
 
 // Modulate the gain level.
-func (n Gain) Modulate(m Modulator) {
-	m.Modulate(n.id, 0)
+func (n Gain) Modulate(low, high float32, m Modulator) {
+	m.Modulate(n.id, 0, low, high)
 }
 
 // Modulate the pan value (from 0. to 1.: 0. is only left, 1. is only right).
-func (n Pan) Modulate(m Modulator) {
-	m.Modulate(n.id, 0)
+func (n Pan) Modulate(low, high float32, m Modulator) {
+	m.Modulate(n.id, 0, low, high)
 }
 
 // Modulate the muted state.
 //
 // Below 0.5 is muted, above is unmuted.
-func (n Mute) Modulate(m Modulator) {
-	m.Modulate(n.id, 0)
+func (n Mute) Modulate(low, high float32, m Modulator) {
+	m.Modulate(n.id, 0, low, high)
 }
 
 // Modulate the paused state.
 //
 // Below 0.5 is paused, above is playing.
-func (n Pause) Modulate(m Modulator) {
-	m.Modulate(n.id, 0)
+func (n Pause) Modulate(low, high float32, m Modulator) {
+	m.Modulate(n.id, 0, low, high)
 }
 
 // Modulate the cut-off frequency.
-func (n LowPass) ModulateFreq(m Modulator) {
-	m.Modulate(n.id, 0)
+func (n LowPass) ModulateFreq(low, high float32, m Modulator) {
+	m.Modulate(n.id, 0, low, high)
 }
 
 // Modulate the cut-off frequency.
-func (n HighPass) ModulateFreq(m Modulator) {
-	m.Modulate(n.id, 0)
+func (n HighPass) ModulateFreq(low, high float32, m Modulator) {
+	m.Modulate(n.id, 0, low, high)
 }
 
 // Modulate the low cut amplitude and adjust the high amplitude to keep the gap.
 //
 // In other words, the difference between low and high cut points will stay the same.
-func (n Clip) ModulateBoth(m Modulator) {
-	m.Modulate(n.id, 0)
+func (n Clip) ModulateBoth(low, high float32, m Modulator) {
+	m.Modulate(n.id, 0, low, high)
 }
 
 // Modulate the low cut amplitude.
-func (n Clip) ModulateLow(m Modulator) {
-	m.Modulate(n.id, 1)
+func (n Clip) ModulateLow(low, high float32, m Modulator) {
+	m.Modulate(n.id, 1, low, high)
 }
 
 // Modulate the high cut amplitude.
-func (n Clip) ModulateHigh(m Modulator) {
-	m.Modulate(n.id, 2)
+func (n Clip) ModulateHigh(low, high float32, m Modulator) {
+	m.Modulate(n.id, 2, low, high)
 }
