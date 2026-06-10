@@ -26,6 +26,8 @@ type Modulator interface {
 //
 // The value before `StartAt` is 0, the value after `EndAt` is 1,
 // and the value between `StartAt` and `EndAt` changes linearly from 0 to 1.
+//
+// Most often used with [Gain] for fade in and fade out effect.
 type LinearModulator struct {
 	StartAt Samples
 	EndAt   Samples
@@ -62,11 +64,49 @@ func (m HoldModulator) Modulate(nodeID uint32, param uint32, low, high float32) 
 	modHold(nodeID, param, low, high, uint32(m.Time))
 }
 
+// ADSR envelope.
+//
+// It looks like this: `🭋🭍🬹🬿`
+//
+//  1. Until `Attack`, the value goes from 0 to 1;
+//  2. Until `Decay`, it goes from 1 to `SustainLevel`;
+//  3. Until `Sustain`, it holds `SustainLevel`;
+//  4. Until `Release`, it goes from `SustainLevel` to 0;
+//  5. After `Release`, it holds 0.
+//
+// Most commonly used with [Gain].
+type ADSRModulator struct {
+	// When the value reaches 1.
+	Attack Samples
+	// When the value reaches `SustainLevel`.
+	Decay Samples
+	// Until when the value holds `SustainLevel`.
+	Sustain Samples
+	// The value generated from `Decay` until `Sustain`.
+	SustainLevel float32
+	// When the value drops to 0.
+	Release Samples
+}
+
+var _ Modulator = ADSRModulator{}
+
+// Modulate implements [Modulator].
+func (m ADSRModulator) Modulate(nodeID uint32, param uint32, low, high float32) {
+	modAdsr(
+		nodeID, param, low, high,
+		uint32(m.Attack),
+		uint32(m.Decay),
+		uint32(m.Sustain), m.SustainLevel,
+		uint32(m.Release),
+	)
+}
+
 // Sine wave low-frequency oscillator.
 //
 // It looks like this: `∿`.
 //
-// `low` is the lowest produced value, `high` is the highest.
+// Most commonly used with [Sine] (or another wave generator)
+// to produce vibrato effect.
 type SineModulator struct {
 	Freq Hz
 }
