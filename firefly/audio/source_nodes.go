@@ -33,19 +33,6 @@ func (n SourceNode) Reset() {
 	reset(n.id)
 }
 
-// Reset the node and all child nodes to the state to how it was when they were just added.
-func (n SourceNode) ResetAll() {
-	resetAll(n.id)
-}
-
-// Remove all child nodes.
-//
-// After it is called, you should make sure to discard all references to the old
-// child nodes.
-func (n SourceNode) Clear() {
-	clearNode(n.id)
-}
-
 // Modulate oscillation frequency.
 func (n Sine) Modulate(low, high Hz, m Modulator) {
 	m.Modulate(n.id, 0, float32(low), float32(high))

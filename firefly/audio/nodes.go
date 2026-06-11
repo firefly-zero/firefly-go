@@ -190,6 +190,19 @@ func (n Node) AddClip(low float32, high float32) Clip {
 	return Clip{Node{SourceNode{id}}}
 }
 
+// Reset the node and all child nodes to the state to how it was when they were just added.
+func (n Node) ResetAll() {
+	resetAll(n.id)
+}
+
+// Remove all child nodes.
+//
+// After it is called, you should make sure to discard all references to the old
+// child nodes.
+func (n Node) Clear() {
+	clearNode(n.id)
+}
+
 // Modulate the gain level.
 func (n Gain) Modulate(low, high float32, m Modulator) {
 	m.Modulate(n.id, 0, low, high)
