@@ -117,3 +117,31 @@ var _ Modulator = SineModulator{}
 func (m SineModulator) Modulate(nodeID uint32, param uint32, low, high float32) {
 	modSine(nodeID, param, float32(m.Freq), low, high)
 }
+
+// Square wave low-frequency oscillator.
+//
+// It looks like this: `🭿🭾🭿🭾🭿🭾🭿🭾`
+type SquareModulator struct {
+	Period Samples
+}
+
+var _ Modulator = SquareModulator{}
+
+// Modulate implements [Modulator].
+func (m SquareModulator) Modulate(nodeID uint32, param uint32, low, high float32) {
+	modSquare(nodeID, param, low, high, uint32(m.Period))
+}
+
+// Sawtooth wave low-frequency oscillator.
+//
+// It looks like this: `╱│╱│╱│╱│`
+type SawtoothModulator struct {
+	Period Samples
+}
+
+var _ Modulator = SawtoothModulator{}
+
+// Modulate implements [Modulator].
+func (m SawtoothModulator) Modulate(nodeID uint32, param uint32, low, high float32) {
+	modSawtooth(nodeID, param, low, high, uint32(m.Period))
+}
