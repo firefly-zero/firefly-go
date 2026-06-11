@@ -304,3 +304,76 @@ func (n Clip) ModulateLow(low, high float32, m Modulator) {
 func (n Clip) ModulateHigh(low, high float32, m Modulator) {
 	m.Modulate(n.id, 2, low, high)
 }
+
+// Set oscillation frequency.
+func (n Sine) Set(freq Hz) {
+	setParam(n.id, 0, float32(freq))
+}
+
+// Set oscillation frequency.
+func (n Square) Set(freq Hz) {
+	setParam(n.id, 0, float32(freq))
+}
+
+// Set oscillation frequency.
+func (n Sawtooth) Set(freq Hz) {
+	setParam(n.id, 0, float32(freq))
+}
+
+// Set oscillation frequency.
+func (n Triangle) Set(freq Hz) {
+	setParam(n.id, 0, float32(freq))
+}
+
+// Set the gain level.
+func (n Gain) Set(val float32) {
+	setParam(n.id, 0, val)
+}
+
+// Set the pan value (from 0. to 1.: 0. is only left, 1. is only right).
+func (n Pan) Set(val float32) {
+	setParam(n.id, 0, val)
+}
+
+func (n Mute) Mute() {
+	setParam(n.id, 0, 0.)
+}
+
+func (n Mute) Unmute() {
+	setParam(n.id, 0, 1.)
+}
+
+func (n Pause) Pause() {
+	setParam(n.id, 0, 0.)
+}
+
+func (n Pause) Play() {
+	setParam(n.id, 0, 1.)
+}
+
+// Set the cut-off frequency.
+func (n LowPass) SetFreq(freq Hz) {
+	setParam(n.id, 0, float32(freq))
+}
+
+// Set the cut-off frequency.
+func (n HighPass) SetFreq(freq Hz) {
+	setParam(n.id, 0, float32(freq))
+}
+
+// Set the low cut amplitude and adjust the high amplitude to keep the gap.
+//
+// In other words, the difference between low and high cut points will stay the same.
+func (n Clip) SetBoth(val float32) {
+	setParam(n.id, 0, val)
+}
+
+// Set the low cut amplitude.
+func (n Clip) SetLow(val float32) {
+	setParam(n.id, 1, val)
+}
+
+// Set the high cut amplitude.
+func (n Clip) SetHigh(val float32) {
+	setParam(n.id, 2, val)
+}

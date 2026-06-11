@@ -98,6 +98,9 @@ func modSquare(nodeID, param uint32, low, high float32, period uint32)
 //go:wasmimport audio mod_square
 func modSawtooth(nodeID, param uint32, low, high float32, period uint32)
 
+//go:wasmimport audio set_param
+func setParam(nodeID, param uint32, val float32)
+
 //go:wasmimport audio reset
 func reset(nodeID uint32)
 
