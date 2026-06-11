@@ -5,16 +5,16 @@ import "unsafe"
 // sources (aka generators)
 
 //go:wasmimport audio add_sine
-func addSine(parentID uint32, freq float32, phase float32) uint32
+func addSine(parentID uint32, freq, phase float32) uint32
 
 //go:wasmimport audio add_square
-func addSquare(parentID uint32, freq float32, phase float32) uint32
+func addSquare(parentID uint32, freq, phase float32) uint32
 
 //go:wasmimport audio add_sawtooth
-func addSawtooth(parentID uint32, freq float32, phase float32) uint32
+func addSawtooth(parentID uint32, freq, phase float32) uint32
 
 //go:wasmimport audio add_triangle
-func addTriangle(parentID uint32, freq float32, phase float32) uint32
+func addTriangle(parentID uint32, freq, phase float32) uint32
 
 //go:wasmimport audio add_noise
 func addNoise(parentID uint32, seed int32) uint32
@@ -73,18 +73,30 @@ func addTakeRight(parentID uint32) uint32
 func addSwap(parentID uint32) uint32
 
 //go:wasmimport audio add_clip
-func addClip(parentID uint32, low float32, high float32) uint32
+func addClip(parentID uint32, low, high float32) uint32
 
 // modulators
 
 //go:wasmimport audio mod_linear
-func modLinear(nodeID uint32, param uint32, start float32, end float32, startAt uint32, endAt uint32)
+func modLinear(nodeID, param uint32, low, high float32, startAt, endAt uint32)
 
 //go:wasmimport audio mod_hold
-func modHold(nodeID uint32, param uint32, v1 float32, v2 float32, time uint32)
+func modHold(nodeID, param uint32, low, high float32, time uint32)
+
+//go:wasmimport audio mod_adsr
+func modAdsr(
+	nodeID, param uint32, low, high float32,
+	attack, decay, sustain uint32, sustainLevel float32, release uint32,
+)
 
 //go:wasmimport audio mod_sine
-func modSine(nodeID uint32, param uint32, freq float32, low float32, high float32)
+func modSine(nodeID, param uint32, freq, low, high float32)
+
+//go:wasmimport audio mod_square
+func modSquare(nodeID, param uint32, low, high float32, period uint32)
+
+//go:wasmimport audio mod_square
+func modSawtooth(nodeID, param uint32, low, high float32, period uint32)
 
 //go:wasmimport audio reset
 func reset(nodeID uint32)
