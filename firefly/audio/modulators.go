@@ -120,7 +120,7 @@ func (m SineModulator) Modulate(nodeID uint32, param uint32, low, high float32) 
 
 // Square wave low-frequency oscillator.
 //
-// It looks like this: `🭿🭾🭿🭾🭿🭾🭿🭾`
+// It looks like this: `🭿🭾🭿🭾🭿🭾🭿🭾`.
 type SquareModulator struct {
 	Period Samples
 }
@@ -134,7 +134,7 @@ func (m SquareModulator) Modulate(nodeID uint32, param uint32, low, high float32
 
 // Sawtooth wave low-frequency oscillator.
 //
-// It looks like this: `╱│╱│╱│╱│`
+// It looks like this: `╱│╱│╱│╱│`.
 type SawtoothModulator struct {
 	Period Samples
 }

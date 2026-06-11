@@ -6,4 +6,4 @@ replace github.com/firefly-zero/firefly-go => ../../
 
 require github.com/firefly-zero/firefly-go v0.12.0
 
-require github.com/orsinium-labs/tinymath v1.1.0 // indirect
+require github.com/orsinium-labs/tinymath v1.2.0 // indirect

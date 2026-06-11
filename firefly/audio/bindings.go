@@ -84,7 +84,10 @@ func modLinear(nodeID, param uint32, low, high float32, startAt, endAt uint32)
 func modHold(nodeID, param uint32, low, high float32, time uint32)
 
 //go:wasmimport audio mod_adsr
-func modAdsr(nodeID, param uint32, low, high float32, attack, decay, sustain uint32, sustainLevel float32, release uint32)
+func modAdsr(
+	nodeID, param uint32, low, high float32,
+	attack, decay, sustain uint32, sustainLevel float32, release uint32,
+)
 
 //go:wasmimport audio mod_sine
 func modSine(nodeID, param uint32, freq, low, high float32)
