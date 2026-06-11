@@ -85,3 +85,8 @@ func (n Sawtooth) Set(freq Hz) {
 func (n Triangle) Set(freq Hz) {
 	setParam(n.id, 0, float32(freq))
 }
+
+// Go to the specified timestamp in the file.
+func (n File) Seek(t Samples) {
+	setParam(n.id, 0, float32(t))
+}
