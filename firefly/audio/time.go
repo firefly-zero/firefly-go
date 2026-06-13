@@ -11,6 +11,7 @@ func Samples(s uint32) Time {
 	return Time(s)
 }
 
+// Time in seconds.
 func Seconds(s uint32) Time {
 	return Time(s * SampleRate)
 }
@@ -26,10 +27,17 @@ func Duration(t time.Duration) Time {
 	return Time(uint32(s))
 }
 
+// Time in number of samples.
+func (t Time) Samples() uint32 {
+	return uint32(t)
+}
+
+// Time in seconds.
 func (t Time) Seconds() uint32 {
 	return uint32(t) / SampleRate
 }
 
+// Time in milliseconds.
 func (t Time) MS() uint32 {
 	return uint32(t) * 1000 / SampleRate
 }
