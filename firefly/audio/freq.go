@@ -173,6 +173,6 @@ func MIDI(note uint8) Hz { //nolint:cyclop
 	return Hz(f)
 }
 
-func (hz Hz) Period() Samples {
-	return SampleRate / Samples(hz)
+func (hz Hz) Period() Time {
+	return SampleRate / Time(hz)
 }

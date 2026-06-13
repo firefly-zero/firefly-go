@@ -74,6 +74,6 @@ func (n Triangle) Set(freq Hz) {
 }
 
 // Go to the specified timestamp in the file.
-func (n File) Seek(t Samples) {
+func (n File) Seek(t Time) {
 	setParam(n.id, 0, float32(t))
 }

@@ -9,7 +9,7 @@ package audio
 // Internally, modulators only produce values from 0 to 1.
 // Then, to get the final value of the parameter,
 // the value from the modulator is projected on the range
-// between `lowe` and `high` arguments passed together
+// between `low` and `high` arguments passed together
 // with the modulator when attaching a modulator to a node.
 // For example, [Sine.Modulate] accepts the range of modulated values
 // for the sine wave frequency (which can be used for vibrato effect).
@@ -29,8 +29,8 @@ type Modulator interface {
 //
 // Most often used with [Gain] for fade in and fade out effect.
 type LinearModulator struct {
-	StartAt Samples
-	EndAt   Samples
+	StartAt Time
+	EndAt   Time
 }
 
 var _ Modulator = LinearModulator{}
@@ -54,7 +54,7 @@ func (m LinearModulator) Modulate(nodeID uint32, param uint32, low, high float32
 // The value before `Time` is 0 and the value after `Time` is 1.
 // Equivalent to [LinearModulator] with `StartAt` being equal to `EndAt`.
 type HoldModulator struct {
-	Time Samples
+	Time Time
 }
 
 var _ Modulator = HoldModulator{}
@@ -77,15 +77,15 @@ func (m HoldModulator) Modulate(nodeID uint32, param uint32, low, high float32) 
 // Most commonly used with [Gain].
 type ADSRModulator struct {
 	// When the value reaches 1.
-	Attack Samples
+	Attack Time
 	// When the value reaches `SustainLevel`.
-	Decay Samples
+	Decay Time
 	// Until when the value holds `SustainLevel`.
-	Sustain Samples
+	Sustain Time
 	// The value generated from `Decay` until `Sustain`.
 	SustainLevel float32
 	// When the value drops to 0.
-	Release Samples
+	Release Time
 }
 
 var _ Modulator = ADSRModulator{}
@@ -122,7 +122,7 @@ func (m SineModulator) Modulate(nodeID uint32, param uint32, low, high float32) 
 //
 // It looks like this: `🭿🭾🭿🭾🭿🭾🭿🭾`.
 type SquareModulator struct {
-	Period Samples
+	Period Time
 }
 
 var _ Modulator = SquareModulator{}
@@ -136,7 +136,7 @@ func (m SquareModulator) Modulate(nodeID uint32, param uint32, low, high float32
 //
 // It looks like this: `╱│╱│╱│╱│`.
 type SawtoothModulator struct {
-	Period Samples
+	Period Time
 }
 
 var _ Modulator = SawtoothModulator{}
