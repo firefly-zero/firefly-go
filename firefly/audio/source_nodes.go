@@ -34,43 +34,43 @@ func (n SourceNode) Reset() {
 }
 
 // Modulate oscillation frequency.
-func (n Sine) Modulate(low, high Hz, m Modulator) {
+func (n Sine) Modulate(low, high Freq, m Modulator) {
 	m.Modulate(n.id, 0, float32(low), float32(high))
 }
 
 // Modulate oscillation frequency.
-func (n Square) Modulate(low, high Hz, m Modulator) {
+func (n Square) Modulate(low, high Freq, m Modulator) {
 	m.Modulate(n.id, 0, float32(low), float32(high))
 }
 
 // Modulate oscillation frequency.
-func (n Sawtooth) Modulate(low, high Hz, m Modulator) {
+func (n Sawtooth) Modulate(low, high Freq, m Modulator) {
 	m.Modulate(n.id, 0, float32(low), float32(high))
 }
 
 // Modulate oscillation frequency.
-func (n Triangle) Modulate(low, high Hz, m Modulator) {
+func (n Triangle) Modulate(low, high Freq, m Modulator) {
 	m.Modulate(n.id, 0, float32(low), float32(high))
 }
 
 // Set oscillation frequency.
-func (n Sine) Set(freq Hz) {
-	setParam(n.id, 0, float32(freq))
+func (n Sine) Set(f Freq) {
+	setParam(n.id, 0, float32(f))
 }
 
 // Set oscillation frequency.
-func (n Square) Set(freq Hz) {
-	setParam(n.id, 0, float32(freq))
+func (n Square) Set(f Freq) {
+	setParam(n.id, 0, float32(f))
 }
 
 // Set oscillation frequency.
-func (n Sawtooth) Set(freq Hz) {
-	setParam(n.id, 0, float32(freq))
+func (n Sawtooth) Set(f Freq) {
+	setParam(n.id, 0, float32(f))
 }
 
 // Set oscillation frequency.
-func (n Triangle) Set(freq Hz) {
-	setParam(n.id, 0, float32(freq))
+func (n Triangle) Set(f Freq) {
+	setParam(n.id, 0, float32(f))
 }
 
 // Go to the specified timestamp in the file.

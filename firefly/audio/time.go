@@ -34,6 +34,6 @@ func (t Time) MS() uint32 {
 	return uint32(t) * 1000 / SampleRate
 }
 
-func (t Time) Frequency() Hz {
-	return SampleRate / Hz(t)
+func (t Time) Frequency() Freq {
+	return SampleRate / Freq(t)
 }

@@ -52,25 +52,25 @@ type Swap struct{ Node }
 type Clip struct{ Node }
 
 // Add sine wave oscillator source (`∿`).
-func (n Node) AddSine(freq Hz, phase float32) Sine {
+func (n Node) AddSine(freq Freq, phase float32) Sine {
 	id := addSine(n.id, float32(freq), phase)
 	return Sine{SourceNode{id}}
 }
 
 // Add square wave oscillator source (`⎍`).
-func (n Node) AddSquare(freq Hz, phase float32) Square {
+func (n Node) AddSquare(freq Freq, phase float32) Square {
 	id := addSquare(n.id, float32(freq), phase)
 	return Square{SourceNode{id}}
 }
 
 // Add sawtooth wave oscillator source (`╱│`).
-func (n Node) AddSawtooth(freq Hz, phase float32) Sawtooth {
+func (n Node) AddSawtooth(freq Freq, phase float32) Sawtooth {
 	id := addSawtooth(n.id, float32(freq), phase)
 	return Sawtooth{SourceNode{id}}
 }
 
 // Add triangle wave oscillator source (`╱╲`).
-func (n Node) AddTriangle(freq Hz, phase float32) Triangle {
+func (n Node) AddTriangle(freq Freq, phase float32) Triangle {
 	id := addTriangle(n.id, float32(freq), phase)
 	return Triangle{SourceNode{id}}
 }
@@ -281,12 +281,12 @@ func (n Pause) Play() {
 }
 
 // Set the cut-off frequency.
-func (n LowPass) SetFreq(freq Hz) {
+func (n LowPass) SetFreq(freq Freq) {
 	setParam(n.id, 0, float32(freq))
 }
 
 // Set the cut-off frequency.
-func (n HighPass) SetFreq(freq Hz) {
+func (n HighPass) SetFreq(freq Freq) {
 	setParam(n.id, 0, float32(freq))
 }
 

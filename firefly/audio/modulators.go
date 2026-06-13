@@ -108,7 +108,7 @@ func (m ADSRModulator) Modulate(nodeID uint32, param uint32, low, high float32) 
 // Most commonly used with [Sine] (or another wave generator)
 // to produce vibrato effect.
 type SineModulator struct {
-	Freq Hz
+	Freq Freq
 }
 
 var _ Modulator = SineModulator{}
