@@ -155,14 +155,14 @@ func (n Node) AddTrackPosition() TrackPosition {
 }
 
 // Add lowpass filter node.
-func (n Node) AddLowPass(freq float32, q float32) LowPass {
-	id := addLowPass(n.id, freq, q)
+func (n Node) AddLowPass(freq Freq, q float32) LowPass {
+	id := addLowPass(n.id, float32(freq), q)
 	return LowPass{Node{SourceNode{id}}}
 }
 
 // Add highpass filter node.
-func (n Node) AddHighPass(freq float32, q float32) HighPass {
-	id := addHighPass(n.id, freq, q)
+func (n Node) AddHighPass(freq Freq, q float32) HighPass {
+	id := addHighPass(n.id, float32(freq), q)
 	return HighPass{Node{SourceNode{id}}}
 }
 
