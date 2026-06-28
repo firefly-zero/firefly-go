@@ -62,33 +62,33 @@ func drawSubImage(
 //go:wasmimport graphics draw_sub_tile
 func drawSubTile(
 	ptr unsafe.Pointer,
-	len uint32,
+	size uint32,
 	// Screen area to fill.
 	x int32,
 	y int32,
 	w uint32,
 	h uint32,
 	// Image sub-region to use.
-	sub_x int32,
-	sub_y int32,
-	sub_width uint32,
-	sub_height uint32,
+	subX int32,
+	subY int32,
+	subWidth uint32,
+	subHeight uint32,
 )
 
 //go:wasmimport graphics draw_nine_slice
 func drawNineSlice(
 	ptr unsafe.Pointer,
-	len uint32,
+	size uint32,
 	// Screen area to fill.
 	x int32,
 	y int32,
 	w uint32,
 	h uint32,
 	// The area of the middle square on the image.
-	mid_x int32,
-	mid_y int32,
-	mid_width uint32,
-	mid_height uint32,
+	midX int32,
+	midY int32,
+	midWidth uint32,
+	midHeight uint32,
 )
 
 //go:wasmimport graphics set_canvas
