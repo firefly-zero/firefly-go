@@ -713,10 +713,9 @@ func DrawSector(p Point, d int, start, sweep Angle, s Style) {
 // but to the baseline start position.
 func DrawText(t string, f Font, p Point, c Color) {
 	textPtr := unsafe.Pointer(unsafe.StringData(t))
-	rawPtr := unsafe.Pointer(unsafe.SliceData(f.raw))
 	drawText(
 		textPtr, uint32(len(t)),
-		rawPtr, uint32(len(f.raw)),
+		getPtr(f.raw), uint32(len(f.raw)),
 		int32(p.X), int32(p.Y), int32(c),
 	)
 }
@@ -733,11 +732,9 @@ func DrawText(t string, f Font, p Point, c Color) {
 //
 // It is allowed to modify the byte slice after the function call.
 func DrawTextBytes(t []byte, f Font, p Point, c Color) {
-	textPtr := unsafe.Pointer(unsafe.SliceData(t))
-	rawPtr := unsafe.Pointer(unsafe.SliceData(f.raw))
 	drawText(
-		textPtr, uint32(len(t)),
-		rawPtr, uint32(len(f.raw)),
+		getPtr(t), uint32(len(t)),
+		getPtr(f.raw), uint32(len(f.raw)),
 		int32(p.X), int32(p.Y), int32(c),
 	)
 }
@@ -761,9 +758,8 @@ func DrawQR(t string, p Point, black, white Color) {
 //
 // It is allowed to modify the byte slice after the function call.
 func DrawQRBytes(t []byte, p Point, black, white Color) {
-	ptr := unsafe.Pointer(unsafe.SliceData(t))
 	drawQR(
-		ptr, uint32(len(t)),
+		getPtr(t), uint32(len(t)),
 		int32(p.X), int32(p.Y),
 		int32(black), int32(white),
 	)
@@ -771,9 +767,8 @@ func DrawQRBytes(t []byte, p Point, black, white Color) {
 
 // Render an image at the given point.
 func DrawImage(i Image, p Point) {
-	rawPtr := unsafe.Pointer(unsafe.SliceData(i.raw))
 	drawImage(
-		rawPtr, uint32(len(i.raw)),
+		getPtr(i.raw), uint32(len(i.raw)),
 		int32(p.X), int32(p.Y),
 	)
 }
@@ -782,10 +777,41 @@ func DrawImage(i Image, p Point) {
 //
 // Most often used to draw a sprite from a sprite atlas.
 func DrawSubImage(i SubImage, p Point) {
-	rawPtr := unsafe.Pointer(unsafe.SliceData(i.raw))
 	drawSubImage(
-		rawPtr, uint32(len(i.raw)),
+		getPtr(i.raw), uint32(len(i.raw)),
 		int32(p.X), int32(p.Y),
+		int32(i.point.X), int32(i.point.Y),
+		uint32(i.size.W), uint32(i.size.H),
+	)
+}
+
+// Tile the given screen area with the provided sub-image.
+func DrawSubTile(i SubImage, p Point, s Size) {
+	drawSubTile(
+		getPtr(i.raw), uint32(len(i.raw)),
+		int32(p.X), int32(p.Y),
+		uint32(s.W), uint32(s.H),
+		int32(i.point.X), int32(i.point.Y),
+		uint32(i.size.W), uint32(i.size.H),
+	)
+}
+
+// Fill the given area with the given 9-slice.
+//
+// A 9-slice is used to tile an area with 9 sub-images: 4 corners,
+// 4 edges, and 1 middle segment. It is useful for speech bubbles
+// and other stylish boxes.
+//
+// The whole image is the 9-slice. The sub-image is the center area of the 9-slice.
+//
+// If the target area is bigger than the 9-slice segments,
+// all the segments (except corners) are repeated ("tiled")
+// without stretching or mirroring.
+func DrawNineSlice(i SubImage, p Point, s Size) {
+	drawNineSlice(
+		getPtr(i.raw), uint32(len(i.raw)),
+		int32(p.X), int32(p.Y),
+		uint32(s.W), uint32(s.H),
 		int32(i.point.X), int32(i.point.Y),
 		uint32(i.size.W), uint32(i.size.H),
 	)
@@ -793,8 +819,7 @@ func DrawSubImage(i SubImage, p Point) {
 
 // Set the target image for all subsequent drawing operations.
 func SetCanvas(c Canvas) {
-	rawPtr := unsafe.Pointer(unsafe.SliceData(c.raw))
-	setCanvas(rawPtr, uint32(len(c.raw)))
+	setCanvas(getPtr(c.raw), uint32(len(c.raw)))
 }
 
 // Make all subsequent drawing operations target the screen instead of a canvas.
@@ -802,4 +827,11 @@ func SetCanvas(c Canvas) {
 // Cancels the effect of [SetCanvas].
 func UnsetCanvas() {
 	unsetCanvas()
+}
+
+// Get memory address of the first item of the slice of bytes.
+//
+//go:inline
+func getPtr(s []byte) unsafe.Pointer {
+	return unsafe.Pointer(unsafe.SliceData(s))
 }
