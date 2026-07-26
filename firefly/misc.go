@@ -1,6 +1,9 @@
 package firefly
 
-import "unsafe"
+import (
+	"time"
+	"unsafe"
+)
 
 type Language uint16
 
@@ -199,6 +202,11 @@ func SetSeed(seed uint32) {
 // Get a random value.
 func GetRandom() uint32 {
 	return getRandom()
+}
+
+// Get the time passed since the app was started.
+func GetTime() time.Duration {
+	return time.Duration(getTime()) * time.Microsecond
 }
 
 // Get human-readable name of the given peer.
