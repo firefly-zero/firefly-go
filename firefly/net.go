@@ -63,7 +63,9 @@ var Combined = Peer{0xFF}
 // The list of peers online.
 //
 // Can be obtained using [GetPeers].
-type Peers uint32
+type Peers struct {
+	p uint32
+}
 
 // Stash is a serialized binary state of the app that you want to persist
 // between app runs and to be available in multiplayer.
@@ -108,13 +110,13 @@ func (peers Peers) Iter() iter.Seq[Peer] {
 
 // Check if the given [Peer] is online.
 func (peers Peers) Contains(peer Peer) bool {
-	return peers>>peer.raw&1 != 0
+	return peers.p>>peer.raw&1 != 0
 }
 
 // Get how many peers are online.
 func (peers Peers) Len() int {
 	// Should be converted by TinyGo in a single wasm instruction.
-	return bits.OnesCount32(uint32(peers))
+	return bits.OnesCount32(peers.p)
 }
 
 // Get the peer corresponding to the local device.
@@ -129,7 +131,7 @@ func GetMe() Me {
 // It can be used to detect if multiplayer is active:
 // if there is more than 1 peer, you're playing with friends.
 func GetPeers() Peers {
-	return Peers(getPeers())
+	return Peers{getPeers()}
 }
 
 // Save the given [Stash].
