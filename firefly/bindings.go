@@ -147,6 +147,17 @@ func addProgress(peerID, badgeID uint32, val int32) uint32
 //go:wasmimport stats add_score
 func addScore(peerID, boardID uint32, val int32) int32
 
+// -- MENU -- //
+
+//go:wasmimport menu add_menu_item
+func addMenuItem(index uint32, ptr unsafe.Pointer, size uint32)
+
+//go:wasmimport menu remove_menu_item
+func removeMenuItem(index uint32)
+
+//go:wasmimport menu open_menu
+func openMenu()
+
 // -- MISC -- //
 
 //go:wasmimport misc log_debug

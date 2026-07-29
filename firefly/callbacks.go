@@ -24,6 +24,9 @@ var (
 	//
 	// Accepts the command index and value and returns a response to show in CLI.
 	Cheat func(int, int) int
+
+	// Callback to be called when a custom menu item is selected.
+	HandleMenu func(MenuItem)
 )
 
 //go:export boot
@@ -62,10 +65,20 @@ func cheat(c, v int32) int32 {
 	return 0
 }
 
+//go:export handle_menu
+func handleMenu(i int32) {
+	if HandleMenu != nil {
+		HandleMenu(MenuItem(i))
+	}
+}
+
+// Suppress warning about unused private function
+// (the linter doesn't account for "go:export").
 var (
 	_ = boot
 	_ = update
 	_ = render
 	_ = beforeExit
 	_ = cheat
+	_ = handleMenu
 )
