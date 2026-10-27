@@ -588,9 +588,15 @@ func (a *Atlas) Load(path string) {
 }
 
 // Create a reference to a sprite within the atlas.
-func (a *Atlas) Sprite(row, col int) Sprite {
-	pos := P(row*a.spriteSize.W, col*a.spriteSize.H)
+func (a *Atlas) Sprite(x, y int) Sprite {
+	pos := P(x*a.spriteSize.W, y*a.spriteSize.H)
 	return Sprite{atlas: a, pos: pos}
+}
+
+// Create a reference to a sprite within the atlas using its 0-indexed ID.
+func (a *Atlas) SpriteID(id int) Sprite {
+	w := a.img.Width() / a.spriteSize.W
+	return a.Sprite(id%w, id/w)
 }
 
 type Sprite struct {
@@ -606,6 +612,10 @@ func (s Sprite) Draw(p Point) {
 	sub.Draw(p)
 }
 
+// Render the sprite.
+//
+// The position is coordinates on the screen as a grid
+// with the same size as the [Atlas] grid.
 func (s Sprite) DrawOnGrid(x, y int) {
 	size := s.atlas.spriteSize
 	point := P(x*size.W, y*size.H)
