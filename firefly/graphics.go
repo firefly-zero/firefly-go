@@ -817,6 +817,13 @@ func DrawNineSlice(i SubImage, p Point, s Size) {
 	)
 }
 
+// Run the function with all drawing operations being executed on the canvas.
+func WithCanvas(c Canvas, f func()) {
+	SetCanvas(c)
+	f()
+	UnsetCanvas()
+}
+
 // Set the target image for all subsequent drawing operations.
 func SetCanvas(c Canvas) {
 	setCanvas(getPtr(c.raw), uint32(len(c.raw)))
