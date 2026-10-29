@@ -4,7 +4,7 @@ import "github.com/firefly-zero/firefly-go/firefly"
 
 var (
 	peers     firefly.Peers
-	canvas    firefly.Canvas
+	canvas    firefly.Image
 	positions [4]*firefly.Point
 )
 
@@ -16,7 +16,8 @@ func init() {
 
 func boot() {
 	peers = firefly.GetPeers()
-	canvas = firefly.NewCanvas(firefly.Size{W: 120, H: 120})
+	size := firefly.Size{W: 120, H: 120}
+	canvas = firefly.NewImage(size, firefly.ColorBlack)
 	firefly.SetCanvas(canvas)
 	firefly.ClearScreen(firefly.ColorLightGray)
 	firefly.UnsetCanvas()
@@ -46,7 +47,7 @@ func update() {
 func render() {
 	firefly.ClearScreen(firefly.ColorWhite)
 	shift := firefly.Point{X: 10, Y: 10}
-	firefly.DrawImage(canvas.Image(), shift)
+	firefly.DrawImage(canvas, shift)
 	for _, point := range positions {
 		if point != nil {
 			firefly.DrawPoint(point.Add(shift), firefly.ColorDarkBlue)

@@ -417,6 +417,32 @@ type Image struct {
 	raw []byte
 }
 
+// Create a new empty image of the given size.
+//
+// The given color is used as the transparency color.
+// if [ColorNone] is given, then the image will not have transparency
+// and it will be filled with [ColorBlack] by default.
+//
+// Use [SetCanvas] (or [WithCanvas]) and the drawing functions
+// to fill the newly created image.
+func NewImage(s Size, transp Color) Image {
+	const headerSize = 4
+	t := byte(transp) - 1
+	bodySize := s.W * s.H / 2
+	raw := make([]byte, headerSize+bodySize)
+	raw[0] = 0x22           // magic number
+	raw[1] = byte(s.W)      // width
+	raw[2] = byte(s.W >> 8) // width
+	raw[3] = t              // transparency
+	if t != 255 && t != 0 {
+		b := t | (t << 4)
+		for i := headerSize; i < len(raw); i++ {
+			raw[i] = b
+		}
+	}
+	return Image{raw}
+}
+
 // Render the image.
 func (i Image) Draw(p Point) {
 	DrawImage(i, p)
@@ -440,9 +466,6 @@ func (i Image) Transparency() Color {
 //
 // Pass ColorNone to disable transparency.
 func (i Image) SetTransparency(c Color) {
-	if c == ColorNone {
-		i.raw[3] = 16
-	}
 	i.raw[3] = byte(c) - 1
 }
 
@@ -536,34 +559,6 @@ func (i SubImage) Width() int {
 // Height returns the height of this sub-image.
 func (i SubImage) Height() int {
 	return i.size.H
-}
-
-// Canvas is an [Image] that can be drawn upon.
-//
-// Constructed by [NewCanvas].
-type Canvas struct {
-	raw []byte
-}
-
-func NewCanvas(s Size) Canvas {
-	const headerSize = 4
-	bodySize := s.W * s.H / 2
-	raw := make([]byte, headerSize+bodySize)
-	raw[0] = 0x22           // magic number
-	raw[1] = byte(s.W)      // width
-	raw[2] = byte(s.W >> 8) // width
-	raw[3] = 255            // transparency
-	return Canvas{raw}
-}
-
-// Set this canvas as the target for all subsequent draw operations.
-func (c Canvas) Set() {
-	SetCanvas(c)
-}
-
-// Represent the canvas as an [Image].
-func (c Canvas) Image() Image {
-	return Image(c)
 }
 
 // Helper for working with spritesheets.
@@ -828,14 +823,14 @@ func DrawNineSlice(i SubImage, p Point, s Size) {
 }
 
 // Run the function with all drawing operations being executed on the canvas.
-func WithCanvas(c Canvas, f func()) {
+func WithCanvas(c Image, f func()) {
 	SetCanvas(c)
 	f()
 	UnsetCanvas()
 }
 
 // Set the target image for all subsequent drawing operations.
-func SetCanvas(c Canvas) {
+func SetCanvas(c Image) {
 	setCanvas(getPtr(c.raw), uint32(len(c.raw)))
 }
 
