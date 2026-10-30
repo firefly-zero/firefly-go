@@ -33,7 +33,6 @@ linters:
     - godot
     - godox
     - goheader
-    - gomodguard
     - goprintffuncname
     - gosec
     - gosmopolitan

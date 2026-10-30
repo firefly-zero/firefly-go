@@ -1,6 +1,10 @@
 package audio
 
-import "unsafe"
+import (
+	"unsafe"
+
+	"github.com/firefly-zero/firefly-go/firefly"
+)
 
 type Node struct{ SourceNode }
 
@@ -29,6 +33,9 @@ type Mute struct{ Node }
 
 // An audio node created by [Node.AddPause].
 type Pause struct{ Node }
+
+// An audio node created by [Node.AddPeer].
+type Peer struct{ Node }
 
 // An audio node created by [Node.AddTrackPosition].
 type TrackPosition struct{ Node }
@@ -146,6 +153,17 @@ func (n Node) AddMute() Mute {
 func (n Node) AddPause() Pause {
 	id := addPause(n.id)
 	return Pause{Node{SourceNode{id}}}
+}
+
+// Add node that plays child nodes only on the device of the given peer.
+func (n Node) AddPeer(p firefly.Peer) Peer {
+	var id uint32
+	if firefly.GetMe().Eq(p) {
+		id = addMix(n.id)
+	} else {
+		id = addZero(n.id)
+	}
+	return Peer{Node{SourceNode{id}}}
 }
 
 // Add node tracking the elapsed playback time.
