@@ -10,6 +10,12 @@ func clearScreen(c int32)
 //go:wasmimport graphics set_color
 func setColor(c, r, g, b int32)
 
+//go:wasmimport graphics flip_x
+func flipX()
+
+//go:wasmimport graphics flip_y
+func flipY()
+
 //go:wasmimport graphics draw_point
 func drawPoint(x, y, c int32)
 
