@@ -443,6 +443,11 @@ func NewImage(s Size, transp Color) Image {
 	return Image{raw}
 }
 
+// Create a copy of the image.
+func (i Image) Clone() Image {
+	return Image{append([]byte{}, i.raw...)}
+}
+
 // Render the image.
 func (i Image) Draw(p Point) {
 	DrawImage(i, p)
@@ -618,8 +623,25 @@ func (s Sprite) DrawOnGrid(x, y int) {
 }
 
 // Fill the whole frame with the given color.
+//
+// Can be used together with [SetCanvas] to set background color for an image
+// created with [NewImage].
 func ClearScreen(c Color) {
 	clearScreen(int32(c))
+}
+
+// Horizontally flip the image currently rendered on the screen.
+//
+// Most commonly used together with [SetCanvas] to flip images (sprites).
+func FlipX() {
+	flipX()
+}
+
+// Vertically flip the image currently rendered on the screen.
+//
+// Most commonly used together with [SetCanvas] to flip images (sprites).
+func FlipY() {
+	flipY()
 }
 
 // Set a color value in the palette.
