@@ -570,56 +570,26 @@ func (i SubImage) Height() int {
 //
 // Constructed by [NewAtlas].
 type Atlas struct {
-	img        Image
-	spriteSize Size
+	Image      Image
+	SpriteSize Size
 }
 
 // Create a new [Atlas] with the given sprite dimensions.
+//
+// You must set [Atlas.Image] before you can use the atlas.
 func NewAtlas(spriteW, spriteH int) Atlas {
-	return Atlas{spriteSize: S(spriteW, spriteH)}
+	return Atlas{SpriteSize: S(spriteW, spriteH)}
 }
 
-// Set the underlying spritesheet image for the atlas.
-//
-// Should be called before any [Sprite.Draw].
-// The best is to call it once from [Boot].
-func (a *Atlas) Load(path string) {
-	a.img = LoadImage(path, nil)
-}
-
-// Create a reference to a sprite within the atlas.
-func (a *Atlas) Sprite(x, y int) Sprite {
-	pos := P(x*a.spriteSize.W, y*a.spriteSize.H)
-	return Sprite{atlas: a, pos: pos}
-}
-
-// Create a reference to a sprite within the atlas using its 0-indexed ID.
-func (a *Atlas) SpriteID(id int) Sprite {
-	w := a.img.Width() / a.spriteSize.W
-	return a.Sprite(id%w, id/w)
-}
-
-type Sprite struct {
-	atlas *Atlas
-	pos   Point
-}
-
-// Render the sprite at the given position.
-//
-// Make sure to call [Atlas.Load] first.
-func (s Sprite) Draw(p Point) {
-	sub := s.atlas.img.Sub(s.pos, s.atlas.spriteSize)
-	sub.Draw(p)
-}
-
-// Render the sprite.
-//
-// The position is coordinates on the screen as a grid
-// with the same size as the [Atlas] grid.
-func (s Sprite) DrawOnGrid(x, y int) {
-	size := s.atlas.spriteSize
-	point := P(x*size.W, y*size.H)
-	s.Draw(point)
+// Create a reference to a sprite within the atlas using its 1-indexed ID.
+func (a *Atlas) Sprite(id uint16) SubImage {
+	size := a.SpriteSize
+	perRow := a.Image.Width() / size.W
+	id--
+	x := int(id) % perRow
+	y := int(id) / perRow
+	pos := P(x*size.W, y*size.H)
+	return a.Image.Sub(pos, size)
 }
 
 // Fill the whole frame with the given color.
