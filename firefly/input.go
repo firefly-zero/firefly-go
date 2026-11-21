@@ -222,9 +222,6 @@ type Buttons struct {
 	//
 	// Typically used for a secondary action, like charged attack.
 	N bool
-
-	// The menu button, almost always handled by the runtime.
-	Menu bool
 }
 
 // Given the old state, get buttons that were not pressed but are pressed now.
@@ -233,7 +230,6 @@ func (p Buttons) JustPressed(old Buttons) Buttons {
 	p.E = p.E && !old.E
 	p.W = p.W && !old.W
 	p.N = p.N && !old.N
-	p.Menu = p.Menu && !old.N
 	return p
 }
 
@@ -243,7 +239,6 @@ func (p Buttons) JustReleased(old Buttons) Buttons {
 	p.E = !p.E && old.E
 	p.W = !p.W && old.W
 	p.N = !p.N && old.N
-	p.Menu = !p.Menu && old.Menu
 	return p
 }
 
@@ -253,13 +248,12 @@ func (p Buttons) Held(old Buttons) Buttons {
 	p.E = p.E && old.E
 	p.W = p.W && old.W
 	p.N = p.N && old.N
-	p.Menu = p.Menu && old.Menu
 	return p
 }
 
 // Check if any button is currently pressed.
 func (p Buttons) Any() bool {
-	return p.S || p.E || p.W || p.N || p.Menu
+	return p.S || p.E || p.W || p.N
 }
 
 // Get the current touch pad state.
@@ -284,11 +278,10 @@ func ReadPad(p Peer) (Pad, bool) {
 func ReadButtons(p Peer) Buttons {
 	raw := readButtons(uint32(p.raw))
 	return Buttons{
-		S:    hasBitSet(raw, 0),
-		E:    hasBitSet(raw, 1),
-		W:    hasBitSet(raw, 2),
-		N:    hasBitSet(raw, 3),
-		Menu: hasBitSet(raw, 4),
+		S: hasBitSet(raw, 0),
+		E: hasBitSet(raw, 1),
+		W: hasBitSet(raw, 2),
+		N: hasBitSet(raw, 3),
 	}
 }
 
